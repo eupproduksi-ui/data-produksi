@@ -1,0 +1,45 @@
+<style>
+.lg-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0d3f92,#1155cc);padding:16px}
+.lg-card{background:#fff;border-radius:12px;padding:28px;width:380px;max-width:100%;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.lg-card h2{color:#1155cc;text-align:center;margin:0 0 4px;letter-spacing:1px;font-weight:bold}
+.lg-card p{color:#888;text-align:center;font-size:13px;margin:0 0 18px;font-weight:bold}
+.lg-card label{display:block;font-weight:bold;font-size:13px;color:#333;margin:10px 0 4px}
+.lg-card input{width:100%;padding:12px;border:1px solid #cfd6e0;border-radius:6px;font-size:15px;font-weight:bold}
+.lg-btn{width:100%;margin-top:16px;background:#1155cc;color:#fff;border:none;border-radius:6px;padding:13px;font-weight:bold;letter-spacing:1px;cursor:pointer}
+.lg-btn:disabled{background:#9db8e8}
+.lg-err{background:#ffebee;color:#c00;border:1px solid #c00;border-radius:6px;padding:8px 10px;font-size:13px;margin-top:10px;display:none;font-weight:bold}
+</style>
+<div class="lg-wrap">
+  <div class="lg-card">
+    <h2>DATA PRODUKSI</h2>
+    <p>EUP GUDANG TAIPA 2026</p>
+    <label>USERNAME</label>
+    <input id="lg-user" autocomplete="username">
+    <label>PASSWORD</label>
+    <input id="lg-pass" type="password" autocomplete="current-password">
+    <div id="lg-err" class="lg-err"></div>
+    <button class="lg-btn" onclick="lgDo()">MASUK</button>
+  </div>
+</div>
+<script>
+function lgErr(m){ var d=document.getElementById("lg-err"); d.textContent=m; d.style.display="block"; }
+function lgDo(){
+  var u=document.getElementById("lg-user").value.trim();
+  var p=document.getElementById("lg-pass").value;
+  if(!u||!p){ lgErr("Isi username & password."); return; }
+  var btn=document.querySelector(".lg-btn");
+  btn.disabled=true; btn.textContent="MEMERIKSA...";
+  fetch(API_URL, {method:"POST", body: JSON.stringify({action:"login", user:u, pass:p})})
+    .then(function(r){ return r.json(); })
+    .then(function(r){
+      btn.disabled=false; btn.textContent="MASUK";
+      if(r && r.ok){ afterLogin({nama:r.nama}); }
+      else { lgErr((r && r.msg) || "Login gagal."); }
+    })
+    .catch(function(e){
+      btn.disabled=false; btn.textContent="MASUK";
+      lgErr("Jaringan error: "+e.message);
+    });
+}
+document.getElementById("lg-pass").addEventListener("keydown", function(ev){ if(ev.key==="Enter"){ lgDo(); } });
+</script>
