@@ -1,0 +1,45 @@
+<style>
+.db-grid{display:flex;flex-direction:column;gap:12px}
+.db-card{background:#fff;border:1px solid #e3e7ee;border-radius:8px;padding:16px}
+.db-card h3{color:#1155cc;margin:0 0 8px;font-size:17px;font-weight:bold;letter-spacing:1px}
+.db-row{display:flex;justify-content:space-between;font-size:14px;padding:6px 0;border-bottom:1px dashed #e3e7ee;font-weight:bold}
+.db-row span{color:#555}
+.db-row b{color:#1155cc}
+</style>
+<div class="db-card">
+  <h3>REKAP PRODUKSI SEMUA MESIN</h3>
+  <div id="db-box" class="db-grid"><div class="boot-msg">Memuat rekap...</div></div>
+</div>
+<script>
+function apiGet(action, params){
+  var q=API_URL+"?action="+encodeURIComponent(action);
+  for(var k in (params||{})){ q+="&"+encodeURIComponent(k)+"="+encodeURIComponent(params[k]); }
+  return fetch(q).then(function(r){ return r.json(); });
+}
+window.init_Dashboard=function(){
+  apiGet("getMesin").then(function(r){
+    var list=(r&&r.data)||[];
+    var box=document.getElementById("db-box");
+    if(!list.length){ box.innerHTML='<div class="boot-msg">Master mesin kosong.</div>'; return; }
+    box.innerHTML="";
+    list.forEach(function(m){
+      apiGet("getListTanggal",{mesin:m}).then(function(d){
+        var rows=(d&&d.data)||[];
+        var all=0, bln={};
+        rows.forEach(function(x){ all+=Number(x.total)||0; bln[x.bulan]=(bln[x.bulan]||0)+Number(x.total)||0; });
+        var html='<h3>'+m+'</h3>';
+        html+='<div class="db-row"><span>TOTAL KESELURUHAN</span><b>'+all.toLocaleString("id-ID")+'</b></div>';
+        var keys=Object.keys(bln).slice(-3).reverse();
+        keys.forEach(function(b){
+          html+='<div class="db-row"><span>'+b+'</span><b>'+bln[b].toLocaleString("id-ID")+'</b></div>';
+        });
+        if(!rows.length){ html+='<div class="db-row"><span>Belum ada data</span><b>0</b></div>'; }
+        var card=document.createElement("div");
+        card.className="db-card";
+        card.innerHTML=html;
+        box.appendChild(card);
+      });
+    });
+  });
+};
+</script>
