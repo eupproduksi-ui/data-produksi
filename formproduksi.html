@@ -1,0 +1,610 @@
+<style>
+.fp-card,.fp-crumb span,.fp-crumb button,.fp-frow label,.fp-frow input,.fp-frow select,.fp-th,.fp-td,.fp-merge,.fp-primary,.fp-outline,.fp-green,.fp-gray,.fp-addbtn,.fp-fab,.fp-det-btn,.fp-det-no,.fp-kpc,.fp-inf,.fp-inf b,.fp-mesin-card,.fp-bulan,.fp-tgl-row .t,.fp-tgl-row .tot,.fp-ckrow,.fp-note,.fp-modal-box h3,.fp-modal-box p,.fp-cellin{font-weight:bold;}
+.fp-card{background:#fff;border:1px solid #e3e7ee;border-radius:8px;padding:14px;margin-bottom:14px}
+.fp-primary{background:#1155cc;color:#fff;border:none;border-radius:6px;padding:12px 22px;font-weight:bold;letter-spacing:1px;cursor:pointer}
+.fp-full{width:100%}
+.fp-outline{background:#fff;color:#1155cc;border:1px solid #1155cc;border-radius:6px;padding:12px 20px;font-weight:bold;cursor:pointer}
+.fp-green{background:#22a555;color:#fff;border:none;border-radius:6px;padding:12px 22px;font-weight:bold;letter-spacing:1px;cursor:pointer}
+.fp-gray{background:#e3e7ee;color:#333;border:none;border-radius:6px;padding:12px 22px;font-weight:bold;letter-spacing:1px;cursor:pointer}
+.fp-scanbtn{flex:0 0 auto;background:#1155cc;color:#fff;border:none;border-radius:6px;padding:12px 14px;font-weight:bold;letter-spacing:1px;cursor:pointer}
+.fp-scanbtn:active{background:#0d3f92}
+.fp-crumb{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.fp-crumb button{background:#fff;border:1px solid #dfe4ec;border-radius:8px;padding:8px 12px;color:#1155cc;cursor:pointer}
+.fp-crumb span{color:#1155cc;font-weight:bold}
+.fp-mesin-grid{display:flex;flex-direction:column;gap:10px}
+.fp-mesin-card{background:#fff;border:1px solid #dfe4ec;border-radius:8px;padding:16px 20px;text-align:left;color:#1155cc;font-weight:bold;font-size:17px;cursor:pointer}
+.fp-mesin-card:hover{background:#1155cc;color:#fff}
+.fp-bulan{background:#1155cc;color:#fff;border-radius:6px;padding:9px 14px;font-weight:bold;margin:16px 0 10px}
+.fp-tgl-row{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid #dfe4ec;border-radius:8px;padding:16px;margin-bottom:10px;cursor:pointer}
+.fp-tgl-row:hover{background:#eef3fb}
+.fp-tgl-row .t{font-weight:bold;font-size:17px}
+.fp-tgl-row .tot{background:#e8eefb;color:#1155cc;border-radius:6px;padding:4px 10px;font-weight:bold;font-size:13px}
+.fp-tgl-row .chev{margin-left:auto;color:#1155cc}
+.fp-fab{position:fixed;right:24px;bottom:24px;width:58px;height:58px;border-radius:50%;background:#1155cc;color:#fff;border:none;font-size:32px;font-weight:bold;line-height:1;box-shadow:0 4px 14px rgba(0,0,0,.35);z-index:60;cursor:pointer}
+.fp-fab:active{background:#0d3f92}
+.fp-frow{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.fp-frow label{width:150px;font-weight:bold;color:#222;font-size:14px;letter-spacing:1px}
+.fp-frow input,.fp-frow select{flex:1;padding:12px;border:1px solid #cfd6e0;border-radius:6px;font-size:15px}
+.fp-frow input[readonly]{background:#eceff3;color:#555}
+.fp-addbtn{flex:0 0 54px;width:54px;height:46px;background:#e8eefb;color:#1155cc;border:1px dashed #1155cc;border-radius:8px;font-size:22px;font-weight:bold;cursor:pointer;line-height:1}
+.fp-addbtn:hover{background:#1155cc;color:#fff}
+.fp-gap{flex:0 0 54px;width:54px}
+.fp-form-foot{display:flex;justify-content:space-between;align-items:center;background:#e5e9f0;padding:12px;border-radius:8px;margin-top:10px}
+.fp-table{width:100%;border-collapse:collapse;background:#fff;font-size:14px;margin:14px 0}
+.fp-th{background:#1155cc;color:#fff;padding:9px;border:1px solid #0d3f92;text-align:center}
+.fp-td{padding:8px;border:1px solid #e3e7ee;text-align:center;vertical-align:top}
+.fp-merge{background:#f7f9fc;color:#1155cc;font-weight:bold;font-size:16px;vertical-align:middle;text-align:center}
+.fp-edit{cursor:pointer;background:#fff}
+.fp-edit:hover{background:#e8eefb;outline:2px solid #1155cc33}
+.fp-cellin{width:90px;padding:4px 6px;border:1px solid #1155cc;border-radius:4px;font-size:14px;text-align:center;background:#fff}
+.fp-det-head{display:flex;gap:10px;align-items:center;margin-bottom:12px}
+.fp-det-no{background:#1155cc;color:#fff;border-radius:16px;padding:7px 16px;font-weight:bold}
+.fp-det-btn{flex:1;background:#fff;border:1px solid #dfe4ec;border-radius:8px;padding:10px;font-weight:bold;letter-spacing:1px;color:#333;cursor:pointer}
+.fp-det-body{display:flex;gap:18px;flex-wrap:wrap}
+.fp-det-left{width:320px}
+.fp-qrrow{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.fp-qr{background:#fff;border:1px solid #e3e7ee;padding:6px;display:inline-block}
+.fp-kpc{font-weight:bold;font-size:16px;margin:0}
+.fp-inf{font-size:14px;margin-bottom:6px}
+.fp-inf b{display:inline-block;width:110px;color:#555;font-weight:bold}
+.fp-modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:100;display:flex;align-items:center;justify-content:center;padding:16px}
+.fp-modal-box{background:#fff;border-radius:10px;width:760px;max-width:100%;max-height:90vh;overflow:auto;padding:22px;position:relative}
+.fp-modal-box h3{color:#1155cc;font-size:20px;margin:0 0 4px}
+.fp-modal-box p{color:#666;font-size:13px;margin:0 0 12px}
+.fp-x{position:absolute;top:14px;right:14px;background:#eee;border:none;border-radius:50%;width:36px;height:36px;font-size:16px;cursor:pointer;z-index:5}
+.fp-ckrow{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #e3e7ee;border-radius:6px;padding:12px 14px;margin-bottom:8px;font-weight:bold;cursor:pointer}
+.fp-ckrow input{width:22px;height:22px;accent-color:#1155cc}
+.fp-note{background:#f4f6f9;border:1px dashed #cfd6e0;border-radius:6px;padding:10px 12px;color:#666;font-size:13px;margin-bottom:12px}
+.fp-print-foot{display:flex;justify-content:flex-end;gap:10px;margin-top:14px}
+</style>
+
+<div class="fp-card fp-crumb">
+  <button onclick="fpBack()">&#9664;</button>
+  <span id="fp-crumb">Data Produksi</span>
+</div>
+
+<section id="fp-view-mesin"><div class="fp-mesin-grid" id="fp-mesin-grid"></div></section>
+
+<section id="fp-view-tanggal" class="hidden">
+  <div id="fp-tgl-list"></div>
+  <button class="fp-fab" onclick="fpOpenForm()" title="Input Data Produksi">+</button>
+</section>
+
+<section id="fp-view-form" class="hidden">
+  <div class="fp-card">
+    <h3 style="color:#1155cc;border-bottom:2px solid #1155cc;padding-bottom:10px;margin-bottom:16px">INPUT DATA PRODUKSI</h3>
+    <div class="fp-frow"><label>NO</label><input id="fp-no" readonly></div>
+    <div class="fp-frow"><label>TANGGAL</label><input id="fp-tgl" type="date" onchange="fpRefreshNo()"></div>
+    <div class="fp-frow"><label>OPERATOR</label><input id="fp-op" readonly></div>
+    <div class="fp-frow"><label>MESIN</label><input id="fp-mesin" readonly></div>
+    <div class="fp-frow"><label>PRODUK</label><select id="fp-produk"><option value="">Pilih Produk</option></select></div>
+    <div class="fp-frow"><label>KPC</label><input id="fp-kpc" placeholder="Isi manual / scan QR"><button type="button" class="fp-scanbtn" onclick="fpOpenScan()">SCAN QR</button></div>
+    <div class="fp-frow"><label>PANJANG COIL</label><input id="fp-coil" type="text" inputmode="numeric" onchange="fpSetNum1(this,'coil')"></div>
+    <div id="fp-summary"></div>
+    <div class="fp-form-foot">
+      <button class="fp-primary" onclick="fpSimpan()">SIMPAN</button>
+      <button class="fp-outline" onclick="fpOpenModal()">+ TAMBAH</button>
+    </div>
+  </div>
+</section>
+
+<section id="fp-view-detail" class="hidden"><div id="fp-detail-box"></div></section>
+
+<div id="fp-modal" class="fp-modal hidden">
+  <div class="fp-modal-box">
+    <button class="fp-x" onclick="fpCloseModal()">&#10005;</button>
+    <h3>INPUTAN PRODUKSI</h3>
+    <p>Input data produksi</p>
+    <div id="fp-modal-rows"></div>
+    <div style="height:12px"></div>
+    <button class="fp-primary fp-full" onclick="fpSimpanInputan()">SIMPAN INPUTAN</button>
+  </div>
+</div>
+
+<div id="fp-print-modal" class="fp-modal hidden">
+  <div class="fp-modal-box">
+    <button class="fp-x" onclick="fpClosePrint()">&#10005;</button>
+    <h3>PILIH KOLOM CETAK</h3>
+    <div class="fp-note">Wajib ikut cetak: QR, KPC, NO, Tanggal, Operator, Mesin, Nama Produk. Silakan centang kolom data di bawah ini:</div>
+    <div id="fp-print-list"></div>
+    <div id="fp-foto-info" class="fp-note hidden"></div>
+    <input type="file" id="fp-file" accept="image/*" style="display:none" onchange="fpOnFile(this)">
+    <div class="fp-print-foot">
+      <button class="fp-primary" onclick="fpDoDownload()">&#11123; DOWNLOAD</button>
+      <button class="fp-green" onclick="fpGaleri()">GALERI</button>
+      <button class="fp-gray" onclick="fpClosePrint()">BATAL</button>
+    </div>
+  </div>
+</div>
+
+<div id="fp-scan-modal" class="fp-modal hidden">
+  <div class="fp-modal-box" style="width:520px;padding:0;overflow:hidden">
+    <button class="fp-x" onclick="fpCloseScan()">&#10005;</button>
+    <iframe id="fp-scan-iframe" src="about:blank" style="width:100%;height:70vh;border:none;display:block"></iframe>
+  </div>
+</div>
+
+<script>
+var fpMESIN=null, fpKEY=null, fpROWS=[], fpSTRUCT=null, fpDATA={}, fpCOIL="";
+var fpCARDS=[], fpEDIT=null, fpPRINTCARD=null, fpPRINTCOLS={};
+function fpFmt(n){ return Number(n||0).toLocaleString("id-ID"); }
+function fpEl(id){ return document.getElementById(id); }
+
+/* ===== PEMANGGIL API (PENGGANTI google.script.run) ===== */
+function fpRun(fn, arg, cb){
+  var params={action:fn};
+  if(fn==="getProduk"){ params.tipe=arg[0]; }
+  if(fn==="getNextNo"){ params.mesin=arg[0]; params.iso=arg[1]; }
+  if(fn==="getListTanggal"){ params.mesin=arg[0]; }
+  if(fn==="getDetail"){ params.mesin=arg[0]; params.key=arg[1]; }
+  if(fn==="simpanPaket"){ params.p=arg[0]; }
+  if(fn==="updatePaket"){ params.p=arg[0]; params.key=arg[1]; params.no=arg[2]; }
+  if(fn==="hapusPaket"){ params.mesin=arg[0]; params.key=arg[1]; params.no=arg[2]; }
+  fetch(API_URL,{method:"POST",body:JSON.stringify(params)})
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+      if(res && res.ok===false){ alert("ERROR: "+(res.msg||"")); return; }
+      if(res && res.ok===true && res.data!==undefined){ cb(res.data); return; }
+      cb(res);
+    })
+    .catch(function(e){ alert("ERROR: "+e.message); });
+}
+
+function fpShow(v){
+  ["fp-view-mesin","fp-view-tanggal","fp-view-form","fp-view-detail"].forEach(function(x){ fpEl(x).classList.add("hidden"); });
+  fpEl(v).classList.remove("hidden");
+}
+function fpBack(){
+  if(!fpEl("fp-view-mesin").classList.contains("hidden")) return;
+  if(!fpEl("fp-view-detail").classList.contains("hidden")) fpGoTanggal();
+  else if(!fpEl("fp-view-form").classList.contains("hidden")) fpGoTanggal();
+  else fpGoMesin();
+}
+window.init_formproduksi=function(){ fpGoMesin(); };
+window.init_FormProduksi=function(){ fpGoMesin(); };
+
+function fpSetNum(el,col,i){ el.value=el.value.replace(/[^0-9]/g,""); fpDATA[col][i]=el.value; }
+function fpSetNum1(el,k){ el.value=el.value.replace(/[^0-9]/g,""); if(k==="coil"){ fpCOIL=el.value; } else { fpDATA[k]=el.value; } }
+
+function fpGoMesin(){
+  fpMESIN=null; fpEl("fp-crumb").textContent="Data Produksi"; fpShow("fp-view-mesin");
+  fpRun("getMesin",[],function(list){
+    if(!list || !list.length){ fpEl("fp-mesin-grid").innerHTML='<div class="fp-card">Master mesin kosong - isi sheet MASTER_MESIN.</div>'; return; }
+    fpEl("fp-mesin-grid").innerHTML=list.map(function(m){
+      return '<div class="fp-mesin-card" onclick="fpOpenMesin(\''+m+'\')">'+m+'</div>';
+    }).join("");
+  });
+}
+function fpOpenMesin(m){ fpMESIN=m; fpGoTanggal(); }
+
+function fpGoTanggal(){
+  fpEl("fp-crumb").textContent="Data Produksi > "+fpMESIN; fpShow("fp-view-tanggal");
+  fpRun("getListTanggal",[fpMESIN],function(list){
+    var html="", bl="";
+    list.forEach(function(x){
+      if(x.bulan!==bl){ bl=x.bulan; html+='<div class="fp-bulan">'+bl+'</div>'; }
+      html+='<div class="fp-tgl-row" onclick="fpOpenDetail(\''+x.key+'\')"><span class="t">'+x.tgl+
+            '</span><span class="tot">Total: '+fpFmt(x.total)+'</span><span class="chev">&#10095;</span></div>';
+    });
+    fpEl("fp-tgl-list").innerHTML=html||'<div class="fp-card">Belum ada data produksi.</div>';
+  });
+}
+
+function fpOpenForm(){
+  fpEDIT=null;
+  fpEl("fp-crumb").textContent="Data Produksi > "+fpMESIN+" > Input"; fpShow("fp-view-form");
+  fpResetForm();
+  fpEl("fp-op").value = USER ? USER.nama : "-";
+  fpEl("fp-mesin").value = fpMESIN;
+  fpRun("getProduk",[(fpMESIN.indexOf("RENG")>=0?"RENG":"TRUSS")],function(list){
+    fpEl("fp-produk").innerHTML='<option value="">Pilih Produk</option>';
+    list.forEach(function(p){ fpEl("fp-produk").innerHTML+='<option>'+p+'</option>'; });
+  });
+}
+function fpRefreshNo(){ fpRun("getNextNo",[fpMESIN,fpEl("fp-tgl").value],function(n){ fpEl("fp-no").value=n; }); }
+
+function fpResetData(){
+  fpDATA={ inputan:"", nonPrime:"", prime:[""], rijekCoil:[""], rijekMesin:[""], scrap:[""] };
+  fpCOIL="";
+}
+function fpResetForm(){
+  fpROWS=[];
+  fpEDIT=null;
+  fpResetData();
+  fpEl("fp-summary").innerHTML="";
+  fpEl("fp-produk").innerHTML='<option value="">Pilih Produk</option>';
+  fpEl("fp-kpc").value="";
+  fpEl("fp-coil").value="";
+  fpEl("fp-tgl").value=new Date().toISOString().slice(0,10);
+  fpRefreshNo();
+}
+
+function fpRenderModal(){
+  var multi=[["prime","PRIME"],["rijekCoil","RIJEK COIL"],["rijekMesin","RIJEK MESIN"],["scrap","SCRAP"]];
+  var h="";
+  h+='<div class="fp-frow"><label>INPUTAN</label><input type="text" inputmode="numeric" value="'+fpDATA.inputan+'" onchange="fpSetNum1(this,\'inputan\')"><span class="fp-gap"></span></div>';
+  multi.forEach(function(m){
+    var col=m[0];
+    fpDATA[col].forEach(function(v,i){
+      if(i===0){
+        h+='<div class="fp-frow"><label>'+m[1]+'</label><input type="text" inputmode="numeric" value="'+v+'" onchange="fpSetNum(this,\''+col+'\','+i+')"><button type="button" class="fp-addbtn" onclick="fpAddVal(\''+col+'\')">+</button></div>';
+      } else {
+        h+='<div class="fp-frow"><label></label><input type="text" inputmode="numeric" value="'+v+'" onchange="fpSetNum(this,\''+col+'\','+i+')"><span class="fp-gap"></span></div>';
+      }
+    });
+  });
+  h+='<div class="fp-frow"><label>NON PRIME</label><input type="text" inputmode="numeric" value="'+fpDATA.nonPrime+'" onchange="fpSetNum1(this,\'nonPrime\')"><span class="fp-gap"></span></div>';
+  fpEl("fp-modal-rows").innerHTML=h;
+}
+function fpAddVal(col){ fpDATA[col].push(""); fpRenderModal(); }
+function fpOpenModal(){ fpResetData(); fpEl("fp-modal").classList.remove("hidden"); fpRenderModal(); }
+function fpCloseModal(){ fpEl("fp-modal").classList.add("hidden"); }
+function fpSimpanInputan(){
+  var inp=Number(fpDATA.inputan)||0;
+  if(inp<=0){ alert("INPUTAN harus lebih dari 0"); return; }
+  var maxLen=Math.max(fpDATA.prime.length, fpDATA.rijekCoil.length, fpDATA.rijekMesin.length, fpDATA.scrap.length, 1);
+  var rows=[];
+  for(var i=0;i<maxLen;i++){
+    rows.push({
+      inputan:  (i===0)? inp : 0,
+      prime:    Number(fpDATA.prime[i])||0,
+      rijekCoil:Number(fpDATA.rijekCoil[i])||0,
+      rijekMesin:Number(fpDATA.rijekMesin[i])||0,
+      scrap:    Number(fpDATA.scrap[i])||0,
+      nonPrime: (i===0)? (Number(fpDATA.nonPrime)||0) : 0
+    });
+  }
+  fpROWS = fpROWS.concat(rows);
+  fpCloseModal(); fpRenderSummary();
+}
+
+var fpIKOLS=[{k:"inputan",l:"INPUTAN"},{k:"prime",l:"PRIME"},{k:"rijekCoil",l:"RIJEK COIL"},{k:"rijekMesin",l:"RIJEK MESIN"},{k:"scrap",l:"SCRAP"},{k:"nonPrime",l:"NON PRIME"}];
+function fpTotals(rows){
+  var t=0,tm=0,tp=0;
+  rows.forEach(function(r){
+    var i=Number(r.inputan)||0, np=Number(r.nonPrime)||0;
+    t+=i;
+    tm+=i+np;
+    tp+=(Number(r.prime)||0)+(Number(r.rijekCoil)||0)+(Number(r.rijekMesin)||0)+(Number(r.scrap)||0);
+  });
+  return {t:t,tm:tm,tp:tp};
+}
+
+function fpMergedTable(rows, editable){
+  var tot=fpTotals(rows);
+  var vis=fpIKOLS.filter(function(c){ return rows.some(function(r){ return Number(r[c.k])||0; }); });
+  var sessions=[];
+  rows.forEach(function(r,ri){
+    if(Number(r.inputan)>0 || sessions.length===0){ sessions.push([{ri:ri,r:r}]); }
+    else { sessions[sessions.length-1].push({ri:ri,r:r}); }
+  });
+  var phys=[];
+  sessions.forEach(function(sess,si){
+    sess.forEach(function(item,i){
+      if(i>0){
+        var adaIsi=vis.some(function(c){ return Number(item.r[c.k])||0; });
+        if(!adaIsi) return;
+      }
+      phys.push({ no:(i===0)? (si+1) : "", ri:item.ri, row:item.r });
+    });
+  });
+  var head='<tr><th class="fp-th">NO</th>'+vis.map(function(c){ return '<th class="fp-th">'+c.l+'</th>'; }).join("")+
+           '<th class="fp-th">TOTAL</th><th class="fp-th">TOTAL MAX</th><th class="fp-th">TOTAL POTONGAN</th></tr>';
+  var body="";
+  phys.forEach(function(p,idx){
+    body+='<tr><td class="fp-td">'+p.no+'</td>';
+    body+=vis.map(function(c){
+      var v=Number(p.row[c.k])||0;
+      if(editable){
+        return '<td class="fp-td fp-edit" onclick="fpEditCell(this,'+p.ri+',\''+c.k+'\')">'+(v? fpFmt(v) : '')+'</td>';
+      }
+      return '<td class="fp-td">'+(v? fpFmt(v) : '')+'</td>';
+    }).join("");
+    if(idx===0){
+      body+='<td class="fp-merge" rowspan="'+phys.length+'">'+fpFmt(tot.t)+'</td>'+
+            '<td class="fp-merge" rowspan="'+phys.length+'">'+fpFmt(tot.tm)+'</td>'+
+            '<td class="fp-merge" rowspan="'+phys.length+'">'+fpFmt(tot.tp)+'</td>';
+    }
+    body+='</tr>';
+  });
+  if(!phys.length){
+    body='<tr><td class="fp-td" colspan="'+(vis.length+4)+'">Belum ada inputan</td></tr>';
+  }
+  return '<table class="fp-table">'+head+body+'</table>';
+}
+function fpRenderSummary(){ fpEl("fp-summary").innerHTML=fpMergedTable(fpROWS, true); }
+
+function fpEditCell(td, ri, col){
+  if(td.getElementsByTagName("input").length) return;
+  var cur=Number(fpROWS[ri][col])||0;
+  td.innerHTML='<input class="fp-cellin" type="text" inputmode="numeric" value="'+(cur? cur : "")+'">';
+  var inp=td.getElementsByTagName("input")[0];
+  inp.focus();
+  inp.select();
+  var selesai=function(){
+    var val=Number(inp.value.replace(/[^0-9]/g,""))||0;
+    fpROWS[ri][col]=val;
+    fpRenderSummary();
+  };
+  inp.onblur=selesai;
+  inp.onkeydown=function(ev){ if(ev.key==="Enter"){ inp.blur(); } };
+  inp.onclick=function(ev){ ev.stopPropagation(); };
+}
+
+function fpSimpan(){
+  if(!fpEl("fp-produk").value){ alert("Pilih produk dulu"); return; }
+  if(!fpROWS.length){ alert("Klik + TAMBAH untuk isi inputan"); return; }
+  var p={ mesin:fpMESIN, tanggal:fpEl("fp-tgl").value, operator:(USER?USER.nama:"-"),
+          produk:fpEl("fp-produk").value, kpc:fpEl("fp-kpc").value,
+          panjangCoil:fpCOIL, rows:fpROWS };
+  if(fpEDIT){
+    var keyEd=fpEDIT.key, noEd=fpEDIT.no;
+    fpRun("updatePaket",[p,keyEd,noEd],function(r){
+      if(!r.ok){ alert(r.msg); return; }
+      alert("PERUBAHAN TERSIMPAN!\nNO: "+noEd+"\nTOTAL: "+fpFmt(r.total)+"\nTOTAL MAX: "+fpFmt(r.totalMax)+"\nTOTAL POTONGAN: "+fpFmt(r.totalPot));
+      fpResetForm();
+      fpOpenDetail(keyEd);
+    });
+    return;
+  }
+  fpRun("simpanPaket",[p],function(r){
+    if(!r.ok){ alert(r.msg); return; }
+    alert("TERSIMPAN!\nNO: "+r.no+"\nTOTAL: "+fpFmt(r.total)+"\nTOTAL MAX: "+fpFmt(r.totalMax)+"\nTOTAL POTONGAN: "+fpFmt(r.totalPot));
+    fpResetForm();
+    fpGoTanggal();
+  });
+}
+
+function fpEditCard(idx){
+  var c=fpCARDS[idx]; if(!c) return;
+  fpEDIT={ key: fpKEY, no: c.no };
+  fpShow("fp-view-form");
+  fpEl("fp-crumb").textContent="Data Produksi > "+fpMESIN+" > EDIT NO "+c.no;
+  fpEl("fp-op").value = USER ? USER.nama : "-";
+  fpEl("fp-mesin").value = fpMESIN;
+  fpEl("fp-tgl").value = fpKEY;
+  fpEl("fp-no").value = c.no;
+  fpEl("fp-kpc").value = c.kpc||"";
+  fpEl("fp-coil").value = c.panjangCoil||"";
+  fpCOIL = String(c.panjangCoil||"");
+  fpROWS = (c.inputs||[]).map(function(r){
+    return { inputan:r.inputan, prime:r.prime, rijekCoil:r.rijekCoil, rijekMesin:r.rijekMesin, scrap:r.scrap, nonPrime:r.nonPrime };
+  });
+  fpRun("getProduk",[(fpMESIN.indexOf("RENG")>=0?"RENG":"TRUSS")],function(list){
+    fpEl("fp-produk").innerHTML='<option value="">Pilih Produk</option>';
+    list.forEach(function(p){ fpEl("fp-produk").innerHTML+='<option'+(p===c.produk?' selected':'')+'>'+p+'</option>'; });
+  });
+  fpRenderSummary();
+}
+
+/* ===== SCAN QR: MODAL IFRAME SATU DOMAIN (TANPA PINDAH HALAMAN) ===== */
+window.addEventListener("message", function(ev){
+  if(!ev.data || ev.data.type!=="DMS_KPC_SCAN") return;
+  fpApplyKpc(ev.data.text);
+});
+function fpOpenScan(){
+  fpEl("fp-scan-modal").classList.remove("hidden");
+  fpEl("fp-scan-iframe").src="scan.html";
+}
+function fpCloseScan(){
+  fpEl("fp-scan-iframe").src="about:blank";
+  fpEl("fp-scan-modal").classList.add("hidden");
+}
+function fpApplyKpc(text){
+  fpCloseScan();
+  fpEl("fp-kpc").value=String(text||"").trim();
+}
+
+function fpPrintItems(){
+  return fpIKOLS.filter(function(z){ return z.k!=="nonPrime"; }).concat([{k:"total",l:"TOTAL"}]);
+}
+function fpRenderPrintList(){
+  fpEl("fp-print-list").innerHTML=fpPrintItems().map(function(c){
+    return '<label class="fp-ckrow"><input type="checkbox" '+(fpPRINTCOLS[c.k]?'checked':'')+
+           ' onchange="fpPRINTCOLS[\''+c.k+'\']=this.checked"><span>'+c.l+'</span></label>';
+  }).join("");
+}
+function fpOpenPrint(idx){
+  fpPRINTCARD=fpCARDS[idx]; if(!fpPRINTCARD) return;
+  fpPRINTCOLS={};
+  fpPRINTCARD._fotoImg=null;
+  fpEl("fp-foto-info").classList.add("hidden");
+  fpEl("fp-foto-info").innerHTML="";
+  fpRenderPrintList();
+  fpEl("fp-print-modal").classList.remove("hidden");
+  var c=fpPRINTCARD;
+  if(c.kpc && !c._qrimg){
+    var im=new Image();
+    im.crossOrigin="anonymous";
+    im.onload=function(){ c._qrimg=im; };
+    im.src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&data="+encodeURIComponent(c.kpc);
+  }
+}
+function fpClosePrint(){ fpEl("fp-print-modal").classList.add("hidden"); }
+
+function fpGaleri(){
+  fpEl("fp-file").click();
+}
+function fpOnFile(inp){
+  var f=inp.files && inp.files[0];
+  inp.value="";
+  if(!f || !fpPRINTCARD) return;
+  var rd=new FileReader();
+  rd.onload=function(){
+    var img=new Image();
+    img.onload=function(){
+      fpPRINTCARD._fotoImg=img;
+      fpPRINTCARD._fotoSrc=rd.result;
+      fpEl("fp-foto-info").innerHTML=
+        '<img src="'+rd.result+'" style="width:64px;height:64px;object-fit:cover;border:1px solid #cfd6e0;border-radius:6px;vertical-align:middle;margin-right:10px">'+
+        '<span>Foto terpilih - akan dicetak HORIZONTAL di bawah footer.</span>';
+      fpEl("fp-foto-info").classList.remove("hidden");
+    };
+    img.src=rd.result;
+  };
+  rd.readAsDataURL(f);
+}
+
+/* ===== CANVAS PNG: LEBAR 1000, TINGGI PADAT, FOTO 2.5:1 SELEBAR TABEL ===== */
+function fpDrawCanvas(c, cols, useTotal, phys, img, foto){
+  var W=1000, M=40, CW=W-M*2;
+  var rowH=38, headH=38, infoLines=4;
+  var dw=0, dh=0;
+  if(foto){ dw=CW; dh=Math.round(CW*2/5); }
+  var yLine=74+110+infoLines*26+10+headH+phys.length*rowH+18;
+  var H=yLine + (foto && dh>0 ? (34+dh+20) : 40);
+  var cv=document.createElement("canvas");
+  cv.width=W; cv.height=H;
+  var x=cv.getContext("2d");
+  x.fillStyle="#f7fafc"; x.fillRect(0,0,W,H);
+  x.textBaseline="middle";
+  x.fillStyle="#112233"; x.font="bold 26px Arial, sans-serif"; x.textAlign="center";
+  x.fillText("DATA PRODUKSI EUP GUDANG TAIPA 2026", W/2, 38);
+  x.fillStyle="#1155cc"; x.fillRect(M, 56, CW, 4);
+  var y=74;
+  if(img){ try{ x.drawImage(img, M, y, 96, 96); }catch(e){} }
+  x.fillStyle="#112233"; x.font="bold 24px Arial, sans-serif"; x.textAlign="left";
+  x.fillText(c.kpc||"-", M+116, y+48);
+  x.fillStyle="#1155cc"; x.font="bold 18px Arial, sans-serif"; x.textAlign="right";
+  x.fillText("[NO "+c.no+"]", W-M, y+16);
+  y+=110;
+  var inf=[["Tanggal",c.tanggal],["Operator",c.operator],["Mesin",c.mesin],["Produk",c.produk]];
+  x.textAlign="left";
+  inf.forEach(function(row,i){
+    x.fillStyle="#334455"; x.font="bold 17px Arial, sans-serif";
+    x.fillText(row[0], M, y+13+i*26);
+    x.fillStyle="#112233"; x.font="bold 17px Arial, sans-serif";
+    x.fillText(": "+(row[1]||""), M+120, y+13+i*26);
+  });
+  y+=infoLines*26+10;
+  var names=["NOR"].concat(cols.map(function(z){ return z.l; })).concat(useTotal?["TOTAL"]:[]);
+  var nc=names.length, colW=CW/nc;
+  x.fillStyle="#1155cc"; x.fillRect(M, y, CW, headH);
+  x.fillStyle="#fff"; x.font="bold 17px Arial, sans-serif"; x.textAlign="center";
+  names.forEach(function(nm,i){ x.fillText(nm, M+colW*i+colW/2, y+headH/2); });
+  var bt=y+headH, bh=phys.length*rowH;
+  x.fillStyle="#fff"; x.fillRect(M, bt, CW, bh);
+  var totalX = useTotal ? M+colW*(nc-1) : null;
+  x.strokeStyle="#cfd6e0"; x.lineWidth=1;
+  for(var r=0;r<=phys.length;r++){
+    var yy=bt+r*rowH;
+    x.beginPath(); x.moveTo(M, yy); x.lineTo(useTotal? totalX : M+CW, yy); x.stroke();
+  }
+  for(var i2=0;i2<=nc;i2++){
+    var xx=M+colW*i2;
+    x.beginPath(); x.moveTo(xx, bt); x.lineTo(xx, bt+bh); x.stroke();
+  }
+  x.strokeRect(M, y, CW, headH+bh);
+  x.fillStyle="#112233"; x.font="bold 17px Arial, sans-serif"; x.textAlign="center";
+  phys.forEach(function(p,ri){
+    var cy=bt+ri*rowH+rowH/2;
+    x.fillText(String(p.no), M+colW/2, cy);
+    cols.forEach(function(z,ci){
+      var v=Number(p.row[z.k])||0;
+      x.fillText(v? fpFmt(v) : "", M+colW*(ci+1)+colW/2, cy);
+    });
+  });
+  if(useTotal){
+    x.fillStyle="#1155cc"; x.font="bold 20px Arial, sans-serif";
+    x.fillText(fpFmt(c.total), totalX+colW/2, bt+bh/2);
+  }
+  y=bt+bh+18;
+  x.strokeStyle="#99aabb"; x.beginPath(); x.moveTo(M, y); x.lineTo(W-M, y); x.stroke();
+  x.fillStyle="#334455"; x.font="italic bold 17px Arial, sans-serif"; x.textAlign="center";
+  x.fillText("\u00A9 EUP GUDANG TAIPA 2026", W/2, y+16);
+  if(foto && dw>0 && dh>0){
+    var py=y+34;
+    var px=(W-dw)/2;
+    var fw=foto.naturalWidth||foto.width, fh=foto.naturalHeight||foto.height;
+    if(fw>0 && fh>0){
+      var rt=dw/dh, sx=0, sy=0, sw=fw, sh=fh;
+      if(fw/fh > rt){ sw=fh*rt; sx=(fw-sw)/2; }
+      else { sh=fw/rt; sy=(fh-sh)/2; }
+      try{
+        x.drawImage(foto, sx, sy, sw, sh, px, py, dw, dh);
+        x.strokeStyle="#cfd6e0"; x.strokeRect(px, py, dw, dh);
+      }catch(e){}
+    }
+  }
+  return cv;
+}
+
+function fpBuildPrintPNG(cb){
+  var c=fpPRINTCARD; if(!c){ alert("Tidak ada data untuk dicetak"); return; }
+  var cols=fpIKOLS.filter(function(z){ return fpPRINTCOLS[z.k] && z.k!=="nonPrime"; });
+  var useTotal=!!fpPRINTCOLS["total"];
+  var sessions=[];
+  (c.inputs||[]).forEach(function(r){
+    if(Number(r.inputan)>0 || sessions.length===0){ sessions.push([r]); }
+    else { sessions[sessions.length-1].push(r); }
+  });
+  var phys=[];
+  sessions.forEach(function(ss2,si){
+    ss2.forEach(function(r,i){ phys.push({ no:(i===0)?(si+1):"", row:r }); });
+  });
+  if(!phys.length){ phys=[{no:1,row:{}}]; }
+  var foto=(c._fotoImg && c._fotoImg.complete && c._fotoImg.naturalWidth>0)? c._fotoImg : null;
+  var make=function(img){
+    var cv=fpDrawCanvas(c, cols, useTotal, phys, img, foto);
+    var ulang=function(){
+      if(img){ var cv2=fpDrawCanvas(c, cols, useTotal, phys, null, foto); cv2.toBlob(function(b2){ if(b2) cb(b2); }, "image/png"); }
+    };
+    try{
+      cv.toBlob(function(b){ if(b){ cb(b); } else { ulang(); } }, "image/png");
+    }catch(e){ ulang(); }
+  };
+  var cached=c._qrimg;
+  if(c.kpc && cached && cached.complete && cached.naturalWidth>0){ make(cached); return; }
+  if(c.kpc){
+    var im=new Image();
+    im.crossOrigin="anonymous";
+    im.onload=function(){ c._qrimg=im; make(im); };
+    im.onerror=function(){ make(null); };
+    im.src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&data="+encodeURIComponent(c.kpc);
+  } else { make(null); }
+}
+
+function fpNamaFile(){
+  var c=fpPRINTCARD;
+  return "PRODUKSI-"+(fpMESIN||"DATA")+"-NO"+(c? c.no : "")+".png";
+}
+function fpSaveBlob(blob, name){
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement("a");
+  a.href=url; a.download=name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function(){ URL.revokeObjectURL(url); },5000);
+}
+function fpDoDownload(){
+  fpBuildPrintPNG(function(blob){
+    fpSaveBlob(blob, fpNamaFile());
+    fpClosePrint();
+  });
+}
+
+function fpOpenDetail(key){
+  fpKEY=key; fpShow("fp-view-detail");
+  fpEl("fp-crumb").textContent="Data Produksi > "+fpMESIN+" > "+key.split("-").reverse().join("/");
+  fpRun("getDetail",[fpMESIN,key],function(d){
+    fpSTRUCT=d.struct;
+    fpCARDS=d.cards;
+    fpEl("fp-detail-box").innerHTML=d.cards.map(function(c, idx){
+      var qr=c.kpc? '<img class="fp-qr" width="86" src="https://api.qrserver.com/v1/create-qr-code/?size=86x86&data='+encodeURIComponent(c.kpc)+'">':'<div class="fp-qr" style="width:86px;height:86px"></div>';
+      return '<div class="fp-card"><div class="fp-det-head"><span class="fp-det-no">NO '+c.no+'</span>'+
+        '<button class="fp-det-btn" onclick="fpEditCard('+idx+')">EDIT</button>'+
+        '<button class="fp-det-btn" onclick="fpOpenPrint('+idx+')">DOWNLOAD</button>'+
+        '<button class="fp-det-btn" onclick="fpHapus('+c.no+')">HAPUS</button></div>'+
+        '<div class="fp-det-body"><div class="fp-det-left">'+
+        '<div class="fp-qrrow">'+qr+'<div class="fp-kpc">'+(c.kpc||"-")+'</div></div>'+
+        '<div class="fp-inf"><b>TANGGAL</b> '+c.tanggal+'</div><div class="fp-inf"><b>OPERATOR</b> '+c.operator+'</div>'+
+        '<div class="fp-inf"><b>MESIN</b> '+c.mesin+'</div><div class="fp-inf"><b>PRODUK</b> '+c.produk+'</div>'+
+        '<div class="fp-inf"><b>PANJANG COIL</b> '+fpFmt(c.panjangCoil)+'</div></div></div>'+
+        '<div style="height:12px"></div>'+fpMergedTable(c.inputs)+'</div>';
+    }).join("") || '<div class="fp-card">Tidak ada data.</div>';
+  });
+}
+function fpHapus(no){
+  if(!confirm("Hapus paket NO "+no+"?")) return;
+  fpRun("hapusPaket",[fpMESIN,fpKEY,no],function(){ fpOpenDetail(fpKEY); });
+}
+</script>
