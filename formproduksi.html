@@ -119,8 +119,11 @@
 
 <div id="fp-scan-modal" class="fp-modal hidden">
   <div class="fp-modal-box" style="width:520px;padding:0;overflow:hidden">
-    <button class="fp-x" onclick="fpCloseScan()">&#10005;</button>
-    <iframe id="fp-scan-iframe" src="about:blank" style="width:100%;height:70vh;border:none;display:block"></iframe>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:#fff;border-bottom:1px solid #e3e7ee">
+      <div style="font-weight:bold;font-size:18px;color:#112233;letter-spacing:.5px">Add KPC</div>
+      <button style="background:#eee;border:none;border-radius:50%;width:36px;height:36px;font-size:16px;cursor:pointer" onclick="fpCloseScan()">&#10005;</button>
+    </div>
+    <iframe id="fp-scan-iframe" src="about:blank" style="width:100%;height:64vh;border:none;display:block"></iframe>
   </div>
 </div>
 
