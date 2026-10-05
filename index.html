@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DATA PRODUKSI</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial, Helvetica, sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+body{background:#f4f6f9;min-height:100vh;display:flex;flex-direction:column}
+.hidden{display:none!important}
+button{cursor:pointer;font-family:inherit;border:none;background:none}
+a{text-decoration:none;color:inherit}
+.app-header{position:sticky;top:0;z-index:50;background:#1155cc;color:#fff;display:flex;align-items:center;gap:14px;padding:12px 16px;height:60px;}
+.menu-btn{font-size:24px;line-height:1;color:#fff;padding:0 8px;}
+.header-title{font-weight:bold;font-size:20px;letter-spacing:1px;flex:1;}
+.user-badge{background:#0d3f92;border:1px solid #ffffff55;border-radius:20px;padding:6px 16px;font-weight:bold;font-size:14px;}
+.sidebar{position:fixed;left:-260px;top:60px;bottom:0;width:250px;background:#0d3f92;z-index:45;transition:.25s ease-in-out;overflow-y:auto;}
+.sidebar.open{left:0;}
+.sidebar a{display:block;color:#fff;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,0.1);font-size:15px;cursor:pointer;}
+.sidebar a:hover{background:#1155cc;}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:40;display:none;}
+.overlay.show{display:block;}
+.main-content{flex:1;padding:16px;max-width:1200px;margin:auto;width:100%;}
+.boot-msg{padding:20px;color:#888;text-align:center}
+.err-box{padding:20px;color:#c00;background:#ffebee;border:2px solid #c00;border-radius:8px;margin:20px}
+</style>
+</head>
+<body>
+
+<div id="login-area"><div class="boot-msg">Memuat aplikasi...</div></div>
+
+<div id="app" class="hidden">
+  <header class="app-header">
+    <button class="menu-btn" onclick="toggleSidebar()">&#9776;</button>
+    <div class="header-title">DATA PRODUKSI</div>
+    <div class="user-badge">&#128100; <span id="user-nama"></span></div>
+  </header>
+
+  <div style="position:relative;">
+    <nav id="sidebar" class="sidebar">
+      <a onclick="loadPage('Dashboard')">Dashboard</a>
+      <a onclick="loadPage('FormProduksi')">Form Produksi</a>
+    </nav>
+
+    <div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
+    <main id="content" class="main-content"></main>
+  </div>
+</div>
+
+<script>
+var USER = null;
+var API_URL = "https://script.google.com/macros/s/AKfycbyAIXUNexzNZapzdY8xH8sTAy5xb1g8jofD_LRPsykC/exec";
+
+function $idx(id){ return document.getElementById(id); }
+
+function inject(html, el){
+  el.innerHTML = html;
+  var scripts = el.querySelectorAll('script');
+  for(var i = scripts.length - 1; i >= 0; i--){
+    var oldScript = scripts[i];
+    var newScript = document.createElement('script');
+    if(oldScript.src) newScript.src = oldScript.src;
+    else newScript.text = oldScript.textContent || oldScript.innerText;
+    document.body.appendChild(newScript);
+    if(oldScript.parentNode) oldScript.parentNode.removeChild(oldScript);
+  }
+}
+
+function toggleSidebar(){
+  var sb = $idx('sidebar'), ov = $idx('overlay');
+  sb.classList.toggle('open');
+  if(sb.classList.contains('open')) ov.classList.add('show');
+  else ov.classList.remove('show');
+}
+
+function loadPage(name){
+  $idx('sidebar').classList.remove('open');
+  $idx('overlay').classList.remove('show');
+  $idx('content').innerHTML = '<div class="boot-msg">Memuat '+name+'...</div>';
+  fetch(API_URL + "?page=" + name)
+    .then(function(r){ return r.text(); })
+    .then(function(h){
+      inject(h, $idx('content'));
+      setTimeout(function(){
+        var fn = window['init_'+name] || window['init_'+name.toLowerCase()] || window['init_'+name.toUpperCase()];
+        if(fn){
+          try{ fn(); }
+          catch(e){ alert('Init '+name+' error:\n'+e.message); }
+        }
+      }, 150);
+    })
+    .catch(function(e){
+      $idx('content').innerHTML = '<div class="err-box"><b>GAGAL MEMUAT: '+name+'</b><br><br>'+e.message+'</div>';
+    });
+}
+
+function afterLogin(u){
+  USER = u;
+  $idx('user-nama').textContent = u.nama;
+  $idx('login-area').classList.add('hidden');
+  $idx('app').classList.remove('hidden');
+  loadPage('Dashboard');
+}
+
+fetch(API_URL + "?page=Login")
+  .then(function(r){ return r.text(); })
+  .then(function(h){ inject(h, $idx('login-area')); })
+  .catch(function(e){
+    $idx('login-area').innerHTML = '<div class="err-box"><b>GAGAL MEMUAT LOGIN</b><br><br>'+e.message+'</div>';
+  });
+</script>
+</body>
+</html>
