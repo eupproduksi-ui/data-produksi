@@ -1,24 +1,30 @@
 <style>
-.db-title{color:#1155cc;font-size:26px;font-weight:bold;border-left:6px solid #1155cc;padding-left:12px;margin:6px 0 16px;letter-spacing:1px}
-.db-card{background:#f8f9fb;border:1px solid #e3e7ee;border-radius:8px;padding:16px;margin-bottom:14px}
-.db-date{font-weight:bold;font-size:17px;color:#111}
-.db-clock{font-weight:bold;font-size:30px;color:#1155cc;letter-spacing:2px;margin-top:4px}
-.db-muted{color:#8a929c;font-size:15px}
+.db-card{background:#fff;border:1px solid #e3e7ee;border-radius:8px;padding:14px;margin-bottom:14px}
+.db-title{color:#1155cc;border-left:5px solid #1155cc;padding-left:10px;margin-bottom:14px}
+.db-jam{color:#1155cc;font-weight:bold;font-size:22px;letter-spacing:2px}
 </style>
-<div class="db-title">DASHBOARD</div>
+
+<h2 class="db-title">DASHBOARD</h2>
 <div class="db-card">
-  <div class="db-date" id="db-tgl"></div>
-  <div class="db-clock" id="db-jam">00:00:00</div>
+  <div id="db-tanggal" style="font-weight:bold"></div>
+  <div id="db-jam" class="db-jam"></div>
 </div>
-<div class="db-card"><div class="db-muted">Ringkasan produksi per mesin — tahap berikutnya.</div></div>
+<div class="db-card" style="min-height:160px;color:#888">Ringkasan produksi per mesin — tahap berikutnya.</div>
+
 <script>
+var dbTimer=null;
 function dbTick(){
+  var e=document.getElementById('db-jam');
+  if(!e){ clearInterval(dbTimer); return; }
   var d=new Date();
-  var hari=["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
-  var bulan=["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
-  function p(n){ return (n<10?"0":"")+n; }
-  document.getElementById("db-tgl").textContent=hari[d.getDay()]+", "+d.getDate()+" "+bulan[d.getMonth()]+" "+d.getFullYear();
-  document.getElementById("db-jam").textContent=p(d.getHours())+":"+p(d.getMinutes())+":"+p(d.getSeconds());
+  var hari=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  var bul=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  document.getElementById('db-tanggal').textContent=hari[d.getDay()]+', '+d.getDate()+' '+bul[d.getMonth()]+' '+d.getFullYear();
+  e.textContent=d.toTimeString().slice(0,8);
 }
-window.init_Dashboard=function(){ dbTick(); setInterval(dbTick,1000); };
+window.init_dashboard=function(){
+  dbTick();
+  if(dbTimer) clearInterval(dbTimer);
+  dbTimer=setInterval(dbTick,1000);
+};
 </script>
