@@ -49,7 +49,7 @@ a{text-decoration:none;color:inherit}
 
 <script>
 var USER = null;
-var API_URL = "https://script.google.com/macros/s/AKfycbyAIXUNexzNZapzdY8xH8sTAy5xb1g8jofD_LRPsykC/exec";
+var API_URL = "https://script.google.com/macros/s/AKfycbwcKOfb6y5USg7k5oh8oI9jE4T91R8TjBjv6wyuzarEQwk-l95j_RPp9uHsBaD2TbWnbw/exec";
 
 function $idx(id){ return document.getElementById(id); }
 
@@ -77,16 +77,13 @@ function loadPage(name){
   $idx('sidebar').classList.remove('open');
   $idx('overlay').classList.remove('show');
   $idx('content').innerHTML = '<div class="boot-msg">Memuat '+name+'...</div>';
-  fetch(API_URL + "?page=" + name)
-    .then(function(r){ return r.text(); })
+  fetch(name.toLowerCase()+'.html')
+    .then(function(r){ if(!r.ok) throw new Error('File '+name+' belum ada (HTTP '+r.status+')'); return r.text(); })
     .then(function(h){
       inject(h, $idx('content'));
       setTimeout(function(){
         var fn = window['init_'+name] || window['init_'+name.toLowerCase()] || window['init_'+name.toUpperCase()];
-        if(fn){
-          try{ fn(); }
-          catch(e){ alert('Init '+name+' error:\n'+e.message); }
-        }
+        if(fn){ try{ fn(); } catch(e){ alert('Init '+name+' error:\n'+e.message); } }
       }, 150);
     })
     .catch(function(e){
@@ -102,8 +99,8 @@ function afterLogin(u){
   loadPage('Dashboard');
 }
 
-fetch(API_URL + "?page=Login")
-  .then(function(r){ return r.text(); })
+fetch('login.html')
+  .then(function(r){ if(!r.ok) throw new Error('login.html belum ada'); return r.text(); })
   .then(function(h){ inject(h, $idx('login-area')); })
   .catch(function(e){
     $idx('login-area').innerHTML = '<div class="err-box"><b>GAGAL MEMUAT LOGIN</b><br><br>'+e.message+'</div>';
