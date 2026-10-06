@@ -4,7 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>SCAN KPC</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jsqr/1.4.0/jsQR.min.js"></script>
 <style>
   html,body{margin:0;height:100%;background:#000;font-family:Arial,sans-serif;overflow:hidden;}
   #video{width:100%;height:100%;object-fit:cover;}
@@ -16,7 +15,15 @@
   #scanBox .bl{bottom:0;left:0;border-bottom-width:6px;border-left-width:6px;}
   #scanBox .br{bottom:0;right:0;border-bottom-width:6px;border-right-width:6px;}
   #msg{position:fixed;bottom:0;left:0;right:0;background:rgba(0,0,0,.65);color:#fff;padding:12px;font-size:13px;text-align:center;}
+  #snap{position:fixed;bottom:52px;left:50%;transform:translateX(-50%);background:#1155cc;color:#fff;border:none;border-radius:24px;padding:12px 26px;font-size:15px;font-weight:bold;letter-spacing:1px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.5);}
+  #snap:active{background:#0d3f92;}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsqr/1.4.0/jsQR.min.js"></script>
+<script>
+if(typeof jsQR==="undefined"){
+  document.write('<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"><\/script>');
+}
+</script>
 </head>
 <body>
 <video id="video" autoplay playsinline muted></video>
@@ -26,6 +33,7 @@
     <span class="c bl"></span><span class="c br"></span>
   </div>
 </div>
+<button id="snap">JEPRET &amp; BACA</button>
 <div id="msg">Arahkan QR ke dalam kotak — terbaca otomatis</div>
 <script>
 let sent=false;
@@ -38,27 +46,43 @@ function kirim(text){
   }catch(e){}
   document.getElementById("msg").textContent="TERBACA: "+text;
 }
+var canvas=document.createElement("canvas");
+var ctx=canvas.getContext("2d");
+function decodeFrame(){
+  if(typeof jsQR==="undefined") return null;
+  var v=document.getElementById("video");
+  if(!v.videoWidth) return null;
+  var maxW=1600;
+  var sc=Math.min(1, maxW/v.videoWidth);
+  canvas.width=Math.max(1,Math.round(v.videoWidth*sc));
+  canvas.height=Math.max(1,Math.round(v.videoHeight*sc));
+  ctx.drawImage(v,0,0,canvas.width,canvas.height);
+  var d=ctx.getImageData(0,0,canvas.width,canvas.height);
+  var code=jsQR(d.data,d.width,d.height,{inversionAttempts:"attemptBoth"});
+  return code? code.data : null;
+}
 navigator.mediaDevices.getUserMedia({ video:{ facingMode:"environment", width:{ideal:1920}, height:{ideal:1080} } })
   .then(function(s){
     var v=document.getElementById("video");
     v.srcObject=s;
-    setInterval(tick,400);
+    setInterval(function(){
+      var t=decodeFrame();
+      if(t) kirim(t);
+    },300);
   })
   .catch(function(err){
     document.getElementById("msg").textContent="Kamera tidak bisa dibuka: "+err.name;
   });
-const canvas=document.createElement("canvas");
-function tick(){
-  const v=document.getElementById("video");
-  if(!v.videoWidth) return;
-  canvas.width=v.videoWidth;
-  canvas.height=v.videoHeight;
-  const ctx=canvas.getContext("2d");
-  ctx.drawImage(v,0,0);
-  const d=ctx.getImageData(0,0,canvas.width,canvas.height);
-  const code=jsQR(d.data,d.width,d.height,{inversionAttempts:"attemptBoth"});
-  if(code && code.data) kirim(code.data);
-}
+document.getElementById("snap").onclick=function(){
+  var t=decodeFrame();
+  if(t){ kirim(t); }
+  else{ document.getElementById("msg").textContent="Belum terbaca — dekatkan 10-20 cm, tahan, lalu JEPRET lagi."; }
+};
+setTimeout(function(){
+  if(typeof jsQR==="undefined"){
+    document.getElementById("msg").textContent="Library scan gagal dimuat — cek koneksi internet lalu ulangi.";
+  }
+},2500);
 </script>
 </body>
 </html>
