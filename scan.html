@@ -15,8 +15,6 @@
   #scanBox .bl{bottom:0;left:0;border-bottom-width:6px;border-left-width:6px;}
   #scanBox .br{bottom:0;right:0;border-bottom-width:6px;border-right-width:6px;}
   #msg{position:fixed;bottom:0;left:0;right:0;background:rgba(0,0,0,.65);color:#fff;padding:12px;font-size:13px;text-align:center;}
-  #snap{position:fixed;bottom:52px;left:50%;transform:translateX(-50%);background:#1155cc;color:#fff;border:none;border-radius:24px;padding:12px 26px;font-size:15px;font-weight:bold;letter-spacing:1px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.5);}
-  #snap:active{background:#0d3f92;}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jsqr/1.4.0/jsQR.min.js"></script>
 <script>
@@ -33,7 +31,6 @@ if(typeof jsQR==="undefined"){
     <span class="c bl"></span><span class="c br"></span>
   </div>
 </div>
-<button id="snap">JEPRET &amp; BACA</button>
 <div id="msg">Arahkan QR ke dalam kotak — terbaca otomatis</div>
 <script>
 let sent=false;
@@ -73,11 +70,6 @@ navigator.mediaDevices.getUserMedia({ video:{ facingMode:"environment", width:{i
   .catch(function(err){
     document.getElementById("msg").textContent="Kamera tidak bisa dibuka: "+err.name;
   });
-document.getElementById("snap").onclick=function(){
-  var t=decodeFrame();
-  if(t){ kirim(t); }
-  else{ document.getElementById("msg").textContent="Belum terbaca — dekatkan 10-20 cm, tahan, lalu JEPRET lagi."; }
-};
 setTimeout(function(){
   if(typeof jsQR==="undefined"){
     document.getElementById("msg").textContent="Library scan gagal dimuat — cek koneksi internet lalu ulangi.";
