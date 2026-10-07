@@ -177,8 +177,8 @@ function fpHideErr(){ fpEl("fp-errbar").classList.add("hidden"); }
 function fpRetry(){ fpHideErr(); if(fpLAST){ fpRun(fpLAST.fn, fpLAST.arg, fpLAST.cb); } }
 function fpBackup(){ window.open(API_URL, "_blank"); }
 
-/* ===== PEMANGGIL API ===== */
-function fpRun(fn, arg, cb){
+/* ===== PEMANGGIL API (OTOMATIS COBA ULANG 1x SAAT JARINGAN PUTUS) ===== */
+function fpRun(fn, arg, cb, _retry){
   fpLAST={fn:fn,arg:arg,cb:cb};
   var params={action:fn};
   if(fn==="getProduk"){ params.tipe=arg[0]; }
@@ -195,7 +195,10 @@ function fpRun(fn, arg, cb){
       if(res && res.ok===true && res.data!==undefined){ cb(res.data); return; }
       cb(res);
     })
-    .catch(function(e){ fpShowErr("Sambungan data terputus. Coba lagi atau buka cadangan."); });
+    .catch(function(e){
+      if(!_retry){ setTimeout(function(){ fpRun(fn,arg,cb,true); },700); return; }
+      fpShowErr("Sambungan data terputus. Coba lagi atau buka cadangan.");
+    });
 }
 
 /* ===== QR LOKAL ===== */
@@ -246,6 +249,7 @@ function fpGoMesin(){
   fpMESIN=null; fpEl("fp-crumb").textContent="PILIH MESIN"; fpShow("fp-view-mesin");
   var c=fpCacheGet("mesin");
   if(c){ fpRenderMesin(c); return; }
+  fpEl("fp-mesin-grid").innerHTML='<div class="fp-card">Memuat daftar mesin...</div>';
   fpRun("getMesin",[],function(list){ fpCacheSet("mesin",list); fpRenderMesin(list); });
 }
 function fpRenderMesin(list){
@@ -261,6 +265,7 @@ function fpGoTanggal(){
   var ck="tgl:"+fpMESIN;
   var c=fpCacheGet(ck);
   if(c){ fpRenderTanggal(c); return; }
+  fpEl("fp-tgl-list").innerHTML='<div class="fp-card">Memuat tanggal...</div>';
   fpRun("getListTanggal",[fpMESIN],function(list){ fpCacheSet(ck,list); fpRenderTanggal(list); });
 }
 function fpRenderTanggal(list){
@@ -657,6 +662,7 @@ function fpOpenDetail(key){
   var ck="det:"+fpMESIN+":"+key;
   var c=fpCacheGet(ck);
   if(c){ fpRenderDetail(c); return; }
+  fpEl("fp-detail-box").innerHTML='<div class="fp-card">Memuat data...</div>';
   fpRun("getDetail",[fpMESIN,key],function(d){ fpCacheSet(ck,d); fpRenderDetail(d); });
 }
 function fpRenderDetail(d){
