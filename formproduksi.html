@@ -1,5 +1,6 @@
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
 <style>
-.fp-card,.fp-crumb span,.fp-crumb button,.fp-frow label,.fp-frow input,.fp-frow select,.fp-th,.fp-td,.fp-merge,.fp-primary,.fp-outline,.fp-green,.fp-gray,.fp-addbtn,.fp-fab,.fp-det-btn,.fp-det-no,.fp-kpc,.fp-inf,.fp-inf b,.fp-mesin-card,.fp-bulan,.fp-tgl-row .t,.fp-tgl-row .tot,.fp-ckrow,.fp-note,.fp-modal-box h3,.fp-modal-box p,.fp-cellin{font-weight:bold;}
+.fp-card,.fp-crumb button,.fp-frow label,.fp-frow input,.fp-frow select,.fp-th,.fp-td,.fp-merge,.fp-primary,.fp-outline,.fp-green,.fp-gray,.fp-addbtn,.fp-fab,.fp-det-no,.fp-kpc,.fp-inf,.fp-inf b,.fp-mesin-card,.fp-bulan,.fp-tgl-row .t,.fp-tgl-row .tot,.fp-ckrow,.fp-note,.fp-modal-box h3,.fp-modal-box p,.fp-cellin,.fp-crumb span{font-weight:bold;}
 .fp-card{background:#fff;border:1px solid #e3e7ee;border-radius:8px;padding:14px;margin-bottom:14px}
 .fp-primary{background:#1155cc;color:#fff;border:none;border-radius:6px;padding:12px 22px;font-weight:bold;letter-spacing:1px;cursor:pointer}
 .fp-full{width:100%}
@@ -9,8 +10,8 @@
 .fp-scanbtn{flex:0 0 auto;background:#1155cc;color:#fff;border:none;border-radius:6px;padding:12px 14px;font-weight:bold;letter-spacing:1px;cursor:pointer}
 .fp-scanbtn:active{background:#0d3f92}
 .fp-crumb{display:flex;align-items:center;gap:12px;margin-bottom:14px}
-.fp-crumb button{background:#fff;border:1px solid #dfe4ec;border-radius:8px;padding:8px 12px;color:#1155cc;cursor:pointer}
-.fp-crumb span{color:#1155cc;font-weight:bold}
+.fp-crumb button{background:#fff;border:1px solid #dfe4ec;border-radius:8px;padding:8px 14px;color:#1155cc;cursor:pointer;font-size:18px}
+.fp-crumb span{color:#1155cc;font-size:26px;letter-spacing:1px;text-transform:uppercase}
 .fp-mesin-grid{display:flex;flex-direction:column;gap:10px}
 .fp-mesin-card{background:#fff;border:1px solid #dfe4ec;border-radius:8px;padding:16px 20px;text-align:left;color:#1155cc;font-weight:bold;font-size:17px;cursor:pointer}
 .fp-mesin-card:hover{background:#1155cc;color:#fff}
@@ -39,7 +40,8 @@
 .fp-cellin{width:90px;padding:4px 6px;border:1px solid #1155cc;border-radius:4px;font-size:14px;text-align:center;background:#fff}
 .fp-det-head{display:flex;gap:10px;align-items:center;margin-bottom:12px}
 .fp-det-no{background:#1155cc;color:#fff;border-radius:16px;padding:7px 16px;font-weight:bold}
-.fp-det-btn{flex:1;background:#fff;border:1px solid #dfe4ec;border-radius:8px;padding:10px;font-weight:bold;letter-spacing:1px;color:#333;cursor:pointer}
+.fp-icobtn{flex:0 0 auto;width:46px;height:42px;background:#fff;border:1px solid #dfe4ec;border-radius:8px;font-size:19px;color:#1155cc;cursor:pointer;font-weight:bold;line-height:1}
+.fp-icobtn:active{background:#e8eefb}
 .fp-det-body{display:flex;gap:18px;flex-wrap:wrap}
 .fp-det-left{width:320px}
 .fp-qrrow{display:flex;align-items:center;gap:12px;margin-bottom:10px}
@@ -56,6 +58,9 @@
 .fp-ckrow input{width:22px;height:22px;accent-color:#1155cc}
 .fp-note{background:#f4f6f9;border:1px dashed #cfd6e0;border-radius:6px;padding:10px 12px;color:#666;font-size:13px;margin-bottom:12px}
 .fp-print-foot{display:flex;justify-content:flex-end;gap:10px;margin-top:14px}
+.fp-errbar{position:fixed;left:0;right:0;bottom:0;background:#c00;color:#fff;padding:10px 14px;z-index:130;display:flex;gap:8px;align-items:center;font-weight:bold}
+.fp-errbar span{flex:1;font-size:13px}
+.fp-errbar button{background:#fff;color:#c00;border:none;border-radius:6px;padding:8px 12px;font-weight:bold;cursor:pointer}
 @media (max-width:700px){
   .fp-frow{flex-wrap:wrap;gap:8px}
   .fp-frow label{width:100%;margin-bottom:0}
@@ -66,8 +71,7 @@
   .fp-det-left{width:100%}
   .fp-modal-box{padding:14px}
   .fp-table{display:block;overflow-x:auto;white-space:nowrap}
-  .fp-det-btn{padding:10px 6px;font-size:12px;letter-spacing:0}
-  .fp-crumb span{font-size:13px}
+  .fp-crumb span{font-size:20px}
   .fp-form-foot{gap:8px}
   .fp-primary,.fp-outline{padding:12px 14px;font-size:13px}
 }
@@ -75,26 +79,26 @@
 
 <div class="fp-card fp-crumb">
   <button onclick="fpBack()">&#9664;</button>
-  <span id="fp-crumb">Data Produksi</span>
+  <span id="fp-crumb">BUKU PRODUKSI</span>
 </div>
 
 <section id="fp-view-mesin"><div class="fp-mesin-grid" id="fp-mesin-grid"></div></section>
 
 <section id="fp-view-tanggal" class="hidden">
   <div id="fp-tgl-list"></div>
-  <button class="fp-fab" onclick="fpOpenForm()" title="Input Data Produksi">+</button>
+  <button class="fp-fab" onclick="fpOpenForm()" title="Input Buku Produksi">+</button>
 </section>
 
 <section id="fp-view-form" class="hidden">
   <div class="fp-card">
-    <h3 style="color:#1155cc;border-bottom:2px solid #1155cc;padding-bottom:10px;margin-bottom:16px">INPUT DATA PRODUKSI</h3>
+    <h3 style="color:#1155cc;border-bottom:2px solid #1155cc;padding-bottom:10px;margin-bottom:16px">INPUT BUKU PRODUKSI</h3>
     <div class="fp-frow"><label>NO</label><input id="fp-no" readonly></div>
     <div class="fp-frow"><label>TANGGAL</label><input id="fp-tgl" type="date" onchange="fpRefreshNo()"></div>
     <div class="fp-frow"><label>OPERATOR</label><input id="fp-op" readonly></div>
     <div class="fp-frow"><label>MESIN</label><input id="fp-mesin" readonly></div>
     <div class="fp-frow"><label>PRODUK</label><select id="fp-produk"><option value="">Pilih Produk</option></select></div>
     <div class="fp-frow"><label>KPC</label><input id="fp-kpc" placeholder="Isi manual / scan QR"><button type="button" class="fp-scanbtn" onclick="fpOpenScan()">SCAN QR</button></div>
-    <div class="fp-frow"><label>PANJANG COIL</label><input id="fp-coil" type="text" inputmode="numeric" onchange="fpSetNum1(this,'coil')"></div>
+    <div class="fp-frow"><label>PANJANG COIL</label><input id="fp-coil" type="text" inputmode="numeric" oninput="fpSetNum1(this,'coil')" onchange="fpSetNum1(this,'coil')"></div>
     <div id="fp-summary"></div>
     <div class="fp-form-foot">
       <button class="fp-primary" onclick="fpSimpan()">SIMPAN</button>
@@ -142,14 +146,39 @@
   </div>
 </div>
 
+<div id="fp-errbar" class="fp-errbar hidden">
+  <span id="fp-errtxt"></span>
+  <button onclick="fpRetry()">COBA LAGI</button>
+  <button onclick="fpBackup()">CADANGAN</button>
+  <button onclick="fpHideErr()" style="background:none;color:#fff;font-size:16px">&#10005;</button>
+</div>
+
 <script>
 var fpMESIN=null, fpKEY=null, fpROWS=[], fpSTRUCT=null, fpDATA={}, fpCOIL="";
 var fpCARDS=[], fpEDIT=null, fpPRINTCARD=null, fpPRINTCOLS={};
+var fpCACHE={}, fpLAST=null;
 function fpFmt(n){ return Number(n||0).toLocaleString("id-ID"); }
 function fpEl(id){ return document.getElementById(id); }
 
-/* ===== PEMANGGIL API (PENGGANTI google.script.run) ===== */
+/* ===== CACHE 5 MENIT ===== */
+function fpCacheGet(k){ var c=fpCACHE[k]; if(!c) return null; if(Date.now()-c.t>300000){ delete fpCACHE[k]; return null; } return c.v; }
+function fpCacheSet(k,v){ fpCACHE[k]={t:Date.now(),v:v}; }
+function fpCacheClearMachine(m){
+  for(var k in fpCACHE){ if(k.indexOf("tgl:"+m)===0 || k.indexOf("det:"+m)===0){ delete fpCACHE[k]; } }
+}
+
+/* ===== ERROR BAR + COBA LAGI + CADANGAN ===== */
+function fpShowErr(msg){
+  fpEl("fp-errtxt").textContent=msg;
+  fpEl("fp-errbar").classList.remove("hidden");
+}
+function fpHideErr(){ fpEl("fp-errbar").classList.add("hidden"); }
+function fpRetry(){ fpHideErr(); if(fpLAST){ fpRun(fpLAST.fn, fpLAST.arg, fpLAST.cb); } }
+function fpBackup(){ window.open(API_URL, "_blank"); }
+
+/* ===== PEMANGGIL API ===== */
 function fpRun(fn, arg, cb){
+  fpLAST={fn:fn,arg:arg,cb:cb};
   var params={action:fn};
   if(fn==="getProduk"){ params.tipe=arg[0]; }
   if(fn==="getNextNo"){ params.mesin=arg[0]; params.iso=arg[1]; }
@@ -161,11 +190,39 @@ function fpRun(fn, arg, cb){
   fetch(API_URL,{method:"POST",body:JSON.stringify(params)})
     .then(function(r){ return r.json(); })
     .then(function(res){
-      if(res && res.ok===false){ alert("ERROR: "+(res.msg||"")); return; }
+      if(res && res.ok===false){ fpShowErr(res.msg||"Gagal memproses."); return; }
       if(res && res.ok===true && res.data!==undefined){ cb(res.data); return; }
       cb(res);
     })
-    .catch(function(e){ alert("ERROR: "+e.message); });
+    .catch(function(e){ fpShowErr("Sambungan data terputus. Coba lagi atau buka cadangan."); });
+}
+
+/* ===== QR LOKAL (CEPAT, TANPA SERVER LUAR) ===== */
+function fpMakeQr(text, px){
+  if(typeof qrcode==="undefined") return null;
+  try{
+    var qr=qrcode(0,"M");
+    qr.addData(text); qr.make();
+    var n=qr.getModuleCount(), quiet=2, total=n+quiet*2;
+    var scale=Math.max(1, Math.floor(px/total));
+    var cv=document.createElement("canvas");
+    cv.width=total*scale; cv.height=total*scale;
+    var x=cv.getContext("2d");
+    x.fillStyle="#fff"; x.fillRect(0,0,cv.width,cv.height);
+    x.fillStyle="#000";
+    for(var r=0;r<n;r++){ for(var c=0;c<n;c++){ if(qr.isDark(r,c)) x.fillRect((c+quiet)*scale,(r+quiet)*scale,scale,scale); } }
+    return cv;
+  }catch(e){ return null; }
+}
+function fpQrDrawable(c, px, cb){
+  if(c._qrcv){ cb(c._qrcv); return; }
+  var cv=fpMakeQr(c.kpc, px);
+  if(cv){ c._qrcv=cv; cb(cv); return; }
+  var im=new Image();
+  im.crossOrigin="anonymous";
+  im.onload=function(){ cb(im); };
+  im.onerror=function(){ cb(null); };
+  im.src="https://api.qrserver.com/v1/create-qr-code/?size="+px+"x"+px+"&data="+encodeURIComponent(c.kpc);
 }
 
 function fpShow(v){
@@ -185,32 +242,39 @@ function fpSetNum(el,col,i){ el.value=el.value.replace(/[^0-9]/g,""); fpDATA[col
 function fpSetNum1(el,k){ el.value=el.value.replace(/[^0-9]/g,""); if(k==="coil"){ fpCOIL=el.value; } else { fpDATA[k]=el.value; } }
 
 function fpGoMesin(){
-  fpMESIN=null; fpEl("fp-crumb").textContent="Data Produksi"; fpShow("fp-view-mesin");
-  fpRun("getMesin",[],function(list){
-    if(!list || !list.length){ fpEl("fp-mesin-grid").innerHTML='<div class="fp-card">Master mesin kosong - isi sheet MASTER_MESIN.</div>'; return; }
-    fpEl("fp-mesin-grid").innerHTML=list.map(function(m){
-      return '<div class="fp-mesin-card" onclick="fpOpenMesin(\''+m+'\')">'+m+'</div>';
-    }).join("");
-  });
+  fpMESIN=null; fpEl("fp-crumb").textContent="BUKU PRODUKSI"; fpShow("fp-view-mesin");
+  var c=fpCacheGet("mesin");
+  if(c){ fpRenderMesin(c); return; }
+  fpRun("getMesin",[],function(list){ fpCacheSet("mesin",list); fpRenderMesin(list); });
+}
+function fpRenderMesin(list){
+  if(!list || !list.length){ fpEl("fp-mesin-grid").innerHTML='<div class="fp-card">Master mesin kosong - isi sheet MASTER_MESIN.</div>'; return; }
+  fpEl("fp-mesin-grid").innerHTML=list.map(function(m){
+    return '<div class="fp-mesin-card" onclick="fpOpenMesin(\''+m+'\')">'+m+'</div>';
+  }).join("");
 }
 function fpOpenMesin(m){ fpMESIN=m; fpGoTanggal(); }
 
 function fpGoTanggal(){
-  fpEl("fp-crumb").textContent="Data Produksi > "+fpMESIN; fpShow("fp-view-tanggal");
-  fpRun("getListTanggal",[fpMESIN],function(list){
-    var html="", bl="";
-    list.forEach(function(x){
-      if(x.bulan!==bl){ bl=x.bulan; html+='<div class="fp-bulan">'+bl+'</div>'; }
-      html+='<div class="fp-tgl-row" onclick="fpOpenDetail(\''+x.key+'\')"><span class="t">'+x.tgl+
-            '</span><span class="tot">Total: '+fpFmt(x.total)+'</span><span class="chev">&#10095;</span></div>';
-    });
-    fpEl("fp-tgl-list").innerHTML=html||'<div class="fp-card">Belum ada data produksi.</div>';
+  fpEl("fp-crumb").textContent=fpMESIN; fpShow("fp-view-tanggal");
+  var ck="tgl:"+fpMESIN;
+  var c=fpCacheGet(ck);
+  if(c){ fpRenderTanggal(c); return; }
+  fpRun("getListTanggal",[fpMESIN],function(list){ fpCacheSet(ck,list); fpRenderTanggal(list); });
+}
+function fpRenderTanggal(list){
+  var html="", bl="";
+  list.forEach(function(x){
+    if(x.bulan!==bl){ bl=x.bulan; html+='<div class="fp-bulan">'+bl+'</div>'; }
+    html+='<div class="fp-tgl-row" onclick="fpOpenDetail(\''+x.key+'\')"><span class="t">'+x.tgl+
+          '</span><span class="tot">Total: '+fpFmt(x.total)+'</span><span class="chev">&#10095;</span></div>';
   });
+  fpEl("fp-tgl-list").innerHTML=html||'<div class="fp-card">Belum ada data produksi.</div>';
 }
 
 function fpOpenForm(){
   fpEDIT=null;
-  fpEl("fp-crumb").textContent="Data Produksi > "+fpMESIN+" > Input"; fpShow("fp-view-form");
+  fpEl("fp-crumb").textContent=fpMESIN; fpShow("fp-view-form");
   fpResetForm();
   fpEl("fp-op").value = USER ? USER.nama : "-";
   fpEl("fp-mesin").value = fpMESIN;
@@ -240,18 +304,18 @@ function fpResetForm(){
 function fpRenderModal(){
   var multi=[["prime","PRIME"],["rijekCoil","RIJEK COIL"],["rijekMesin","RIJEK MESIN"],["scrap","SCRAP"]];
   var h="";
-  h+='<div class="fp-frow"><label>INPUTAN</label><input type="text" inputmode="numeric" value="'+fpDATA.inputan+'" onchange="fpSetNum1(this,\'inputan\')"><span class="fp-gap"></span></div>';
+  h+='<div class="fp-frow"><label>INPUTAN</label><input type="text" inputmode="numeric" value="'+fpDATA.inputan+'" oninput="fpSetNum1(this,\'inputan\')" onchange="fpSetNum1(this,\'inputan\')"><span class="fp-gap"></span></div>';
   multi.forEach(function(m){
     var col=m[0];
     fpDATA[col].forEach(function(v,i){
       if(i===0){
-        h+='<div class="fp-frow"><label>'+m[1]+'</label><input type="text" inputmode="numeric" value="'+v+'" onchange="fpSetNum(this,\''+col+'\','+i+')"><button type="button" class="fp-addbtn" onclick="fpAddVal(\''+col+'\')">+</button></div>';
+        h+='<div class="fp-frow"><label>'+m[1]+'</label><input type="text" inputmode="numeric" value="'+v+'" oninput="fpSetNum(this,\''+col+'\','+i+')" onchange="fpSetNum(this,\''+col+'\','+i+')"><button type="button" class="fp-addbtn" onclick="fpAddVal(\''+col+'\')">+</button></div>';
       } else {
-        h+='<div class="fp-frow"><label></label><input type="text" inputmode="numeric" value="'+v+'" onchange="fpSetNum(this,\''+col+'\','+i+')"><span class="fp-gap"></span></div>';
+        h+='<div class="fp-frow"><label></label><input type="text" inputmode="numeric" value="'+v+'" oninput="fpSetNum(this,\''+col+'\','+i+')" onchange="fpSetNum(this,\''+col+'\','+i+')"><span class="fp-gap"></span></div>';
       }
     });
   });
-  h+='<div class="fp-frow"><label>NON PRIME</label><input type="text" inputmode="numeric" value="'+fpDATA.nonPrime+'" onchange="fpSetNum1(this,\'nonPrime\')"><span class="fp-gap"></span></div>';
+  h+='<div class="fp-frow"><label>NON PRIME</label><input type="text" inputmode="numeric" value="'+fpDATA.nonPrime+'" oninput="fpSetNum1(this,\'nonPrime\')" onchange="fpSetNum1(this,\'nonPrime\')"><span class="fp-gap"></span></div>';
   fpEl("fp-modal-rows").innerHTML=h;
 }
 function fpAddVal(col){ fpDATA[col].push(""); fpRenderModal(); }
@@ -352,6 +416,7 @@ function fpEditCell(td, ri, col){
 function fpSimpan(){
   if(!fpEl("fp-produk").value){ alert("Pilih produk dulu"); return; }
   if(!fpROWS.length){ alert("Klik + TAMBAH untuk isi inputan"); return; }
+  fpCOIL=(fpEl("fp-coil").value||"").replace(/[^0-9]/g,"");
   var p={ mesin:fpMESIN, tanggal:fpEl("fp-tgl").value, operator:(USER?USER.nama:"-"),
           produk:fpEl("fp-produk").value, kpc:fpEl("fp-kpc").value,
           panjangCoil:fpCOIL, rows:fpROWS };
@@ -359,7 +424,8 @@ function fpSimpan(){
     var keyEd=fpEDIT.key, noEd=fpEDIT.no;
     fpRun("updatePaket",[p,keyEd,noEd],function(r){
       if(!r.ok){ alert(r.msg); return; }
-      alert("PERUBAHAN TERSIMPAN!\nNO: "+noEd+"\nTOTAL: "+fpFmt(r.total)+"\nTOTAL MAX: "+fpFmt(r.totalMax)+"\nTOTAL POTONGAN: "+fpFmt(r.totalPot));
+      fpCacheClearMachine(fpMESIN);
+      alert("DATA DIPERBARUI");
       fpResetForm();
       fpOpenDetail(keyEd);
     });
@@ -367,7 +433,8 @@ function fpSimpan(){
   }
   fpRun("simpanPaket",[p],function(r){
     if(!r.ok){ alert(r.msg); return; }
-    alert("TERSIMPAN!\nNO: "+r.no+"\nTOTAL: "+fpFmt(r.total)+"\nTOTAL MAX: "+fpFmt(r.totalMax)+"\nTOTAL POTONGAN: "+fpFmt(r.totalPot));
+    fpCacheClearMachine(fpMESIN);
+    alert("DATA TERSIMPAN");
     fpResetForm();
     fpGoTanggal();
   });
@@ -377,7 +444,7 @@ function fpEditCard(idx){
   var c=fpCARDS[idx]; if(!c) return;
   fpEDIT={ key: fpKEY, no: c.no };
   fpShow("fp-view-form");
-  fpEl("fp-crumb").textContent="Data Produksi > "+fpMESIN+" > EDIT NO "+c.no;
+  fpEl("fp-crumb").textContent=fpMESIN;
   fpEl("fp-op").value = USER ? USER.nama : "-";
   fpEl("fp-mesin").value = fpMESIN;
   fpEl("fp-tgl").value = fpKEY;
@@ -395,7 +462,7 @@ function fpEditCard(idx){
   fpRenderSummary();
 }
 
-/* ===== SCAN QR: MODAL IFRAME SATU DOMAIN (TANPA PINDAH HALAMAN) ===== */
+/* ===== SCAN QR ===== */
 window.addEventListener("message", function(ev){
   if(!ev.data || ev.data.type!=="DMS_KPC_SCAN") return;
   fpApplyKpc(ev.data.text);
@@ -430,19 +497,10 @@ function fpOpenPrint(idx){
   fpEl("fp-foto-info").innerHTML="";
   fpRenderPrintList();
   fpEl("fp-print-modal").classList.remove("hidden");
-  var c=fpPRINTCARD;
-  if(c.kpc && !c._qrimg){
-    var im=new Image();
-    im.crossOrigin="anonymous";
-    im.onload=function(){ c._qrimg=im; };
-    im.src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&data="+encodeURIComponent(c.kpc);
-  }
 }
 function fpClosePrint(){ fpEl("fp-print-modal").classList.add("hidden"); }
 
-function fpGaleri(){
-  fpEl("fp-file").click();
-}
+function fpGaleri(){ fpEl("fp-file").click(); }
 function fpOnFile(inp){
   var f=inp.files && inp.files[0];
   inp.value="";
@@ -463,44 +521,43 @@ function fpOnFile(inp){
   rd.readAsDataURL(f);
 }
 
-/* ===== CANVAS PNG: LEBAR 1000, TINGGI PADAT, FOTO 2.5:1 SELEBAR TABEL ===== */
-function fpDrawCanvas(c, cols, useTotal, phys, img, foto){
+/* ===== CANVAS PNG: ANGKA & TEKS DIBESARKAN ===== */
+function fpDrawCanvas(c, cols, useTotal, phys, qr, foto){
   var W=1000, M=40, CW=W-M*2;
-  var rowH=38, headH=38, infoLines=4;
+  var rowH=46, headH=46, infoLines=4, lineH=32;
   var dw=0, dh=0;
   if(foto){ dw=CW; dh=Math.round(CW*2/5); }
-  var yLine=74+110+infoLines*26+10+headH+phys.length*rowH+18;
-  var H=yLine + (foto && dh>0 ? (34+dh+20) : 40);
+  var yTop=80, qrSize=120, infoStart=yTop+qrSize+20;
+  var tableY=infoStart+infoLines*lineH+12;
+  var yLine=tableY+headH+phys.length*rowH+20;
+  var H=yLine + (foto && dh>0 ? (34+dh+20) : 46);
   var cv=document.createElement("canvas");
   cv.width=W; cv.height=H;
   var x=cv.getContext("2d");
   x.fillStyle="#f7fafc"; x.fillRect(0,0,W,H);
   x.textBaseline="middle";
-  x.fillStyle="#112233"; x.font="bold 26px Arial, sans-serif"; x.textAlign="center";
-  x.fillText("DATA PRODUKSI EUP GUDANG TAIPA 2026", W/2, 38);
-  x.fillStyle="#1155cc"; x.fillRect(M, 56, CW, 4);
-  var y=74;
-  if(img){ try{ x.drawImage(img, M, y, 96, 96); }catch(e){} }
-  x.fillStyle="#112233"; x.font="bold 24px Arial, sans-serif"; x.textAlign="left";
-  x.fillText(c.kpc||"-", M+116, y+48);
-  x.fillStyle="#1155cc"; x.font="bold 18px Arial, sans-serif"; x.textAlign="right";
-  x.fillText("[NO "+c.no+"]", W-M, y+16);
-  y+=110;
+  x.fillStyle="#112233"; x.font="bold 32px Arial, sans-serif"; x.textAlign="center";
+  x.fillText("DATA PRODUKSI EUP GUDANG TAIPA 2026", W/2, 40);
+  x.fillStyle="#1155cc"; x.fillRect(M, 62, CW, 5);
+  if(qr){ try{ x.drawImage(qr, M, yTop, qrSize, qrSize); }catch(e){} }
+  x.fillStyle="#112233"; x.font="bold 30px Arial, sans-serif"; x.textAlign="left";
+  x.fillText(c.kpc||"-", M+qrSize+24, yTop+qrSize/2);
+  x.fillStyle="#1155cc"; x.font="bold 22px Arial, sans-serif"; x.textAlign="right";
+  x.fillText("[NO "+c.no+"]", W-M, yTop+20);
   var inf=[["Tanggal",c.tanggal],["Operator",c.operator],["Mesin",c.mesin],["Produk",c.produk]];
   x.textAlign="left";
   inf.forEach(function(row,i){
-    x.fillStyle="#334455"; x.font="bold 17px Arial, sans-serif";
-    x.fillText(row[0], M, y+13+i*26);
-    x.fillStyle="#112233"; x.font="bold 17px Arial, sans-serif";
-    x.fillText(": "+(row[1]||""), M+120, y+13+i*26);
+    x.fillStyle="#334455"; x.font="bold 21px Arial, sans-serif";
+    x.fillText(row[0], M, infoStart+i*lineH+lineH/2);
+    x.fillStyle="#112233"; x.font="bold 21px Arial, sans-serif";
+    x.fillText(": "+(row[1]||""), M+150, infoStart+i*lineH+lineH/2);
   });
-  y+=infoLines*26+10;
   var names=["NOR"].concat(cols.map(function(z){ return z.l; })).concat(useTotal?["TOTAL"]:[]);
   var nc=names.length, colW=CW/nc;
-  x.fillStyle="#1155cc"; x.fillRect(M, y, CW, headH);
-  x.fillStyle="#fff"; x.font="bold 17px Arial, sans-serif"; x.textAlign="center";
-  names.forEach(function(nm,i){ x.fillText(nm, M+colW*i+colW/2, y+headH/2); });
-  var bt=y+headH, bh=phys.length*rowH;
+  x.fillStyle="#1155cc"; x.fillRect(M, tableY, CW, headH);
+  x.fillStyle="#fff"; x.font="bold 21px Arial, sans-serif"; x.textAlign="center";
+  names.forEach(function(nm,i){ x.fillText(nm, M+colW*i+colW/2, tableY+headH/2); });
+  var bt=tableY+headH, bh=phys.length*rowH;
   x.fillStyle="#fff"; x.fillRect(M, bt, CW, bh);
   var totalX = useTotal ? M+colW*(nc-1) : null;
   x.strokeStyle="#cfd6e0"; x.lineWidth=1;
@@ -512,8 +569,8 @@ function fpDrawCanvas(c, cols, useTotal, phys, img, foto){
     var xx=M+colW*i2;
     x.beginPath(); x.moveTo(xx, bt); x.lineTo(xx, bt+bh); x.stroke();
   }
-  x.strokeRect(M, y, CW, headH+bh);
-  x.fillStyle="#112233"; x.font="bold 17px Arial, sans-serif"; x.textAlign="center";
+  x.strokeRect(M, tableY, CW, headH+bh);
+  x.fillStyle="#112233"; x.font="bold 22px Arial, sans-serif"; x.textAlign="center";
   phys.forEach(function(p,ri){
     var cy=bt+ri*rowH+rowH/2;
     x.fillText(String(p.no), M+colW/2, cy);
@@ -523,15 +580,15 @@ function fpDrawCanvas(c, cols, useTotal, phys, img, foto){
     });
   });
   if(useTotal){
-    x.fillStyle="#1155cc"; x.font="bold 20px Arial, sans-serif";
+    x.fillStyle="#1155cc"; x.font="bold 26px Arial, sans-serif";
     x.fillText(fpFmt(c.total), totalX+colW/2, bt+bh/2);
   }
-  y=bt+bh+18;
-  x.strokeStyle="#99aabb"; x.beginPath(); x.moveTo(M, y); x.lineTo(W-M, y); x.stroke();
-  x.fillStyle="#334455"; x.font="italic bold 17px Arial, sans-serif"; x.textAlign="center";
-  x.fillText("\u00A9 EUP GUDANG TAIPA 2026", W/2, y+16);
+  yLine=bt+bh+20;
+  x.strokeStyle="#99aabb"; x.beginPath(); x.moveTo(M, yLine); x.lineTo(W-M, yLine); x.stroke();
+  x.fillStyle="#334455"; x.font="italic bold 20px Arial, sans-serif"; x.textAlign="center";
+  x.fillText("\u00A9 EUP GUDANG TAIPA 2026", W/2, yLine+20);
   if(foto && dw>0 && dh>0){
-    var py=y+34;
+    var py=yLine+34;
     var px=(W-dw)/2;
     var fw=foto.naturalWidth||foto.width, fh=foto.naturalHeight||foto.height;
     if(fw>0 && fh>0){
@@ -562,29 +619,16 @@ function fpBuildPrintPNG(cb){
   });
   if(!phys.length){ phys=[{no:1,row:{}}]; }
   var foto=(c._fotoImg && c._fotoImg.complete && c._fotoImg.naturalWidth>0)? c._fotoImg : null;
-  var make=function(img){
-    var cv=fpDrawCanvas(c, cols, useTotal, phys, img, foto);
-    var ulang=function(){
-      if(img){ var cv2=fpDrawCanvas(c, cols, useTotal, phys, null, foto); cv2.toBlob(function(b2){ if(b2) cb(b2); }, "image/png"); }
-    };
-    try{
-      cv.toBlob(function(b){ if(b){ cb(b); } else { ulang(); } }, "image/png");
-    }catch(e){ ulang(); }
-  };
-  var cached=c._qrimg;
-  if(c.kpc && cached && cached.complete && cached.naturalWidth>0){ make(cached); return; }
   if(c.kpc){
-    var im=new Image();
-    im.crossOrigin="anonymous";
-    im.onload=function(){ c._qrimg=im; make(im); };
-    im.onerror=function(){ make(null); };
-    im.src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&data="+encodeURIComponent(c.kpc);
-  } else { make(null); }
+    fpQrDrawable(c, 240, function(qr){ cb(fpDrawCanvas(c, cols, useTotal, phys, qr, foto)); });
+  } else {
+    cb(fpDrawCanvas(c, cols, useTotal, phys, null, foto));
+  }
 }
 
 function fpNamaFile(){
   var c=fpPRINTCARD;
-  return "PRODUKSI-"+(fpMESIN||"DATA")+"-NO"+(c? c.no : "")+".png";
+  return (fpMESIN||"DATA")+" ("+(c? c.no : "")+").png";
 }
 function fpSaveBlob(blob, name){
   var url=URL.createObjectURL(blob);
@@ -594,35 +638,46 @@ function fpSaveBlob(blob, name){
   setTimeout(function(){ URL.revokeObjectURL(url); },5000);
 }
 function fpDoDownload(){
-  fpBuildPrintPNG(function(blob){
-    fpSaveBlob(blob, fpNamaFile());
-    fpClosePrint();
+  fpBuildPrintPNG(function(cv){
+    cv.toBlob(function(b){
+      if(b){ fpSaveBlob(b, fpNamaFile()); fpClosePrint(); }
+      else{ alert("Gagal membuat gambar."); }
+    }, "image/png");
   });
 }
 
 function fpOpenDetail(key){
   fpKEY=key; fpShow("fp-view-detail");
-  fpEl("fp-crumb").textContent="Data Produksi > "+fpMESIN+" > "+key.split("-").reverse().join("/");
-  fpRun("getDetail",[fpMESIN,key],function(d){
-    fpSTRUCT=d.struct;
-    fpCARDS=d.cards;
-    fpEl("fp-detail-box").innerHTML=d.cards.map(function(c, idx){
-      var qr=c.kpc? '<img class="fp-qr" width="86" src="https://api.qrserver.com/v1/create-qr-code/?size=86x86&data='+encodeURIComponent(c.kpc)+'">':'<div class="fp-qr" style="width:86px;height:86px"></div>';
-      return '<div class="fp-card"><div class="fp-det-head"><span class="fp-det-no">NO '+c.no+'</span>'+
-        '<button class="fp-det-btn" onclick="fpEditCard('+idx+')">EDIT</button>'+
-        '<button class="fp-det-btn" onclick="fpOpenPrint('+idx+')">DOWNLOAD</button>'+
-        '<button class="fp-det-btn" onclick="fpHapus('+c.no+')">HAPUS</button></div>'+
-        '<div class="fp-det-body"><div class="fp-det-left">'+
-        '<div class="fp-qrrow">'+qr+'<div class="fp-kpc">'+(c.kpc||"-")+'</div></div>'+
-        '<div class="fp-inf"><b>TANGGAL</b> '+c.tanggal+'</div><div class="fp-inf"><b>OPERATOR</b> '+c.operator+'</div>'+
-        '<div class="fp-inf"><b>MESIN</b> '+c.mesin+'</div><div class="fp-inf"><b>PRODUK</b> '+c.produk+'</div>'+
-        '<div class="fp-inf"><b>PANJANG COIL</b> '+fpFmt(c.panjangCoil)+'</div></div></div>'+
-        '<div style="height:12px"></div>'+fpMergedTable(c.inputs)+'</div>';
-    }).join("") || '<div class="fp-card">Tidak ada data.</div>';
-  });
+  fpEl("fp-crumb").textContent=fpMESIN;
+  var ck="det:"+fpMESIN+":"+key;
+  var c=fpCacheGet(ck);
+  if(c){ fpRenderDetail(c); return; }
+  fpRun("getDetail",[fpMESIN,key],function(d){ fpCacheSet(ck,d); fpRenderDetail(d); });
 }
-function fpHapus(no){
-  if(!confirm("Hapus paket NO "+no+"?")) return;
-  fpRun("hapusPaket",[fpMESIN,fpKEY,no],function(){ fpOpenDetail(fpKEY); });
+function fpRenderDetail(d){
+  fpSTRUCT=d.struct;
+  fpCARDS=d.cards;
+  var html=d.cards.map(function(c, idx){
+    var qr=c.kpc? '<img class="fp-qr" width="86" height="86" data-qr="'+encodeURIComponent(c.kpc)+'" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">' : '<div class="fp-qr" style="width:86px;height:86px"></div>';
+    return '<div class="fp-card"><div class="fp-det-head"><span class="fp-det-no">NO '+c.no+'</span>'+
+      '<button class="fp-icobtn" title="Edit" onclick="fpEditCard('+idx+')">&#9998;</button>'+
+      '<button class="fp-icobtn" title="Download" onclick="fpOpenPrint('+idx+')">&#11123;</button></div>'+
+      '<div class="fp-det-body"><div class="fp-det-left">'+
+      '<div class="fp-qrrow">'+qr+'<div class="fp-kpc">'+(c.kpc||"-")+'</div></div>'+
+      '<div class="fp-inf"><b>TANGGAL</b> '+c.tanggal+'</div><div class="fp-inf"><b>OPERATOR</b> '+c.operator+'</div>'+
+      '<div class="fp-inf"><b>MESIN</b> '+c.mesin+'</div><div class="fp-inf"><b>PRODUK</b> '+c.produk+'</div>'+
+      '<div class="fp-inf"><b>PANJANG COIL</b> '+fpFmt(c.panjangCoil)+'</div></div></div>'+
+      '<div style="height:12px"></div>'+fpMergedTable(c.inputs)+'</div>';
+  }).join("") || '<div class="fp-card">Tidak ada data.</div>';
+  fpEl("fp-detail-box").innerHTML=html;
+  var imgs=fpEl("fp-detail-box").querySelectorAll("img[data-qr]");
+  for(var i=0;i<imgs.length;i++){
+    (function(im){
+      var text=decodeURIComponent(im.getAttribute("data-qr"));
+      var cv=fpMakeQr(text, 172);
+      if(cv){ im.src=cv.toDataURL(); }
+      else{ im.src="https://api.qrserver.com/v1/create-qr-code/?size=86x86&data="+encodeURIComponent(text); }
+    })(imgs[i]);
+  }
 }
 </script>
