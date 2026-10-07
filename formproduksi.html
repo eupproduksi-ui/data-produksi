@@ -9,9 +9,9 @@
 .fp-gray{background:#e3e7ee;color:#333;border:none;border-radius:6px;padding:12px 22px;font-weight:bold;letter-spacing:1px;cursor:pointer}
 .fp-scanbtn{flex:0 0 auto;background:#1155cc;color:#fff;border:none;border-radius:6px;padding:12px 14px;font-weight:bold;letter-spacing:1px;cursor:pointer}
 .fp-scanbtn:active{background:#0d3f92}
-.fp-crumb{display:flex;align-items:center;gap:12px;margin-bottom:14px}
-.fp-crumb button{background:#fff;border:1px solid #dfe4ec;border-radius:8px;padding:8px 14px;color:#1155cc;cursor:pointer;font-size:18px}
-.fp-crumb span{color:#1155cc;font-size:26px;letter-spacing:1px;text-transform:uppercase}
+.fp-crumb{display:flex;align-items:center;gap:12px;margin-bottom:14px;position:sticky;top:60px;z-index:30;}
+.fp-crumb button{background:#fff;border:1px solid #dfe4ec;border-radius:8px;padding:8px 14px;color:#1155cc;cursor:pointer;font-size:16px}
+.fp-crumb span{color:#1155cc;font-size:16px;letter-spacing:1px;text-transform:uppercase}
 .fp-mesin-grid{display:flex;flex-direction:column;gap:10px}
 .fp-mesin-card{background:#fff;border:1px solid #dfe4ec;border-radius:8px;padding:16px 20px;text-align:left;color:#1155cc;font-weight:bold;font-size:17px;cursor:pointer}
 .fp-mesin-card:hover{background:#1155cc;color:#fff}
@@ -71,7 +71,7 @@
   .fp-det-left{width:100%}
   .fp-modal-box{padding:14px}
   .fp-table{display:block;overflow-x:auto;white-space:nowrap}
-  .fp-crumb span{font-size:20px}
+  .fp-crumb span{font-size:14px}
   .fp-form-foot{gap:8px}
   .fp-primary,.fp-outline{padding:12px 14px;font-size:13px}
 }
@@ -79,7 +79,7 @@
 
 <div class="fp-card fp-crumb">
   <button onclick="fpBack()">&#9664;</button>
-  <span id="fp-crumb">BUKU PRODUKSI</span>
+  <span id="fp-crumb">PILIH MESIN</span>
 </div>
 
 <section id="fp-view-mesin"><div class="fp-mesin-grid" id="fp-mesin-grid"></div></section>
@@ -159,6 +159,7 @@ var fpCARDS=[], fpEDIT=null, fpPRINTCARD=null, fpPRINTCOLS={};
 var fpCACHE={}, fpLAST=null;
 function fpFmt(n){ return Number(n||0).toLocaleString("id-ID"); }
 function fpEl(id){ return document.getElementById(id); }
+function fpDispDate(key){ return String(key).split("-").reverse().join("/"); }
 
 /* ===== CACHE 5 MENIT ===== */
 function fpCacheGet(k){ var c=fpCACHE[k]; if(!c) return null; if(Date.now()-c.t>300000){ delete fpCACHE[k]; return null; } return c.v; }
@@ -197,7 +198,7 @@ function fpRun(fn, arg, cb){
     .catch(function(e){ fpShowErr("Sambungan data terputus. Coba lagi atau buka cadangan."); });
 }
 
-/* ===== QR LOKAL (CEPAT, TANPA SERVER LUAR) ===== */
+/* ===== QR LOKAL ===== */
 function fpMakeQr(text, px){
   if(typeof qrcode==="undefined") return null;
   try{
@@ -242,7 +243,7 @@ function fpSetNum(el,col,i){ el.value=el.value.replace(/[^0-9]/g,""); fpDATA[col
 function fpSetNum1(el,k){ el.value=el.value.replace(/[^0-9]/g,""); if(k==="coil"){ fpCOIL=el.value; } else { fpDATA[k]=el.value; } }
 
 function fpGoMesin(){
-  fpMESIN=null; fpEl("fp-crumb").textContent="BUKU PRODUKSI"; fpShow("fp-view-mesin");
+  fpMESIN=null; fpEl("fp-crumb").textContent="PILIH MESIN"; fpShow("fp-view-mesin");
   var c=fpCacheGet("mesin");
   if(c){ fpRenderMesin(c); return; }
   fpRun("getMesin",[],function(list){ fpCacheSet("mesin",list); fpRenderMesin(list); });
@@ -256,7 +257,7 @@ function fpRenderMesin(list){
 function fpOpenMesin(m){ fpMESIN=m; fpGoTanggal(); }
 
 function fpGoTanggal(){
-  fpEl("fp-crumb").textContent=fpMESIN; fpShow("fp-view-tanggal");
+  fpEl("fp-crumb").textContent="DATA PRODUKSI "+fpMESIN; fpShow("fp-view-tanggal");
   var ck="tgl:"+fpMESIN;
   var c=fpCacheGet(ck);
   if(c){ fpRenderTanggal(c); return; }
@@ -274,7 +275,7 @@ function fpRenderTanggal(list){
 
 function fpOpenForm(){
   fpEDIT=null;
-  fpEl("fp-crumb").textContent=fpMESIN; fpShow("fp-view-form");
+  fpEl("fp-crumb").textContent="DATA PRODUKSI "+fpMESIN; fpShow("fp-view-form");
   fpResetForm();
   fpEl("fp-op").value = USER ? USER.nama : "-";
   fpEl("fp-mesin").value = fpMESIN;
@@ -444,7 +445,7 @@ function fpEditCard(idx){
   var c=fpCARDS[idx]; if(!c) return;
   fpEDIT={ key: fpKEY, no: c.no };
   fpShow("fp-view-form");
-  fpEl("fp-crumb").textContent=fpMESIN;
+  fpEl("fp-crumb").textContent="DATA PRODUKSI "+fpMESIN;
   fpEl("fp-op").value = USER ? USER.nama : "-";
   fpEl("fp-mesin").value = fpMESIN;
   fpEl("fp-tgl").value = fpKEY;
@@ -521,7 +522,7 @@ function fpOnFile(inp){
   rd.readAsDataURL(f);
 }
 
-/* ===== CANVAS PNG: SEMUA TEKS UTAMA = UKURAN JUDUL (32px) ===== */
+/* ===== CANVAS PNG: NO HITAM DI TENGAH BAWAH JUDUL, NO & KPC = UKURAN JUDUL ===== */
 function fpDrawCanvas(c, cols, useTotal, phys, qr, foto){
   var F=32;
   var names=["NOR"].concat(cols.map(function(z){ return z.l; })).concat(useTotal?["TOTAL"]:[]);
@@ -531,7 +532,7 @@ function fpDrawCanvas(c, cols, useTotal, phys, qr, foto){
   var CW=W-M*2, colW=CW/nc;
   var rowH=56, headH=56, lineH=44, infoLines=4;
   var qrSize=120;
-  var yTop=80;
+  var yTop=120;
   var infoStart=yTop+qrSize+20;
   var tableY=infoStart+infoLines*lineH+14;
   var bt=tableY+headH, bh=phys.length*rowH;
@@ -547,11 +548,11 @@ function fpDrawCanvas(c, cols, useTotal, phys, qr, foto){
   x.fillStyle="#112233"; x.font="bold "+F+"px Arial, sans-serif"; x.textAlign="center";
   x.fillText("DATA PRODUKSI EUP GUDANG TAIPA 2026", W/2, 40);
   x.fillStyle="#1155cc"; x.fillRect(M, 62, CW, 5);
+  x.fillStyle="#112233"; x.font="bold "+F+"px Arial, sans-serif"; x.textAlign="center";
+  x.fillText("[NO "+c.no+"]", W/2, 92);
   if(qr){ try{ x.drawImage(qr, M, yTop, qrSize, qrSize); }catch(e){} }
-  x.fillStyle="#112233"; x.font="bold 30px Arial, sans-serif"; x.textAlign="left";
+  x.fillStyle="#112233"; x.font="bold "+F+"px Arial, sans-serif"; x.textAlign="left";
   x.fillText(c.kpc||"-", M+qrSize+24, yTop+qrSize/2);
-  x.fillStyle="#1155cc"; x.font="bold 22px Arial, sans-serif"; x.textAlign="right";
-  x.fillText("[NO "+c.no+"]", W-M, yTop+20);
   var inf=[["Tanggal",c.tanggal],["Operator",c.operator],["Mesin",c.mesin],["Produk",c.produk]];
   x.textAlign="left";
   inf.forEach(function(row,i){
@@ -652,7 +653,7 @@ function fpDoDownload(){
 
 function fpOpenDetail(key){
   fpKEY=key; fpShow("fp-view-detail");
-  fpEl("fp-crumb").textContent=fpMESIN;
+  fpEl("fp-crumb").textContent="DATA PRODUKSI "+fpMESIN+" "+fpDispDate(key);
   var ck="det:"+fpMESIN+":"+key;
   var c=fpCacheGet(ck);
   if(c){ fpRenderDetail(c); return; }
