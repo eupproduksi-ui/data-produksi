@@ -177,7 +177,8 @@ function fpHideErr(){ fpEl("fp-errbar").classList.add("hidden"); }
 function fpRetry(){ fpHideErr(); if(fpLAST){ fpRun(fpLAST.fn, fpLAST.arg, fpLAST.cb); } }
 function fpBackup(){ window.open(API_URL, "_blank"); }
 
-/* ===== PEMANGGIL API (OTOMATIS COBA ULANG 1x SAAT JARINGAN PUTUS) ===== */
+/* ===== PEMANGGIL API: BACA PAKAI GET (SEPERTI LINK TES YANG SELALU BERHASIL) ===== */
+var fpREAD={getMesin:1,getProduk:1,getNextNo:1,getListTanggal:1,getDetail:1};
 function fpRun(fn, arg, cb, _retry){
   fpLAST={fn:fn,arg:arg,cb:cb};
   var params={action:fn};
@@ -188,8 +189,16 @@ function fpRun(fn, arg, cb, _retry){
   if(fn==="simpanPaket"){ params.p=arg[0]; }
   if(fn==="updatePaket"){ params.p=arg[0]; params.key=arg[1]; params.no=arg[2]; }
   if(fn==="hapusPaket"){ params.mesin=arg[0]; params.key=arg[1]; params.no=arg[2]; }
-  fetch(API_URL,{method:"POST",body:JSON.stringify(params)})
-    .then(function(r){ return r.json(); })
+  var req;
+  if(fpREAD[fn]){
+    params._t=Date.now();
+    var q=[];
+    for(var k in params){ q.push(encodeURIComponent(k)+"="+encodeURIComponent(params[k])); }
+    req=fetch(API_URL+"?"+q.join("&"));
+  } else {
+    req=fetch(API_URL,{method:"POST",body:JSON.stringify(params)});
+  }
+  req.then(function(r){ return r.json(); })
     .then(function(res){
       if(res && res.ok===false){ fpShowErr(res.msg||"Gagal memproses."); return; }
       if(res && res.ok===true && res.data!==undefined){ cb(res.data); return; }
@@ -527,7 +536,7 @@ function fpOnFile(inp){
   rd.readAsDataURL(f);
 }
 
-/* ===== CANVAS PNG: NO HITAM DI TENGAH BAWAH JUDUL, NO & KPC = UKURAN JUDUL ===== */
+/* ===== CANVAS PNG ===== */
 function fpDrawCanvas(c, cols, useTotal, phys, qr, foto){
   var F=32;
   var names=["NOR"].concat(cols.map(function(z){ return z.l; })).concat(useTotal?["TOTAL"]:[]);
