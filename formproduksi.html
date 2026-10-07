@@ -521,22 +521,30 @@ function fpOnFile(inp){
   rd.readAsDataURL(f);
 }
 
-/* ===== CANVAS PNG: ANGKA & TEKS DIBESARKAN ===== */
+/* ===== CANVAS PNG: SEMUA TEKS UTAMA = UKURAN JUDUL (32px) ===== */
 function fpDrawCanvas(c, cols, useTotal, phys, qr, foto){
-  var W=1000, M=40, CW=W-M*2;
-  var rowH=46, headH=46, infoLines=4, lineH=32;
+  var F=32;
+  var names=["NOR"].concat(cols.map(function(z){ return z.l; })).concat(useTotal?["TOTAL"]:[]);
+  var nc=names.length;
+  var M=40;
+  var W=Math.max(1000, nc*240+M*2);
+  var CW=W-M*2, colW=CW/nc;
+  var rowH=56, headH=56, lineH=44, infoLines=4;
+  var qrSize=120;
+  var yTop=80;
+  var infoStart=yTop+qrSize+20;
+  var tableY=infoStart+infoLines*lineH+14;
+  var bt=tableY+headH, bh=phys.length*rowH;
+  var yLine=bt+bh+22;
   var dw=0, dh=0;
   if(foto){ dw=CW; dh=Math.round(CW*2/5); }
-  var yTop=80, qrSize=120, infoStart=yTop+qrSize+20;
-  var tableY=infoStart+infoLines*lineH+12;
-  var yLine=tableY+headH+phys.length*rowH+20;
   var H=yLine + (foto && dh>0 ? (34+dh+20) : 46);
   var cv=document.createElement("canvas");
   cv.width=W; cv.height=H;
   var x=cv.getContext("2d");
   x.fillStyle="#f7fafc"; x.fillRect(0,0,W,H);
   x.textBaseline="middle";
-  x.fillStyle="#112233"; x.font="bold 32px Arial, sans-serif"; x.textAlign="center";
+  x.fillStyle="#112233"; x.font="bold "+F+"px Arial, sans-serif"; x.textAlign="center";
   x.fillText("DATA PRODUKSI EUP GUDANG TAIPA 2026", W/2, 40);
   x.fillStyle="#1155cc"; x.fillRect(M, 62, CW, 5);
   if(qr){ try{ x.drawImage(qr, M, yTop, qrSize, qrSize); }catch(e){} }
@@ -547,17 +555,14 @@ function fpDrawCanvas(c, cols, useTotal, phys, qr, foto){
   var inf=[["Tanggal",c.tanggal],["Operator",c.operator],["Mesin",c.mesin],["Produk",c.produk]];
   x.textAlign="left";
   inf.forEach(function(row,i){
-    x.fillStyle="#334455"; x.font="bold 21px Arial, sans-serif";
+    x.fillStyle="#334455"; x.font="bold "+F+"px Arial, sans-serif";
     x.fillText(row[0], M, infoStart+i*lineH+lineH/2);
-    x.fillStyle="#112233"; x.font="bold 21px Arial, sans-serif";
-    x.fillText(": "+(row[1]||""), M+150, infoStart+i*lineH+lineH/2);
+    x.fillStyle="#112233"; x.font="bold "+F+"px Arial, sans-serif";
+    x.fillText(": "+(row[1]||""), M+230, infoStart+i*lineH+lineH/2);
   });
-  var names=["NOR"].concat(cols.map(function(z){ return z.l; })).concat(useTotal?["TOTAL"]:[]);
-  var nc=names.length, colW=CW/nc;
   x.fillStyle="#1155cc"; x.fillRect(M, tableY, CW, headH);
-  x.fillStyle="#fff"; x.font="bold 21px Arial, sans-serif"; x.textAlign="center";
+  x.fillStyle="#fff"; x.font="bold "+F+"px Arial, sans-serif"; x.textAlign="center";
   names.forEach(function(nm,i){ x.fillText(nm, M+colW*i+colW/2, tableY+headH/2); });
-  var bt=tableY+headH, bh=phys.length*rowH;
   x.fillStyle="#fff"; x.fillRect(M, bt, CW, bh);
   var totalX = useTotal ? M+colW*(nc-1) : null;
   x.strokeStyle="#cfd6e0"; x.lineWidth=1;
@@ -570,7 +575,7 @@ function fpDrawCanvas(c, cols, useTotal, phys, qr, foto){
     x.beginPath(); x.moveTo(xx, bt); x.lineTo(xx, bt+bh); x.stroke();
   }
   x.strokeRect(M, tableY, CW, headH+bh);
-  x.fillStyle="#112233"; x.font="bold 22px Arial, sans-serif"; x.textAlign="center";
+  x.fillStyle="#112233"; x.font="bold "+F+"px Arial, sans-serif"; x.textAlign="center";
   phys.forEach(function(p,ri){
     var cy=bt+ri*rowH+rowH/2;
     x.fillText(String(p.no), M+colW/2, cy);
@@ -580,10 +585,9 @@ function fpDrawCanvas(c, cols, useTotal, phys, qr, foto){
     });
   });
   if(useTotal){
-    x.fillStyle="#1155cc"; x.font="bold 26px Arial, sans-serif";
+    x.fillStyle="#1155cc"; x.font="bold "+F+"px Arial, sans-serif";
     x.fillText(fpFmt(c.total), totalX+colW/2, bt+bh/2);
   }
-  yLine=bt+bh+20;
   x.strokeStyle="#99aabb"; x.beginPath(); x.moveTo(M, yLine); x.lineTo(W-M, yLine); x.stroke();
   x.fillStyle="#334455"; x.font="italic bold 20px Arial, sans-serif"; x.textAlign="center";
   x.fillText("\u00A9 EUP GUDANG TAIPA 2026", W/2, yLine+20);
