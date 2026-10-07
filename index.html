@@ -24,6 +24,9 @@ a{text-decoration:none;color:inherit}
 .main-content{flex:1;padding:16px;max-width:1200px;margin:auto;width:100%;overflow-x:hidden;}
 .boot-msg{padding:20px;color:#888;text-align:center}
 .err-box{padding:20px;color:#c00;background:#ffebee;border:2px solid #c00;border-radius:8px;margin:20px}
+.global-err{position:fixed;bottom:0;left:0;right:0;background:#c00;color:#fff;padding:10px 14px;z-index:150;display:flex;gap:8px;align-items:center;font-weight:bold;font-size:14px}
+.global-err span{flex:1}
+.global-err button{background:#fff;color:#c00;border:none;border-radius:6px;padding:8px 12px;font-weight:bold;cursor:pointer}
 </style>
 </head>
 <body>
@@ -40,12 +43,18 @@ a{text-decoration:none;color:inherit}
   <div style="position:relative;">
     <nav id="sidebar" class="sidebar">
       <a onclick="loadPage('Dashboard')">Dashboard</a>
-      <a onclick="loadPage('FormProduksi')">Form Produksi</a>
+      <a onclick="loadPage('FormProduksi')">Buku Produksi</a>
     </nav>
 
     <div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
     <main id="content" class="main-content"></main>
   </div>
+</div>
+
+<div id="global-err" class="global-err hidden">
+  <span>Sambungan data terputus.</span>
+  <button onclick="window.open(API_URL,'_blank')">BUKA CADANGAN</button>
+  <button onclick="document.getElementById('global-err').classList.add('hidden')" style="background:none;color:#fff;font-size:18px">&#10005;</button>
 </div>
 
 <script>
@@ -88,7 +97,7 @@ function loadPage(name){
       }, 150);
     })
     .catch(function(e){
-      $idx('content').innerHTML = '<div class="err-box"><b>GAGAL MEMUAT: '+name+'</b><br><br>'+e.message+'</div>';
+      $idx('content').innerHTML = '<div class="err-box"><b>GAGAL MEMUAT: '+name+'</b><br><br>'+e.message+'<br><br><button onclick="loadPage(\''+name+'\')" style="background:#1155cc;color:#fff;padding:10px 20px;border:none;border-radius:6px;font-weight:bold;cursor:pointer">COBA LAGI</button></div>';
     });
 }
 
@@ -106,6 +115,10 @@ fetch('login.html')
   .catch(function(e){
     $idx('login-area').innerHTML = '<div class="err-box"><b>GAGAL MEMUAT LOGIN</b><br><br>'+e.message+'</div>';
   });
+
+/* Global Network Check */
+window.addEventListener('offline', function(){ $idx('global-err').classList.remove('hidden'); });
+window.addEventListener('online', function(){ $idx('global-err').classList.add('hidden'); });
 </script>
 </body>
 </html>
