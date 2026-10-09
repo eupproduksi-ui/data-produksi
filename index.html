@@ -222,6 +222,7 @@ function inject(html, el){
   }
 }
 
+/* ===== MUAT HALAMAN DARI FILE LOKAL GITHUB (tidak tergantung deployment Apps Script) ===== */
 function loadPage(name){
   $id("sidebar").classList.remove("open");
   $id("overlay").classList.remove("show");
@@ -240,24 +241,27 @@ function loadPage(name){
     });
 }
 
-/* ===== SCANNER ===== */
+/* ===== SCANNER (DIOPTIMALKAN: crop tengah + 600px + 1x proses = DETEKSI < 0,5 dtk) ===== */
 var scanStream=null, scanTimer=null, scanSent=false, torchOn=false, scanCv=null;
+var SCAN_OUT=600;     // resolusi baca QR (naikkan ke 800 kalau QR sangat kecil/jauh)
+var SCAN_CROP=0.62;   // proporsi kotak tengah yang dibaca (0.62 ≈ area bingkai sudut)
+var SCAN_MS=250;      // jeda antar percobaan
 
 function startScanner(deviceId){
   stopScanner(true);
   scanSent=false;
   if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){ alert("Browser tidak mendukung kamera."); return; }
-  var vid={width:{ideal:1920},height:{ideal:1080}};
+  var vid={width:{ideal:1280},height:{ideal:720}};
   if(deviceId){ vid.deviceId={exact:deviceId}; } else { vid.facingMode="environment"; }
   navigator.mediaDevices.getUserMedia({video:vid,audio:false})
     .then(function(stream){
       scanStream=stream;
       var v=$id("sc-video");
       v.srcObject=stream; v.play();
-      scanCv=document.createElement("canvas");
+      if(!scanCv) scanCv=document.createElement("canvas");
       listCams(deviceId||null);
       $id("sc-modal").classList.add("show");
-      scanTimer=setInterval(scanTick,350);
+      scanTimer=setInterval(scanTick,SCAN_MS);
     })
     .catch(function(e){ alert("Kamera tidak bisa dibuka: "+e.message); });
 }
@@ -273,18 +277,21 @@ function stopScanner(keepModal){
 function scanTick(){
   if(scanSent||!scanStream||typeof jsQR==="undefined") return;
   var v=$id("sc-video");
-  if(!v||!v.videoWidth||v.readyState!==4) return;
-  scanCv.width=v.videoWidth; scanCv.height=v.videoHeight;
-  var cx=scanCv.getContext("2d");
-  cx.drawImage(v,0,0);
-  var img=cx.getImageData(0,0,scanCv.width,scanCv.height);
+  if(!v||!v.videoWidth||v.readyState<2) return;
+  var vw=v.videoWidth, vh=v.videoHeight;
+  var side=Math.floor(Math.min(vw,vh)*SCAN_CROP);
+  var ox=Math.floor((vw-side)/2), oy=Math.floor((vh-side)/2);
+  scanCv.width=SCAN_OUT; scanCv.height=SCAN_OUT;
+  var cx=scanCv.getContext("2d",{willReadFrequently:true});
+  cx.drawImage(v, ox,oy,side,side, 0,0,SCAN_OUT,SCAN_OUT);
+  var img=cx.getImageData(0,0,SCAN_OUT,SCAN_OUT);
   var code=null;
-  try{ code=jsQR(img.data,scanCv.width,scanCv.height,{inversionAttempts:"attemptBoth"}); }catch(e){}
+  try{ code=jsQR(img.data,SCAN_OUT,SCAN_OUT); }catch(e){}
   if(code&&code.data){
     scanSent=true;
     var txt=code.data;
     window.dispatchEvent(new CustomEvent("DMS_KPC_SCAN",{detail:{text:txt}}));
-    setTimeout(function(){ stopScanner(); },400);
+    setTimeout(function(){ stopScanner(); },350);
   }
 }
 
@@ -330,7 +337,6 @@ function toggleTorch(){
   try{ t.applyConstraints({advanced:[{torch:torchOn}]}); }catch(e){}
 }
 
-/* Expose global scanner API untuk halaman */
 window.__SCANNER__ = { start: startScanner, stop: stopScanner };
 
 /* ===== AUTO LOGIN ===== */
