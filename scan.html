@@ -1,80 +1,60 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>SCAN KPC</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scan KPC</title>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 <style>
-  html,body{margin:0;height:100%;background:#000;font-family:Arial,sans-serif;overflow:hidden;}
-  #video{width:100%;height:100%;object-fit:cover;}
-  #frame{position:fixed;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;pointer-events:none;overflow:hidden;}
-  #scanBox{position:relative;width:min(66vw,52vh);height:min(66vw,52vh);background:rgba(255,255,255,.05);box-shadow:0 0 0 9999px rgba(0,0,0,.35);}
-  #scanBox .c{position:absolute;width:36px;height:36px;border:0 solid #fff;}
-  #scanBox .tl{top:0;left:0;border-top-width:6px;border-left-width:6px;}
-  #scanBox .tr{top:0;right:0;border-top-width:6px;border-right-width:6px;}
-  #scanBox .bl{bottom:0;left:0;border-bottom-width:6px;border-left-width:6px;}
-  #scanBox .br{bottom:0;right:0;border-bottom-width:6px;border-right-width:6px;}
-  #msg{position:fixed;bottom:0;left:0;right:0;background:rgba(0,0,0,.65);color:#fff;padding:12px;font-size:13px;text-align:center;}
+html,body{margin:0;padding:0;background:#000;height:100%;overflow:hidden}
+#v{width:100%;height:100vh;object-fit:cover;display:block}
+.ov{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.box{position:relative;width:64%;max-width:300px;aspect-ratio:1/1;background:rgba(255,255,255,.06);box-shadow:0 0 0 9999px rgba(0,0,0,.35)}
+.box .c{position:absolute;width:34px;height:34px;border:0 solid #fff}
+.tl{top:0;left:0;border-top-width:5px;border-left-width:5px}
+.tr{top:0;right:0;border-top-width:5px;border-right-width:5px}
+.bl{bottom:0;left:0;border-bottom-width:5px;border-left-width:5px}
+.br{bottom:0;right:0;border-bottom-width:5px;border-right-width:5px}
+.hint{position:fixed;bottom:18px;left:0;right:0;text-align:center;color:#fff;font:bold 14px Arial;text-shadow:0 1px 4px #000}
+.done{position:fixed;inset:0;background:#16A34A;color:#fff;display:flex;align-items:center;justify-content:center;font:bold 20px Arial}
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jsqr/1.4.0/jsQR.min.js"></script>
-<script>
-if(typeof jsQR==="undefined"){
-  document.write('<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"><\/script>');
-}
-</script>
 </head>
 <body>
-<video id="video" autoplay playsinline muted></video>
-<div id="frame">
-  <div id="scanBox">
-    <span class="c tl"></span><span class="c tr"></span>
-    <span class="c bl"></span><span class="c br"></span>
-  </div>
-</div>
-<div id="msg">Arahkan QR ke dalam kotak — terbaca otomatis</div>
+<video id="v" playsinline autoplay muted></video>
+<div class="ov"><div class="box"><span class="c tl"></span><span class="c tr"></span><span class="c bl"></span><span class="c br"></span></div></div>
+<div class="hint">Arahkan QR KPC ke kotak</div>
 <script>
-let sent=false;
-function kirim(text){
-  if(sent) return;
-  sent=true;
-  try{
-    if(window.parent && window.parent!==window) window.parent.postMessage({type:"DMS_KPC_SCAN", text:text}, "*");
-    if(window.opener) window.opener.postMessage({type:"DMS_KPC_SCAN", text:text}, "*");
-  }catch(e){}
-  document.getElementById("msg").textContent="TERBACA: "+text;
+var stream=null, timer=null, sent=false;
+function start(){
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){ return; }
+  navigator.mediaDevices.getUserMedia({video:{facingMode:"environment",width:{ideal:1920},height:{ideal:1080}}})
+    .then(function(s){
+      stream=s;
+      var v=document.getElementById("v");
+      v.srcObject=s; v.play();
+      var cv=document.createElement("canvas"), cx=cv.getContext("2d");
+      timer=setInterval(function(){
+        if(sent) return;
+        if(!v.videoWidth||v.readyState!==4) return;
+        cv.width=v.videoWidth; cv.height=v.videoHeight;
+        cx.drawImage(v,0,0);
+        var img=cx.getImageData(0,0,cv.width,cv.height);
+        var code=null;
+        try{ code=jsQR(img.data,cv.width,cv.height,{inversionAttempts:"attemptBoth"}); }catch(e){}
+        if(code&&code.data){
+          sent=true;
+          clearInterval(timer);
+          try{ window.parent.postMessage({type:"DMS_KPC_SCAN",text:code.data},"*"); }catch(e){}
+          document.body.innerHTML='<div class="done">&#10004; QR TERBACA</div>';
+          setTimeout(function(){ try{ window.parent.postMessage({type:"DMS_KPC_SCAN",text:code.data},"*"); }catch(e){} },300);
+        }
+      },400);
+    })
+    .catch(function(e){
+      document.querySelector(".hint").textContent="Kamera tidak bisa dibuka: "+e.message;
+    });
 }
-var canvas=document.createElement("canvas");
-var ctx=canvas.getContext("2d");
-function decodeFrame(){
-  if(typeof jsQR==="undefined") return null;
-  var v=document.getElementById("video");
-  if(!v.videoWidth) return null;
-  var maxW=1600;
-  var sc=Math.min(1, maxW/v.videoWidth);
-  canvas.width=Math.max(1,Math.round(v.videoWidth*sc));
-  canvas.height=Math.max(1,Math.round(v.videoHeight*sc));
-  ctx.drawImage(v,0,0,canvas.width,canvas.height);
-  var d=ctx.getImageData(0,0,canvas.width,canvas.height);
-  var code=jsQR(d.data,d.width,d.height,{inversionAttempts:"attemptBoth"});
-  return code? code.data : null;
-}
-navigator.mediaDevices.getUserMedia({ video:{ facingMode:"environment", width:{ideal:1920}, height:{ideal:1080} } })
-  .then(function(s){
-    var v=document.getElementById("video");
-    v.srcObject=s;
-    setInterval(function(){
-      var t=decodeFrame();
-      if(t) kirim(t);
-    },300);
-  })
-  .catch(function(err){
-    document.getElementById("msg").textContent="Kamera tidak bisa dibuka: "+err.name;
-  });
-setTimeout(function(){
-  if(typeof jsQR==="undefined"){
-    document.getElementById("msg").textContent="Library scan gagal dimuat — cek koneksi internet lalu ulangi.";
-  }
-},2500);
+start();
 </script>
 </body>
 </html>
