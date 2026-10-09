@@ -53,14 +53,14 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 .sc-close{background:#eee;border:none;border-radius:50%;width:36px;height:36px;font-size:16px;cursor:pointer}
 .sc-body{padding:12px}
 .sc-video-wrap{position:relative;background:#000;border-radius:8px;overflow:hidden}
-.sc-video{width:100%;max-height:52vh;display:block;object-fit:cover}
+.sc-video{width:100%;max-height:66vh;display:block;object-fit:cover}
 .sc-ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
-.sc-box-inner{position:relative;width:64%;max-width:300px;aspect-ratio:1/1;background:rgba(255,255,255,.06);box-shadow:0 0 0 9999px rgba(0,0,0,.35)}
-.sc-corner{position:absolute;width:34px;height:34px;border:0 solid #fff}
-.sc-tl{top:0;left:0;border-top-width:5px;border-left-width:5px}
-.sc-tr{top:0;right:0;border-top-width:5px;border-right-width:5px}
-.sc-bl{bottom:0;left:0;border-bottom-width:5px;border-left-width:5px}
-.sc-br{bottom:0;right:0;border-bottom-width:5px;border-right-width:5px}
+.sc-box-inner{position:relative;width:76%;max-width:380px;aspect-ratio:1/1;background:rgba(255,255,255,.06);box-shadow:0 0 0 9999px rgba(0,0,0,.35)}
+.sc-corner{position:absolute;width:42px;height:42px;border:0 solid #fff}
+.sc-tl{top:0;left:0;border-top-width:6px;border-left-width:6px}
+.sc-tr{top:0;right:0;border-top-width:6px;border-right-width:6px}
+.sc-bl{bottom:0;left:0;border-bottom-width:6px;border-left-width:6px}
+.sc-br{bottom:0;right:0;border-bottom-width:6px;border-right-width:6px}
 .sc-zoom{display:flex;align-items:center;gap:10px;margin-top:12px}
 .sc-zoom input{flex:1}
 .sc-zoom-lbl{font-size:13px;font-weight:bold;color:#333;white-space:nowrap}
@@ -241,10 +241,10 @@ function loadPage(name){
     });
 }
 
-/* ===== SCANNER (DIOPTIMALKAN: crop tengah + 600px + 1x proses = DETEKSI < 0,5 dtk) ===== */
+/* ===== SCANNER (DIOPTIMALKAN: crop tengah + 700px + 1x proses = DETEKSI < 0,5 dtk) ===== */
 var scanStream=null, scanTimer=null, scanSent=false, torchOn=false, scanCv=null;
-var SCAN_OUT=600;     // resolusi baca QR (naikkan ke 800 kalau QR sangat kecil/jauh)
-var SCAN_CROP=0.62;   // proporsi kotak tengah yang dibaca (0.62 ≈ area bingkai sudut)
+var SCAN_OUT=700;     // resolusi baca QR (naikkan ke 800 kalau QR sangat kecil/jauh)
+var SCAN_CROP=0.74;   // proporsi kotak tengah yang dibaca (0.74 ≈ area bingkai sudut 76%)
 var SCAN_MS=250;      // jeda antar percobaan
 
 function startScanner(deviceId){
