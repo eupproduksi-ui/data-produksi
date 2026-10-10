@@ -8,8 +8,8 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
-/* === GLOBAL FONT OVERRIDE: 11px MERRIWEATHER === */
-* {
+/* === GLOBAL FONT: 11px MERRIWEATHER (Kecuali elemen yang dikecualikan) === */
+*:not(.menu-btn):not(.fp-fab):not(.dm-fab):not(.sc-torch-btn):not(.lg-line svg) {
   font-family: 'Merriweather', serif !important;
   font-size: 11px !important;
 }
@@ -21,23 +21,26 @@ button{cursor:pointer;border:none;background:none}
 /* LOGIN */
 .lg-bg{position:fixed;inset:0;background:linear-gradient(160deg,#bdbdbd 0%,#969696 55%,#7d7d7d 100%);display:flex;align-items:center;justify-content:center;padding:16px;z-index:100}
 .lg-card{width:400px;max-width:94%;background:linear-gradient(135deg,rgba(255,255,255,.55) 0%,rgba(255,255,255,.22) 50%,rgba(255,255,255,.45) 100%);border:1px solid rgba(255,255,255,.65);border-radius:22px;box-shadow:0 18px 40px rgba(0,0,0,.28);padding:34px 30px 24px;text-align:center;position:relative;overflow:hidden}
-.lg-title{margin-bottom:28px; font-weight:bold;} /* Size handled by global * */
+.lg-title{margin-bottom:28px; font-weight:bold;}
 .lg-line{display:flex;align-items:center;gap:10px;border-bottom:1px solid #6f6f6f;margin-bottom:22px;padding:6px 2px}
-.lg-line svg{width:14px;height:14px;fill:#4c4c4c;flex:0 0 auto} /* Icon adjusted slightly */
+.lg-line svg{width:14px;height:14px;fill:#4c4c4c;flex:0 0 auto}
 .lg-line input{flex:1;border:none;outline:none;background:transparent!important;color:#2f2f2f;padding:6px 0;font-weight:bold}
 .lg-btn{width:72%;margin:0 auto;background:#565656;color:#fff;border:none;border-radius:8px;padding:13px 0;font-weight:bold;letter-spacing:2px;cursor:pointer;display:block}
 .lg-msg{color:#b00020;min-height:14px;margin-top:8px;font-weight:bold}
 .lg-foot{margin-top:0;color:#4a4a4a;letter-spacing:1px;font-style:italic;font-weight:bold}
 
 /* APP FRAME */
-.app-header{position:sticky;top:0;z-index:50;background:#1155cc;color:#fff;display:flex;align-items:center;gap:14px;padding:12px 16px;height:50px} /* Height reduced slightly for small font */
-.menu-btn{color:#fff;padding:0 8px;}
+.app-header{position:sticky;top:0;z-index:50;background:#1155cc;color:#fff;display:flex;align-items:center;gap:14px;padding:12px 16px;height:50px}
+/* === FIX 1: ICON MENU (GARIS 3) DIBESARKAN === */
+.menu-btn{font-size:28px !important; line-height:1; color:#fff; padding:0 8px; font-family:Arial !important;} 
 .header-title{font-weight:bold;letter-spacing:1px;flex:1;}
 .user-badge{background:#0d3f92;border:1px solid #ffffff55;border-radius:20px;padding:6px 16px;font-weight:bold;}
-.sidebar{position:fixed;left:-260px;top:50px;bottom:0;width:250px;background:#0d3f92;z-index:45;transition:.25s;overflow-y:auto;}
+
+/* === FIX 2: SIDEBAR Z-INDEX NAIK AGAR TIDAK DITUTUP HEADER === */
+.sidebar{position:fixed;left:-260px;top:0;bottom:0;width:250px;background:#0d3f92;z-index:60;transition:.25s;overflow-y:auto; padding-top:60px;} 
 .sidebar.open{left:0}
 .sidebar a{display:block;color:#fff;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.1);cursor:pointer;}
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:40;display:none}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:55;display:none} /* Overlay di bawah sidebar(60) tapi di atas header(50) */
 .overlay.show{display:block}
 .main-content{flex:1;padding:16px;max-width:1200px;margin:auto;width:100%}
 .boot-msg{padding:20px;color:#888;text-align:center}
@@ -68,7 +71,7 @@ button{cursor:pointer;border:none;background:none}
 .sc-cam-sel{flex:1;min-width:140px;padding:8px;border:1px solid #cfd6e0;border-radius:6px;font-weight:bold}
 .sc-cam-stop{background:none;border:none;color:#1155cc;font-weight:bold;cursor:pointer;white-space:nowrap}
 .sc-torch{display:flex;justify-content:flex-end;margin-top:10px}
-.sc-torch-btn{width:44px;height:44px;border-radius:10px;background:#2196f3;color:#fff;cursor:pointer}
+.sc-torch-btn{width:44px;height:44px;border-radius:10px;background:#2196f3;color:#fff;cursor:pointer; font-size:20px !important;}
 </style>
 </head>
 <body>
@@ -223,6 +226,16 @@ function inject(html, el){
     document.body.appendChild(nw);
     if(old.parentNode) old.parentNode.removeChild(old);
   }
+  
+  // === FIX 3: PASTIKAN TOMBOL FAB (+) UKURANNYA KEMBALI NORMAL SETELAH INJEKSI ===
+  setTimeout(function(){
+    var fabs = document.querySelectorAll('.fp-fab, .dm-fab');
+    for(var j=0; j<fabs.length; j++){
+      fabs[j].style.fontSize = '32px';
+      fabs[j].style.fontFamily = 'Arial';
+      fabs[j].style.lineHeight = '1';
+    }
+  }, 200);
 }
 
 var PAGE_TTL=300000;
