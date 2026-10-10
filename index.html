@@ -146,7 +146,8 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 </div>
 
 <script>
-var API_URL="https://script.google.com/macros/s/AKfycbwcKOfb6y5USg7k5oh8oI9jE4T91R8TjBjv6wyuzarEQwk-l95j_RPp9uHsBaD2TbWnbw/exec";
+/* === SATU-SATUNYA BARIS YANG DIREVISI: URL deployment AKTIF (salin utuh dari Manage deployments) === */
+var API_URL="https://script.google.com/macros/s/AKfycbwzk6T_YFrgmHOp2N2JGG-s9YL0_Fkhf7z8zkwNU9HwSsLT0V_nM3paaAP1PR/exec";
 var USER=null;
 function $id(x){ return document.getElementById(x); }
 
@@ -228,13 +229,8 @@ function inject(html, el){
   }
 }
 
-/* ===== ISI HALAMAN DARI APPS SCRIPT (editor utama) + CACHE 5 MENIT =====
-   - HTML diambil sekali per halaman per sesi, selanjutnya dari sessionStorage
-     => klik bolak-balik tetap instan meski Apps Script jadi sumber.
-   - Setelah edit halaman di Apps Script WAJIB: Deploy -> Manage deployments ->
-     pensil pada deployment ber-URL AKfycbwcKOfb... -> Version: New version -> Deploy.
-   - Kalau habis deploy tapi masih lama: klik Keluar lalu login lagi (membersihkan cache). */
-var PAGE_TTL=300000; /* 5 menit, sama dengan pola cache data di halaman */
+/* ===== ISI HALAMAN DARI APPS SCRIPT (editor utama) + CACHE 5 MENIT ===== */
+var PAGE_TTL=300000;
 function pageCacheKey(n){ return "EUP_HTML_"+n; }
 function clearPageCache(name){ try{ sessionStorage.removeItem(pageCacheKey(name)); }catch(e){} }
 function getPageHtml(name, cb, fail){
@@ -268,9 +264,9 @@ function loadPage(name){
 
 /* ===== SCANNER (built-in di shell GitHub — crop tengah + 700px + 1x proses) ===== */
 var scanStream=null, scanTimer=null, scanSent=false, torchOn=false, scanCv=null;
-var SCAN_OUT=700;     // resolusi baca QR (naikkan ke 800 kalau QR sangat kecil/jauh)
-var SCAN_CROP=0.74;   // proporsi kotak tengah yang dibaca (0.74 ≈ area bingkai sudut 76%)
-var SCAN_MS=250;      // jeda antar percobaan
+var SCAN_OUT=700;
+var SCAN_CROP=0.74;
+var SCAN_MS=250;
 
 function startScanner(deviceId){
   stopScanner(true);
