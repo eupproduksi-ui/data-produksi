@@ -1,3 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EUP GUDANG TAIPA</title>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+<style>
+/* === IMPORT FONT MERRIWEATHER === */
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700&display=swap');
+
+/* RESET GLOBAL */
+* { box-sizing:border-box; margin:0; padding:0; font-family:'Merriweather', serif !important; }
+body{background:#f4f6f9;min-height:100vh;display:flex;flex-direction:column}
+.hidden{display:none!important}
+button{cursor:pointer;border:none;background:none;font-family:inherit;}
+a{text-decoration:none;color:inherit}
+
+/* HEADER STYLE (SAMA PERSIS DENGAN APPS SCRIPT) */
+.app-header{position:sticky;top:0;z-index:50;background:#1155cc;color:#fff;display:flex;align-items:center;gap:14px;padding:12px 16px;height:60px;}
+.menu-btn{font-size:28px !important;line-height:1;color:#fff;padding:0 8px;} 
+.header-title{font-weight:bold;font-size:18px !important;letter-spacing:1px;flex:1;}
+.user-badge{background:#0d3f92;border-radius:20px;padding:6px 15px;font-weight:bold;font-size:14px !important;}
+
+/* SIDEBAR STYLE (SAMA PERSIS DENGAN APPS SCRIPT) */
+.sidebar{position:fixed;left:-260px;top:0;bottom:0;width:250px;background:#0d3f92;z-index:100;transition:.25s ease-in-out;overflow-y:auto; padding-top:70px;}
+.sidebar.open{left:0;}
+.sidebar a{display:block;color:#fff;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,0.1);font-size:14px !important;cursor:pointer;}
+.sidebar a:hover{background:#1155cc;}
+
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:90;display:none;}
+.overlay.show{display:block;}
+
+.main-content{flex:1;padding:16px;max-width:1200px;margin:auto;width:100%;}
+.boot-msg{padding:20px;color:#888;text-align:center;font-size:14px !important;}
+.err-box{padding:20px;color:#c00;background:#ffebee;border:2px solid #c00;border-radius:8px;margin:20px;font-size:14px !important;}
+
+/* SCANNER MODAL (STABIL) */
+.sc-modal{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:10000;display:none;align-items:center;justify-content:center;padding:16px}
+.sc-modal.show{display:flex}
+.sc-box{background:#fff;border-radius:10px;width:520px;max-width:100%;max-height:90vh;overflow:auto}
+.sc-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:#fff;border-bottom:1px solid #e3e7ee}
+.sc-title{font-weight:bold;color:#112233;font-size:16px !important}
+.sc-close{background:#eee;border:none;border-radius:50%;width:36px;height:36px;font-size:18px !important;cursor:pointer}
+.sc-body{padding:12px}
+.sc-video-wrap{position:relative;background:#000;border-radius:8px;overflow:hidden}
+.sc-video{width:100%;max-height:60vh;display:block;object-fit:cover}
+.sc-ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.sc-box-inner{position:relative;width:70%;max-width:300px;aspect-ratio:1/1;border:2px solid rgba(255,255,255,0.3)}
+.sc-corner{position:absolute;width:40px;height:40px;border:0 solid #fff}
+.sc-tl{top:-2px;left:-2px;border-top-width:4px;border-left-width:4px}
+.sc-tr{top:-2px;right:-2px;border-top-width:4px;border-right-width:4px}
+.sc-bl{bottom:-2px;left:-2px;border-bottom-width:4px;border-left-width:4px}
+.sc-br{bottom:-2px;right:-2px;border-bottom-width:4px;border-right-width:4px}
+.sc-controls{padding:10px;}
+.sc-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.sc-label{font-weight:bold;color:#333;white-space:nowrap;font-size:14px !important}
+.sc-input-range{flex:1;padding:8px;border:1px solid #ccc;border-radius:4px;font-size:14px !important}
+.sc-select{flex:1;min-width:140px;padding:8px;border:1px solid #cfd6e0;border-radius:6px;font-size:14px !important;font-weight:bold}
+.sc-btn{background:#1155cc;color:#fff;border:none;padding:10px 15px;border-radius:6px;font-size:14px !important;font-weight:bold;cursor:pointer}
+.sc-btn-torch{width:50px;height:50px;border-radius:50%;background:#2196f3;color:#fff;font-size:24px !important;display:flex;align-items:center;justify-content:center;margin-left:auto}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-area" style="position:fixed;inset:0;background:linear-gradient(160deg,#bdbdbd,#7d7d7d);display:flex;align-items:center;justify-content:center;z-index:100;">
+  <div style="width:400px;max-width:94%;background:rgba(255,255,255,0.95);border-radius:15px;padding:30px;text-align:center;">
+    <h2 style="margin-bottom:20px;letter-spacing:1px;">EUP GUDANG TAIPA</h2>
+    <input id="lg-user" placeholder="Username" style="width:100%;padding:12px;margin:10px 0;border:1px solid #ccc;border-radius:6px;font-size:14px;">
+    <input id="lg-pass" type="password" placeholder="Password" style="width:100%;padding:12px;margin:10px 0;border:1px solid #ccc;border-radius:6px;font-size:14px;">
+    <button onclick="doLogin()" style="width:100%;padding:12px;background:#333;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:bold;margin-top:10px;">LOGIN</button>
+    <div id="lg-msg" style="color:red;margin-top:10px;min-height:20px;font-size:13px;"></div>
+  </div>
+</div>
+
+<!-- APP SHELL (MENU DISINI HARUS SAMA PERSIS DENGAN INDEX.HTML APPS SCRIPT) -->
+<div id="app" class="hidden">
+  <header class="app-header">
+    <button class="menu-btn" onclick="toggleSidebar()">&#9776;</button>
+    <div class="header-title">EUP GUDANG TAIPA</div>
+    <div class="user-badge">&#128100; <span id="user-nama"></span></div>
+  </header>
+  <div style="position:relative;">
+    <nav id="sidebar" class="sidebar">
+      <a onclick="loadPage('Dashboard')">Dashboard</a>
+      <a onclick="loadPage('FormProduksi')">Buku Produksi</a>
+      <a onclick="loadPage('Dimensi')">Data Dimensi</a>
+      <a onclick="logout()" style="margin-top:20px;border-top:1px solid #fff;">Keluar</a>
+    </nav>
+    <div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
+    <main id="content" class="main-content"></main>
+  </div>
+</div>
+
+<!-- SCANNER MODAL -->
+<div id="sc-modal" class="sc-modal">
+  <div class="sc-box">
+    <div class="sc-header">
+      <div class="sc-title">Scan QR KPC</div>
+      <button class="sc-close" onclick="stopScanner()">&#10005;</button>
+    </div>
+    <div class="sc-body">
+      <div class="sc-video-wrap">
+        <video id="sc-video" playsinline autoplay muted class="sc-video"></video>
+        <div class="sc-ov">
+          <div class="sc-box-inner">
+            <span class="sc-corner sc-tl"></span><span class="sc-corner sc-tr"></span>
+            <span class="sc-corner sc-bl"></span><span class="sc-corner sc-br"></span>
+          </div>
+        </div>
+      </div>
+      <div class="sc-controls">
+        <div class="sc-row">
+          <span class="sc-label">Zoom</span>
+          <input type="range" id="sc-zoom" min="1" max="3" step="0.1" value="1" class="sc-input-range" oninput="onZoom(this)">
+        </div>
+        <div class="sc-row">
+          <span class="sc-label">Kamera</span>
+          <select id="sc-cams" class="sc-select" onchange="onCamChange()"></select>
+        </div>
+        <div class="sc-row">
+          <button class="sc-btn" onclick="stopScanner()" style="flex:1">Tutup Scanner</button>
+          <button class="sc-btn-torch" onclick="toggleTorch()">&#128294;</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 var API_URL="https://script.google.com/macros/s/AKfycbwzk6T_YFrgmHOp2N2JGG-s9YL0_Fkhf7z8zkwNU9HwSsLT0V_nM3paaAP1PRfn1LIlnw/exec";
 var USER=null;
@@ -9,65 +139,14 @@ function api(params, cb, fail){
     .then(r=>r.json()).then(cb).catch(e=>{ if(fail) fail(e); });
 }
 
-/* === FUNGSI UTAMA: LOAD SHELL DARI APPS SCRIPT (HEADER & SIDEBAR) === */
-function loadShell(callback){
-  // 1. Ambil Sidebar HTML dari Apps Script
-  api({action:"getShellPart", name:"Sidebar"}, function(resS){
-    var htmlS = (resS && resS.html) ? resS.html : "";
-    
-    // Masukkan ke container placeholder di GitHub
-    var sbContainer = $id("sidebar-container");
-    if(sbContainer) sbContainer.innerHTML = htmlS;
-
-    // 2. Ambil Header HTML dari Apps Script
-    api({action:"getShellPart", name:"Header"}, function(resH){
-      var htmlH = (resH && resH.html) ? resH.html : "";
-      
-      if(htmlH){
-        // Timpa header statis dengan header dinamis dari App
-        var hdrContainer = $id("header-container");
-        if(hdrContainer) {
-           // Gunakan outerHTML agar tag <style> di dalam Header.html juga ikut terbaca oleh browser
-           hdrContainer.outerHTML = htmlH; 
-        }
-      }
-
-      // 3. PENTING: Setelah DOM berubah total, pasang ulang Event Listener Manual
-      rebindEvents(); 
-
-      if(callback) callback();
-    });
-  });
-}
-
-/* === REBIND EVENTS: MEMASTIKAN TOMBOL GARIS 3 & MENU BERFUNGSI === */
-function rebindEvents(){
-  // Cari tombol menu (garis 3) di header baru
-  var btnMenu = document.querySelector('#btn-menu') || document.querySelector('.menu-btn');
-  if(btnMenu){
-    btnMenu.onclick = toggleSidebar; // Pasang fungsi toggle langsung
-  }
-
-  // Cari overlay di sidebar baru
-  var ov = document.querySelector('#sidebar-overlay');
-  if(ov){
-    ov.onclick = toggleSidebar;
-  }
-  
-  // Opsional: Pastikan link di sidebar punya handler yang benar jika onclick internal gagal
-  // Tapi karena kita pakai onclick="loadPage(...)" di Sidebar.html, ini biasanya sudah cukup.
-}
-
 function doLogin(){
   var u=$id("lg-user").value.trim();
   var p=$id("lg-pass").value;
   var msg=$id("lg-msg");
-  var btn=$id("lg-btn");
   if(!u||!p){ msg.textContent="Isi username & password."; return; }
-  msg.textContent="Memproses..."; btn.disabled=true;
+  msg.textContent="Memproses..."; 
   
   api({action:"login",user:u,pass:p}, function(res){
-    btn.disabled=false;
     if(res && res.ok){ 
        USER = { nama: res.nama || (res.data && res.data.nama) };
        sessionStorage.setItem("EUP_USER", JSON.stringify(USER));
@@ -75,23 +154,14 @@ function doLogin(){
     } else { 
        msg.textContent=(res&&res.msg)||"Login gagal."; 
     }
-  }, function(e){ btn.disabled=false; msg.textContent="Error koneksi."; });
+  }, function(e){ msg.textContent="Error koneksi."; });
 }
 
 function enterApp(){
+  $id("user-nama").textContent=USER.nama;
   $id("login-area").classList.add("hidden");
   $id("app").classList.remove("hidden");
-  
-  // Load Shell dulu (Ambil Header/Sidebar dari App)
-  loadShell(function(){
-    // SETELAH shell termuat, BARU isi nama user ke span #user-nama
-    // Ini memperbaiki bug "titik-titik" karena sebelumnya elemen belum ada atau tertimpa
-    var userSpan = document.getElementById("user-nama");
-    if(userSpan) userSpan.textContent = USER.nama;
-    
-    // Baru load halaman dashboard
-    loadPage("Dashboard");
-  });
+  loadPage("Dashboard");
 }
 
 function logout(){
@@ -101,19 +171,11 @@ function logout(){
 }
 
 function toggleSidebar(){
-  // Cari sidebar terbaru di DOM (karena sudah di-inject ulang)
-  var sb = document.querySelector('#app-sidebar');
-  var ov = document.querySelector('#sidebar-overlay');
-  
-  if(sb && ov){
-    sb.classList.toggle("open");
-    ov.classList.toggle("show", sb.classList.contains("open"));
-  } else {
-    console.error("Sidebar/Overlay tidak ditemukan di DOM!");
-  }
+  var sb=$id("sidebar"), ov=$id("overlay");
+  sb.classList.toggle("open");
+  ov.classList.toggle("show", sb.classList.contains("open"));
 }
 
-/* === INJEKSI HALAMAN CHILD (DASHBOARD/FORM/DIMENSI) === */
 function inject(html, el){
   el.innerHTML=html;
   var scripts=el.querySelectorAll("script");
@@ -123,7 +185,6 @@ function inject(html, el){
     document.body.appendChild(nw);
     if(old.parentNode) old.parentNode.removeChild(old);
   }
-  // Fix tombol + (FAB) agar besar meski ada aturan global 14px
   setTimeout(function(){
     var fabs = document.querySelectorAll('.fp-fab, .dm-fab');
     for(var j=0;j<fabs.length;j++){
@@ -132,9 +193,9 @@ function inject(html, el){
   }, 200);
 }
 
-var PAGE_TTL=300000; // Cache 5 menit
+var PAGE_TTL=300000;
 function loadPage(name){
-  toggleSidebar(); // Tutup sidebar saat pindah halaman
+  toggleSidebar();
   $id("content").innerHTML='<div class="boot-msg">Memuat '+name+'...</div>';
   
   var key="EUP_HTML_"+name;
@@ -160,7 +221,7 @@ function runInit(name){
   },200);
 }
 
-/* === SCANNER LOGIC (STANDAR - JANGAN UBAH) === */
+/* === SCANNER LOGIC === */
 var scanStream=null, scanTimer=null, scanSent=false, torchOn=false, scanCv=null;
 var SCAN_OUT=700, SCAN_CROP=0.74, SCAN_MS=250;
 
@@ -240,3 +301,5 @@ window.__SCANNER__ = { start: startScanner, stop: stopScanner };
   }catch(e){}
 })();
 </script>
+</body>
+</html>
