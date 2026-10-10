@@ -9,33 +9,25 @@
 /* === IMPORT FONT MERRIWEATHER === */
 @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700&display=swap');
 
-/* === GLOBAL STYLE: PAKSA MERIWETHER 14PX UNTUK SEMUA === */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Merriweather', Georgia, serif !important;
-  font-size: 14px !important; /* <-- UKURAN SERAGAM */
-  -webkit-font-smoothing: antialiased;
-}
-
+/* Reset Dasar */
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Merriweather', serif !important;}
 body{background:#f4f6f9;min-height:100vh;display:flex;flex-direction:column}
 .hidden{display:none!important}
 button{cursor:pointer;border:none;background:none;font-family:inherit;}
 a{text-decoration:none;color:inherit}
 
-/* LOGIN AREA */
+/* LOGIN AREA (Statis - Tidak berubah) */
 .lg-bg{position:fixed;inset:0;background:linear-gradient(160deg,#bdbdbd 0%,#969696 55%,#7d7d7d 100%);display:flex;align-items:center;justify-content:center;padding:16px;z-index:100}
-.lg-card{width:400px;max-width:94%;background:#fff;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,.2);padding:30px;text-align:center}
-.lg-title{font-weight:bold;margin-bottom:20px;letter-spacing:1px;}
+.lg-card{width:400px;max-width:94%;background:rgba(255,255,255,0.95);border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,.2);padding:30px;text-align:center}
+.lg-title{font-weight:bold;margin-bottom:20px;letter-spacing:1px;font-size:20px !important;color:#333;}
 .lg-line{margin-bottom:15px;text-align:left}
 .lg-input{width:100%;padding:12px;border:1px solid #ccc;border-radius:6px;font-size:14px !important;background:#f9fafb}
 .lg-btn{width:100%;padding:12px;background:#333;color:#fff;border:none;border-radius:6px;font-weight:bold;cursor:pointer;font-size:14px !important}
 .lg-msg{color:red;margin-top:10px;min-height:20px;font-size:13px !important}
 
-/* APP FRAME */
+/* APP FRAME (Header/Sidebar akan diisi oleh JS loadShell) */
 .app-header{position:sticky;top:0;z-index:50;background:#1155cc;color:#fff;display:flex;align-items:center;gap:14px;padding:12px 16px;height:60px;}
-.menu-btn{font-size:28px !important;line-height:1;color:#fff;padding:0 8px;} /* Garis 3 Besar */
+.menu-btn{font-size:28px !important;line-height:1;color:#fff;padding:0 8px;} 
 .header-title{font-weight:bold;font-size:18px !important;letter-spacing:1px;flex:1;}
 .user-badge{background:#0d3f92;border:1px solid #ffffff55;border-radius:20px;padding:6px 16px;font-weight:bold;font-size:14px !important;}
 
@@ -51,7 +43,7 @@ a{text-decoration:none;color:inherit}
 .boot-msg{padding:20px;color:#888;text-align:center;font-size:14px !important;}
 .err-box{padding:20px;color:#c00;background:#ffebee;border:2px solid #c00;border-radius:8px;margin:20px;font-size:14px !important;}
 
-/* SCANNER MODAL */
+/* SCANNER MODAL (Statis) */
 .sc-modal{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:10000;display:none;align-items:center;justify-content:center;padding:16px}
 .sc-modal.show{display:flex}
 .sc-box{background:#fff;border-radius:10px;width:520px;max-width:100%;max-height:90vh;overflow:auto}
@@ -90,20 +82,20 @@ a{text-decoration:none;color:inherit}
   </div>
 </div>
 
-<!-- APP SHELL -->
+<!-- APP SHELL (HEADER & SIDEBAR KOSONG - DIISI OLEH JS) -->
 <div id="app" class="hidden">
-  <header class="app-header">
+  
+  <!-- Placeholder Header (Akan ditimpa oleh loadShell jika ada custom header di App) -->
+  <header id="header-container" class="app-header">
     <button class="menu-btn" onclick="toggleSidebar()">&#9776;</button>
     <div class="header-title">EUP GUDANG TAIPA</div>
     <div class="user-badge">&#128100; <span id="user-nama"></span></div>
   </header>
+
   <div style="position:relative;">
-    <nav id="sidebar" class="sidebar">
-      <a onclick="loadPage('Dashboard')">Dashboard</a>
-      <a onclick="loadPage('FormProduksi')">Buku Produksi</a>
-      <a onclick="loadPage('Dimensi')">Data Dimensi</a>
-      <a onclick="logout()" style="margin-top:20px;border-top:1px solid #fff;">Keluar</a>
-    </nav>
+    <!-- PLACEHOLDER SIDEBAR (KOSONG TOTAL) -->
+    <div id="sidebar-container"></div> 
+    
     <div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
     <main id="content" class="main-content"></main>
   </div>
@@ -155,6 +147,25 @@ function api(params, cb, fail){
     .then(r=>r.json()).then(cb).catch(e=>{ if(fail) fail(e); });
 }
 
+/* === FUNGSI UTAMA: LOAD SHELL DARI APPS SCRIPT === */
+function loadShell(callback){
+  // Minta file Sidebar.html dari Apps Script
+  api({action:"getShellPart", name:"Sidebar"}, function(resS){
+    var htmlS = (resS && resS.html) ? resS.html : "";
+    $id("sidebar-container").innerHTML = htmlS;
+    
+    // Minta file Header.html dari Apps Script (Opsional, jika ada)
+    api({action:"getShellPart", name:"Header"}, function(resH){
+      var htmlH = (resH && resH.html) ? resH.html : "";
+      if(htmlH){
+        // Jika Header.html ada di App, timpa header container
+        $id("header-container").outerHTML = htmlH;
+      }
+      if(callback) callback();
+    });
+  });
+}
+
 function doLogin(){
   var u=$id("lg-user").value.trim();
   var p=$id("lg-pass").value;
@@ -165,10 +176,11 @@ function doLogin(){
   
   api({action:"login",user:u,pass:p}, function(res){
     btn.disabled=false;
-    // PERBAIKAN LOGIKA LOGIN DI SINI
     if(res && res.ok){ 
        USER = { nama: res.nama || (res.data && res.data.nama) };
        sessionStorage.setItem("EUP_USER", JSON.stringify(USER));
+       
+       // PENTING: Load Shell dulu sebelum masuk app
        enterApp();
     } else { 
        msg.textContent=(res&&res.msg)||"Login gagal."; 
@@ -180,7 +192,12 @@ function enterApp(){
   $id("user-nama").textContent=USER.nama;
   $id("login-area").classList.add("hidden");
   $id("app").classList.remove("hidden");
-  loadPage("Dashboard");
+  
+  // Panggil loadShell untuk mengisi sidebar/header dari Apps Script
+  loadShell(function(){
+    // Setelah shell termuat, baru load halaman pertama
+    loadPage("Dashboard");
+  });
 }
 
 function logout(){
@@ -190,9 +207,12 @@ function logout(){
 }
 
 function toggleSidebar(){
-  var sb=$id("sidebar"), ov=$id("overlay");
-  sb.classList.toggle("open");
-  ov.classList.toggle("show", sb.classList.contains("open"));
+  var sb=document.querySelector('.sidebar') || $id("sidebar-container").querySelector('.sidebar');
+  var ov=$id("overlay");
+  if(sb){
+    sb.classList.toggle("open");
+    ov.classList.toggle("show", sb.classList.contains("open"));
+  }
 }
 
 function inject(html, el){
@@ -204,7 +224,6 @@ function inject(html, el){
     document.body.appendChild(nw);
     if(old.parentNode) old.parentNode.removeChild(old);
   }
-  // Fix tombol + (FAB) agar besar meski ada aturan global 14px
   setTimeout(function(){
     var fabs = document.querySelectorAll('.fp-fab, .dm-fab');
     for(var j=0;j<fabs.length;j++){
@@ -215,7 +234,7 @@ function inject(html, el){
 
 var PAGE_TTL=300000;
 function loadPage(name){
-  toggleSidebar();
+  toggleSidebar(); // Tutup sidebar saat pindah halaman
   $id("content").innerHTML='<div class="boot-msg">Memuat '+name+'...</div>';
   
   var key="EUP_HTML_"+name;
@@ -241,7 +260,7 @@ function runInit(name){
   },200);
 }
 
-/* === SCANNER LOGIC === */
+/* === SCANNER LOGIC (STANDAR) === */
 var scanStream=null, scanTimer=null, scanSent=false, torchOn=false, scanCv=null;
 var SCAN_OUT=700, SCAN_CROP=0.74, SCAN_MS=250;
 
