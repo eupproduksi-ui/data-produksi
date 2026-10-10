@@ -6,52 +6,50 @@
 <title>EUP GUDANG TAIPA</title>
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@1,700&display=swap');
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+/* === GLOBAL FONT OVERRIDE: 11px MERRIWEATHER === */
+* {
+  font-family: 'Merriweather', serif !important;
+  font-size: 11px !important;
+}
+
 body{background:#f4f6f9;min-height:100vh}
 .hidden{display:none!important}
-button{cursor:pointer;border:none;background:none;font-family:inherit}
+button{cursor:pointer;border:none;background:none}
 
 /* LOGIN */
 .lg-bg{position:fixed;inset:0;background:linear-gradient(160deg,#bdbdbd 0%,#969696 55%,#7d7d7d 100%);display:flex;align-items:center;justify-content:center;padding:16px;z-index:100}
 .lg-card{width:400px;max-width:94%;background:linear-gradient(135deg,rgba(255,255,255,.55) 0%,rgba(255,255,255,.22) 50%,rgba(255,255,255,.45) 100%);border:1px solid rgba(255,255,255,.65);border-radius:22px;box-shadow:0 18px 40px rgba(0,0,0,.28);padding:34px 30px 24px;text-align:center;position:relative;overflow:hidden}
-.lg-card:before{content:"";position:absolute;top:-40%;left:-25%;width:55%;height:180%;background:linear-gradient(115deg,rgba(255,255,255,.4),rgba(255,255,255,0) 60%);transform:rotate(8deg);pointer-events:none}
-.lg-title{font-size:22px;letter-spacing:3px;color:#3d3d3d;font-weight:bold;margin-bottom:28px}
+.lg-title{margin-bottom:28px; font-weight:bold;} /* Size handled by global * */
 .lg-line{display:flex;align-items:center;gap:10px;border-bottom:1px solid #6f6f6f;margin-bottom:22px;padding:6px 2px}
-.lg-line svg{width:18px;height:18px;fill:#4c4c4c;flex:0 0 auto}
-.lg-line input{flex:1;border:none;outline:none;background:transparent!important;font-size:15px;color:#2f2f2f;padding:6px 0;font-weight:bold}
-.lg-line input:-webkit-autofill{-webkit-text-fill-color:#2f2f2f;transition:background-color 99999s ease-in-out 0s}
-.lg-line input::placeholder{color:#8a8a8a;font-weight:normal}
-.lg-btn{width:72%;margin:0 auto;background:#565656;color:#fff;border:none;border-radius:8px;padding:13px 0;font-size:14px;font-weight:bold;letter-spacing:2px;cursor:pointer;display:block}
-.lg-btn:hover{background:#3f3f3f}
-.lg-btn:active{background:#2b2b2b}
-.lg-btn:disabled{background:#9CA3AF;cursor:not-allowed}
-.lg-msg{color:#b00020;font-size:12px;min-height:14px;margin-top:8px;font-weight:bold}
-.lg-foot{margin-top:0;color:#4a4a4a;font-size:12px;letter-spacing:1px;font-style:italic;font-weight:bold;font-family:'Merriweather',Georgia,serif}
+.lg-line svg{width:14px;height:14px;fill:#4c4c4c;flex:0 0 auto} /* Icon adjusted slightly */
+.lg-line input{flex:1;border:none;outline:none;background:transparent!important;color:#2f2f2f;padding:6px 0;font-weight:bold}
+.lg-btn{width:72%;margin:0 auto;background:#565656;color:#fff;border:none;border-radius:8px;padding:13px 0;font-weight:bold;letter-spacing:2px;cursor:pointer;display:block}
+.lg-msg{color:#b00020;min-height:14px;margin-top:8px;font-weight:bold}
+.lg-foot{margin-top:0;color:#4a4a4a;letter-spacing:1px;font-style:italic;font-weight:bold}
 
 /* APP FRAME */
-.app-header{position:sticky;top:0;z-index:50;background:#1155cc;color:#fff;display:flex;align-items:center;gap:14px;padding:12px 16px;height:60px}
-.menu-btn{font-size:24px;color:#fff;padding:0 8px}
-.header-title{font-weight:bold;font-size:20px;letter-spacing:1px;flex:1}
-.user-badge{background:#0d3f92;border:1px solid #ffffff55;border-radius:20px;padding:6px 16px;font-weight:bold;font-size:14px}
-.sidebar{position:fixed;left:-260px;top:60px;bottom:0;width:250px;background:#0d3f92;z-index:45;transition:.25s;overflow-y:auto}
+.app-header{position:sticky;top:0;z-index:50;background:#1155cc;color:#fff;display:flex;align-items:center;gap:14px;padding:12px 16px;height:50px} /* Height reduced slightly for small font */
+.menu-btn{color:#fff;padding:0 8px;}
+.header-title{font-weight:bold;letter-spacing:1px;flex:1;}
+.user-badge{background:#0d3f92;border:1px solid #ffffff55;border-radius:20px;padding:6px 16px;font-weight:bold;}
+.sidebar{position:fixed;left:-260px;top:50px;bottom:0;width:250px;background:#0d3f92;z-index:45;transition:.25s;overflow-y:auto;}
 .sidebar.open{left:0}
-.sidebar a{display:block;color:#fff;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.1);font-size:15px;cursor:pointer}
-.sidebar a:hover{background:#1155cc}
+.sidebar a{display:block;color:#fff;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.1);cursor:pointer;}
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:40;display:none}
 .overlay.show{display:block}
 .main-content{flex:1;padding:16px;max-width:1200px;margin:auto;width:100%}
 .boot-msg{padding:20px;color:#888;text-align:center}
 .err-box{padding:20px;color:#c00;background:#ffebee;border:2px solid #c00;border-radius:8px;margin:20px}
-.err-box button{margin-top:10px;background:#c00;color:#fff;border:none;border-radius:6px;padding:8px 14px;font-weight:bold;cursor:pointer}
 
 /* SCANNER */
 .sc-modal{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;display:none;align-items:center;justify-content:center;padding:16px}
 .sc-modal.show{display:flex}
 .sc-box{background:#fff;border-radius:10px;width:520px;max-width:100%;max-height:90vh;overflow:auto}
 .sc-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:#fff;border-bottom:1px solid #e3e7ee}
-.sc-title{font-weight:bold;font-size:18px;color:#112233;letter-spacing:.5px}
-.sc-close{background:#eee;border:none;border-radius:50%;width:36px;height:36px;font-size:16px;cursor:pointer}
+.sc-title{font-weight:bold;color:#112233;letter-spacing:.5px}
+.sc-close{background:#eee;border:none;border-radius:50%;width:30px;height:30px;cursor:pointer}
 .sc-body{padding:12px}
 .sc-video-wrap{position:relative;background:#000;border-radius:8px;overflow:hidden}
 .sc-video{width:100%;max-height:66vh;display:block;object-fit:cover}
@@ -64,13 +62,13 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 .sc-br{bottom:0;right:0;border-bottom-width:6px;border-right-width:6px}
 .sc-zoom{display:flex;align-items:center;gap:10px;margin-top:12px}
 .sc-zoom input{flex:1}
-.sc-zoom-lbl{font-size:13px;font-weight:bold;color:#333;white-space:nowrap}
+.sc-zoom-lbl{font-weight:bold;color:#333;white-space:nowrap}
 .sc-cam{display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap}
-.sc-cam-lbl{font-size:13px;font-weight:bold;color:#333;white-space:nowrap}
-.sc-cam-sel{flex:1;min-width:140px;padding:8px;border:1px solid #cfd6e0;border-radius:6px;font-size:13px;font-weight:bold}
-.sc-cam-stop{background:none;border:none;color:#1155cc;font-weight:bold;font-size:13px;cursor:pointer;white-space:nowrap}
+.sc-cam-lbl{font-weight:bold;color:#333;white-space:nowrap}
+.sc-cam-sel{flex:1;min-width:140px;padding:8px;border:1px solid #cfd6e0;border-radius:6px;font-weight:bold}
+.sc-cam-stop{background:none;border:none;color:#1155cc;font-weight:bold;cursor:pointer;white-space:nowrap}
 .sc-torch{display:flex;justify-content:flex-end;margin-top:10px}
-.sc-torch-btn{width:44px;height:44px;border-radius:10px;background:#2196f3;color:#fff;font-size:20px;cursor:pointer}
+.sc-torch-btn{width:44px;height:44px;border-radius:10px;background:#2196f3;color:#fff;cursor:pointer}
 </style>
 </head>
 <body>
@@ -110,7 +108,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   </div>
 </div>
 
-<!-- SCANNER KAMERA (built-in di index.html — mesin scanner TIDAK ikut terhapus saat file halaman dihapus) -->
+<!-- SCANNER -->
 <div id="sc-modal" class="sc-modal">
   <div class="sc-box">
     <div class="sc-header">
@@ -146,7 +144,6 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 </div>
 
 <script>
-/* === URL deployment AKTIF — LENGKAP (jangan dipotong). Ini satu-satunya yang direvisi. === */
 var API_URL="https://script.google.com/macros/s/AKfycbwzk6T_YFrgmHOp2N2JGG-s9YL0_Fkhf7z8zkwNU9HwSsLT0V_nM3paaAP1PRfn1LIlnw/exec";
 var USER=null;
 function $id(x){ return document.getElementById(x); }
@@ -202,7 +199,6 @@ function logout(){
   USER=null;
   try{
     sessionStorage.removeItem("EUP_USER");
-    /* bersihkan cache halaman supaya login berikutnya menarik deploy terbaru */
     var ks=[]; for(var i=0;i<sessionStorage.length;i++){ var k=sessionStorage.key(i); if(k && k.indexOf("EUP_HTML_")===0) ks.push(k); }
     ks.forEach(function(k){ sessionStorage.removeItem(k); });
   }catch(e){}
@@ -229,7 +225,6 @@ function inject(html, el){
   }
 }
 
-/* ===== ISI HALAMAN DARI APPS SCRIPT (editor utama) + CACHE 5 MENIT ===== */
 var PAGE_TTL=300000;
 function pageCacheKey(n){ return "EUP_HTML_"+n; }
 function clearPageCache(name){ try{ sessionStorage.removeItem(pageCacheKey(name)); }catch(e){} }
@@ -262,7 +257,6 @@ function loadPage(name){
   });
 }
 
-/* ===== SCANNER (built-in di shell GitHub — crop tengah + 700px + 1x proses) ===== */
 var scanStream=null, scanTimer=null, scanSent=false, torchOn=false, scanCv=null;
 var SCAN_OUT=700;
 var SCAN_CROP=0.74;
@@ -360,7 +354,6 @@ function toggleTorch(){
 
 window.__SCANNER__ = { start: startScanner, stop: stopScanner };
 
-/* ===== AUTO LOGIN ===== */
 (function(){
   try{
     var s=sessionStorage.getItem("EUP_USER");
