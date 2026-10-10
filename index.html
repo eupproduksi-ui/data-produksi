@@ -43,6 +43,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 .main-content{flex:1;padding:16px;max-width:1200px;margin:auto;width:100%}
 .boot-msg{padding:20px;color:#888;text-align:center}
 .err-box{padding:20px;color:#c00;background:#ffebee;border:2px solid #c00;border-radius:8px;margin:20px}
+.err-box button{margin-top:10px;background:#c00;color:#fff;border:none;border-radius:6px;padding:8px 14px;font-weight:bold;cursor:pointer}
 
 /* SCANNER */
 .sc-modal{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;display:none;align-items:center;justify-content:center;padding:16px}
@@ -109,7 +110,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   </div>
 </div>
 
-<!-- SCANNER KAMERA (built-in di index.html) -->
+<!-- SCANNER KAMERA (built-in di index.html — mesin scanner TIDAK ikut terhapus saat file halaman dihapus) -->
 <div id="sc-modal" class="sc-modal">
   <div class="sc-box">
     <div class="sc-header">
@@ -198,7 +199,12 @@ function enterApp(){
 
 function logout(){
   USER=null;
-  try{ sessionStorage.removeItem("EUP_USER"); }catch(e){}
+  try{
+    sessionStorage.removeItem("EUP_USER");
+    /* bersihkan cache halaman supaya login berikutnya menarik deploy terbaru */
+    var ks=[]; for(var i=0;i<sessionStorage.length;i++){ var k=sessionStorage.key(i); if(k && k.indexOf("EUP_HTML_")===0) ks.push(k); }
+    ks.forEach(function(k){ sessionStorage.removeItem(k); });
+  }catch(e){}
   $id("app").classList.add("hidden");
   $id("login-area").classList.remove("hidden");
   $id("lg-pass").value="";
@@ -222,26 +228,45 @@ function inject(html, el){
   }
 }
 
-/* ===== MUAT HALAMAN DARI FILE LOKAL GITHUB (tidak tergantung deployment Apps Script) ===== */
+/* ===== ISI HALAMAN DARI APPS SCRIPT (editor utama) + CACHE 5 MENIT =====
+   - HTML diambil sekali per halaman per sesi, selanjutnya dari sessionStorage
+     => klik bolak-balik tetap instan meski Apps Script jadi sumber.
+   - Setelah edit halaman di Apps Script WAJIB: Deploy -> Manage deployments ->
+     pensil pada deployment ber-URL AKfycbwcKOfb... -> Version: New version -> Deploy.
+   - Kalau habis deploy tapi masih lama: klik Keluar lalu login lagi (membersihkan cache). */
+var PAGE_TTL=300000; /* 5 menit, sama dengan pola cache data di halaman */
+function pageCacheKey(n){ return "EUP_HTML_"+n; }
+function clearPageCache(name){ try{ sessionStorage.removeItem(pageCacheKey(name)); }catch(e){} }
+function getPageHtml(name, cb, fail){
+  var key=pageCacheKey(name);
+  try{
+    var raw=sessionStorage.getItem(key);
+    if(raw){ var c=JSON.parse(raw); if(c && c.html && (Date.now()-c.t)<PAGE_TTL){ cb(c.html); return; } }
+  }catch(e){}
+  api({action:"getPage",name:name}, function(res){
+    var html=(res&&res.html)||(res&&res.data&&res.data.html)||null;
+    if(!html){ fail("Apps Script tidak mengirim halaman — kemungkinan deployment belum di-New version."); return; }
+    try{ sessionStorage.setItem(key, JSON.stringify({t:Date.now(),html:html})); }catch(e){}
+    cb(html);
+  }, function(e){ fail(e && e.message ? e.message : "sambungan terputus."); });
+}
 function loadPage(name){
   $id("sidebar").classList.remove("open");
   $id("overlay").classList.remove("show");
   $id("content").innerHTML='<div class="boot-msg">Memuat '+name+'...</div>';
-  fetch(name+".html?v="+Date.now(),{cache:"no-store"})
-    .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.text(); })
-    .then(function(html){
-      inject(html, $id("content"));
-      setTimeout(function(){
-        var fn=window["init_"+name]||window["init_"+name.toLowerCase()]||window["init_"+name.toUpperCase()];
-        if(fn){ try{ fn(); }catch(e){ alert("Init "+name+" error:\n"+e.message); } }
-      },150);
-    })
-    .catch(function(e){
-      $id("content").innerHTML='<div class="err-box"><b>GAGAL MEMUAT: '+name+'</b><br>'+e.message+'</div>';
-    });
+  getPageHtml(name, function(html){
+    inject(html, $id("content"));
+    setTimeout(function(){
+      var fn=window["init_"+name]||window["init_"+name.toLowerCase()]||window["init_"+name.toUpperCase()];
+      if(fn){ try{ fn(); }catch(e){ alert("Init "+name+" error:\n"+e.message); } }
+    },150);
+  }, function(msg){
+    $id("content").innerHTML='<div class="err-box"><b>GAGAL MEMUAT: '+name+'</b><br>'+msg+
+      '<br><button onclick="clearPageCache(\''+name+'\');loadPage(\''+name+'\')">COBA LAGI</button></div>';
+  });
 }
 
-/* ===== SCANNER (DIOPTIMALKAN: crop tengah + 700px + 1x proses = DETEKSI < 0,5 dtk) ===== */
+/* ===== SCANNER (built-in di shell GitHub — crop tengah + 700px + 1x proses) ===== */
 var scanStream=null, scanTimer=null, scanSent=false, torchOn=false, scanCv=null;
 var SCAN_OUT=700;     // resolusi baca QR (naikkan ke 800 kalau QR sangat kecil/jauh)
 var SCAN_CROP=0.74;   // proporsi kotak tengah yang dibaca (0.74 ≈ area bingkai sudut 76%)
