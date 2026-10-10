@@ -22,11 +22,37 @@ a{text-decoration:none;color:inherit}
 .header-title{font-weight:bold;font-size:18px !important;letter-spacing:1px;flex:1;}
 .user-badge{background:#0d3f92;border-radius:20px;padding:6px 15px;font-weight:bold;font-size:14px !important;}
 
-/* SIDEBAR STYLE (SAMA PERSIS DENGAN APPS SCRIPT) */
-.sidebar{position:fixed;left:-260px;top:0;bottom:0;width:250px;background:#0d3f92;z-index:100;transition:.25s ease-in-out;overflow-y:auto; padding-top:70px;}
+/* SIDEBAR STYLE (PUTIH - TULISAN HITAM) */
+.sidebar{
+  position:fixed;left:-260px;top:0;bottom:0;width:250px;
+  background:#ffffff; /* WARNA PUTIH */
+  z-index:100;transition:.25s ease-in-out;overflow-y:auto; 
+  padding-top:70px; /* Ruang untuk header */
+  display:flex; flex-direction:column; /* Agar tombol keluar bisa di bawah */
+  border-right:1px solid #e3e7ee; /* Garis pemisah halus */
+  box-shadow:2px 0 10px rgba(0,0,0,0.05);
+}
 .sidebar.open{left:0;}
-.sidebar a{display:block;color:#fff;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,0.1);font-size:14px !important;cursor:pointer;}
-.sidebar a:hover{background:#1155cc;}
+
+/* MENU LINKS (TULISAN HITAM) */
+.sidebar a{
+  display:block;color:#333333; /* TULISAN HITAM/GELAP */
+  padding:14px 20px;
+  border-bottom:1px solid #f0f0f0; /* Garis pemisah antar menu */
+  font-size:14px !important;cursor:pointer;
+  text-decoration:none;
+}
+.sidebar a:hover{background:#f5f5f5;color:#1155cc;} /* Efek hover lembut */
+
+/* TOMBOL LOGOUT/KELUAR (POSISI PALING BAWAH) */
+.logout-link{
+  margin-top:auto; /* DORONG KE BAWAH */
+  color:#c00 !important; /* Warna merah agar jelas sebagai aksi berbahaya */
+  font-weight:bold;
+  border-top:1px solid #eee;
+  padding:15px 20px;
+}
+.logout-link:hover{background:#ffebee;}
 
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:90;display:none;}
 .overlay.show{display:block;}
@@ -86,7 +112,9 @@ a{text-decoration:none;color:inherit}
       <a onclick="loadPage('Dashboard')">Dashboard</a>
       <a onclick="loadPage('FormProduksi')">Buku Produksi</a>
       <a onclick="loadPage('Dimensi')">Data Dimensi</a>
-      <a onclick="logout()" style="margin-top:20px;border-top:1px solid #fff;">Keluar</a>
+      
+      <!-- TOMBOL KELUAR/LOGOUT DI PALING BAWAH -->
+      <a onclick="logout()" class="logout-link">Keluar</a>
     </nav>
     <div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
     <main id="content" class="main-content"></main>
