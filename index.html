@@ -6,64 +6,140 @@
 <title>EUP GUDANG TAIPA</title>
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap');
+/* === IMPORT FONT MERRIWEATHER === */
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700&display=swap');
 
-/* Global Font untuk Konten */
-body, #content, #content * { font-family: 'Merriweather', serif !important; font-size: 11px !important; }
-body { background:#f4f6f9; margin:0; padding:0; min-height:100vh; }
-.hidden { display:none!important }
+/* === GLOBAL STYLE: PAKSA MERIWETHER 14PX UNTUK SEMUA === */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Merriweather', Georgia, serif !important;
+  font-size: 14px !important; /* <-- UKURAN SERAGAM */
+  -webkit-font-smoothing: antialiased;
+}
 
-/* Login Styles (Tetap di sini biar cepat muncul) */
-#login-area{position:fixed;inset:0;background:linear-gradient(160deg,#bdbdbd,#7d7d7d);display:flex;align-items:center;justify-content:center;z-index:9999; font-family:Arial !important;}
-.lg-card{width:90%;max-width:400px;background:rgba(255,255,255,0.9);padding:30px;border-radius:15px;text-align:center;}
-.lg-input{width:100%;padding:12px;margin:10px 0;border:1px solid #ccc;border-radius:5px;font-size:16px !important;}
-.lg-btn{width:100%;padding:12px;background:#333;color:#fff;border:none;border-radius:5px;font-size:16px !important;cursor:pointer;}
+body{background:#f4f6f9;min-height:100vh;display:flex;flex-direction:column}
+.hidden{display:none!important}
+button{cursor:pointer;border:none;background:none;font-family:inherit;}
+a{text-decoration:none;color:inherit}
 
-/* Container Utama */
-#main-wrapper{ padding-top:60px; min-height:100vh; }
-#content{ padding:15px; max-width:1200px; margin:0 auto; }
+/* LOGIN AREA */
+.lg-bg{position:fixed;inset:0;background:linear-gradient(160deg,#bdbdbd 0%,#969696 55%,#7d7d7d 100%);display:flex;align-items:center;justify-content:center;padding:16px;z-index:100}
+.lg-card{width:400px;max-width:94%;background:#fff;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,.2);padding:30px;text-align:center}
+.lg-title{font-weight:bold;margin-bottom:20px;letter-spacing:1px;}
+.lg-line{margin-bottom:15px;text-align:left}
+.lg-input{width:100%;padding:12px;border:1px solid #ccc;border-radius:6px;font-size:14px !important;background:#f9fafb}
+.lg-btn{width:100%;padding:12px;background:#333;color:#fff;border:none;border-radius:6px;font-weight:bold;cursor:pointer;font-size:14px !important}
+.lg-msg{color:red;margin-top:10px;min-height:20px;font-size:13px !important}
 
-/* Scanner Styles (Tetap di sini) */
-#sc-modal{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:10000;display:none;align-items:center;justify-content:center; font-family:Arial !important;}
-#sc-modal.show{display:flex}
-.sc-box{background:#fff;width:90%;max-width:500px;border-radius:10px;overflow:hidden;}
-.sc-video{width:100%;display:block;background:#000;}
-.sc-controls{padding:15px;}
-.sc-btn{background:#1155cc;color:#fff;border:none;padding:10px;border-radius:5px;width:100%;margin-top:10px;font-size:16px !important;}
+/* APP FRAME */
+.app-header{position:sticky;top:0;z-index:50;background:#1155cc;color:#fff;display:flex;align-items:center;gap:14px;padding:12px 16px;height:60px;}
+.menu-btn{font-size:28px !important;line-height:1;color:#fff;padding:0 8px;} /* Garis 3 Besar */
+.header-title{font-weight:bold;font-size:18px !important;letter-spacing:1px;flex:1;}
+.user-badge{background:#0d3f92;border:1px solid #ffffff55;border-radius:20px;padding:6px 16px;font-weight:bold;font-size:14px !important;}
+
+.sidebar{position:fixed;left:-260px;top:60px;bottom:0;width:250px;background:#0d3f92;z-index:45;transition:.25s ease-in-out;overflow-y:auto;}
+.sidebar.open{left:0;}
+.sidebar a{display:block;color:#fff;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,0.1);font-size:14px !important;cursor:pointer;}
+.sidebar a:hover{background:#1155cc;}
+
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:40;display:none;}
+.overlay.show{display:block;}
+
+.main-content{flex:1;padding:16px;max-width:1200px;margin:auto;width:100%;}
+.boot-msg{padding:20px;color:#888;text-align:center;font-size:14px !important;}
+.err-box{padding:20px;color:#c00;background:#ffebee;border:2px solid #c00;border-radius:8px;margin:20px;font-size:14px !important;}
+
+/* SCANNER MODAL */
+.sc-modal{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:10000;display:none;align-items:center;justify-content:center;padding:16px}
+.sc-modal.show{display:flex}
+.sc-box{background:#fff;border-radius:10px;width:520px;max-width:100%;max-height:90vh;overflow:auto}
+.sc-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:#fff;border-bottom:1px solid #e3e7ee}
+.sc-title{font-weight:bold;color:#112233;font-size:16px !important}
+.sc-close{background:#eee;border:none;border-radius:50%;width:36px;height:36px;font-size:18px !important;cursor:pointer}
+.sc-body{padding:12px}
+.sc-video-wrap{position:relative;background:#000;border-radius:8px;overflow:hidden}
+.sc-video{width:100%;max-height:60vh;display:block;object-fit:cover}
+.sc-ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.sc-box-inner{position:relative;width:70%;max-width:300px;aspect-ratio:1/1;border:2px solid rgba(255,255,255,0.3)}
+.sc-corner{position:absolute;width:40px;height:40px;border:0 solid #fff}
+.sc-tl{top:-2px;left:-2px;border-top-width:4px;border-left-width:4px}
+.sc-tr{top:-2px;right:-2px;border-top-width:4px;border-right-width:4px}
+.sc-bl{bottom:-2px;left:-2px;border-bottom-width:4px;border-left-width:4px}
+.sc-br{bottom:-2px;right:-2px;border-bottom-width:4px;border-right-width:4px}
+.sc-controls{padding:10px;}
+.sc-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.sc-label{font-weight:bold;color:#333;white-space:nowrap;font-size:14px !important}
+.sc-input-range{flex:1;padding:8px;border:1px solid #ccc;border-radius:4px;font-size:14px !important}
+.sc-select{flex:1;min-width:140px;padding:8px;border:1px solid #cfd6e0;border-radius:6px;font-size:14px !important;font-weight:bold}
+.sc-btn{background:#1155cc;color:#fff;border:none;padding:10px 15px;border-radius:6px;font-size:14px !important;font-weight:bold;cursor:pointer}
+.sc-btn-torch{width:50px;height:50px;border-radius:50%;background:#2196f3;color:#fff;font-size:24px !important;display:flex;align-items:center;justify-content:center;margin-left:auto}
 </style>
 </head>
 <body>
 
-<!-- LOGIN (Static) -->
-<div id="login-area">
+<!-- LOGIN -->
+<div id="login-area" class="lg-bg">
   <div class="lg-card">
-    <h2>EUP GUDANG TAIPA</h2>
-    <input id="lg-user" class="lg-input" placeholder="Username">
-    <input id="lg-pass" class="lg-input" type="password" placeholder="Password">
-    <button class="lg-btn" onclick="doLogin()">LOGIN</button>
-    <div id="lg-msg" style="color:red;margin-top:10px;font-size:12px !important;"></div>
+    <div class="lg-title">EUP GUDANG TAIPA</div>
+    <div class="lg-line"><input id="lg-user" class="lg-input" placeholder="Username"></div>
+    <div class="lg-line"><input id="lg-pass" class="lg-input" type="password" placeholder="Password"></div>
+    <button id="lg-btn" class="lg-btn" onclick="doLogin()">LOGIN</button>
+    <div id="lg-msg" class="lg-msg"></div>
   </div>
 </div>
 
-<!-- APP SHELL (Akan diisi oleh Server) -->
-<div id="app-shell" class="hidden">
-  <div id="header-container"></div> <!-- Header masuk sini -->
-  <div id="sidebar-container"></div> <!-- Sidebar masuk sini -->
-  
-  <div id="main-wrapper">
-    <main id="content"></main>
+<!-- APP SHELL -->
+<div id="app" class="hidden">
+  <header class="app-header">
+    <button class="menu-btn" onclick="toggleSidebar()">&#9776;</button>
+    <div class="header-title">EUP GUDANG TAIPA</div>
+    <div class="user-badge">&#128100; <span id="user-nama"></span></div>
+  </header>
+  <div style="position:relative;">
+    <nav id="sidebar" class="sidebar">
+      <a onclick="loadPage('Dashboard')">Dashboard</a>
+      <a onclick="loadPage('FormProduksi')">Buku Produksi</a>
+      <a onclick="loadPage('Dimensi')">Data Dimensi</a>
+      <a onclick="logout()" style="margin-top:20px;border-top:1px solid #fff;">Keluar</a>
+    </nav>
+    <div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
+    <main id="content" class="main-content"></main>
   </div>
 </div>
 
-<!-- SCANNER (Static) -->
-<div id="sc-modal">
+<!-- SCANNER MODAL -->
+<div id="sc-modal" class="sc-modal">
   <div class="sc-box">
-    <div style="padding:10px;display:flex;justify-content:space-between;background:#eee;">
-      <b>Scan QR</b> <span onclick="stopScanner()" style="cursor:pointer;">✕</span>
+    <div class="sc-header">
+      <div class="sc-title">Scan QR KPC</div>
+      <button class="sc-close" onclick="stopScanner()">&#10005;</button>
     </div>
-    <video id="sc-video" playsinline autoplay muted class="sc-video"></video>
-    <div class="sc-controls">
-      <button class="sc-btn" onclick="stopScanner()">Tutup</button>
+    <div class="sc-body">
+      <div class="sc-video-wrap">
+        <video id="sc-video" playsinline autoplay muted class="sc-video"></video>
+        <div class="sc-ov">
+          <div class="sc-box-inner">
+            <span class="sc-corner sc-tl"></span><span class="sc-corner sc-tr"></span>
+            <span class="sc-corner sc-bl"></span><span class="sc-corner sc-br"></span>
+          </div>
+        </div>
+      </div>
+      <div class="sc-controls">
+        <div class="sc-row">
+          <span class="sc-label">Zoom</span>
+          <input type="range" id="sc-zoom" min="1" max="3" step="0.1" value="1" class="sc-input-range" oninput="onZoom(this)">
+        </div>
+        <div class="sc-row">
+          <span class="sc-label">Kamera</span>
+          <select id="sc-cams" class="sc-select" onchange="onCamChange()"></select>
+        </div>
+        <div class="sc-row">
+          <button class="sc-btn" onclick="stopScanner()" style="flex:1">Tutup Scanner</button>
+          <button class="sc-btn-torch" onclick="toggleTorch()">&#128294;</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -79,127 +155,170 @@ function api(params, cb, fail){
     .then(r=>r.json()).then(cb).catch(e=>{ if(fail) fail(e); });
 }
 
-/* === FUNGSI LOAD HEADER & SIDEBAR DARI SERVER === */
-function loadShell(callback){
-  // Ambil Header
-  api({action:"getShellPart", name:"Header"}, function(resH){
-    var htmlH = (resH&&resH.html) || "";
-    $id("header-container").innerHTML = htmlH;
-    
-    // Ambil Sidebar
-    api({action:"getShellPart", name:"Sidebar"}, function(resS){
-      var htmlS = (resS&&resS.html) || "";
-      $id("sidebar-container").innerHTML = htmlS;
-      
-      // Setelah keduanya loaded, jalankan callback
-      if(callback) callback();
-    });
-  });
-}
-
 function doLogin(){
-  var u=$id("lg-user").value, p=$id("lg-pass").value;
-  if(!u||!p) return;
+  var u=$id("lg-user").value.trim();
+  var p=$id("lg-pass").value;
+  var msg=$id("lg-msg");
+  var btn=$id("lg-btn");
+  if(!u||!p){ msg.textContent="Isi username & password."; return; }
+  msg.textContent="Memproses..."; btn.disabled=true;
+  
   api({action:"login",user:u,pass:p}, function(res){
-    if(res && res.ok && res.data){ // Sesuaikan dengan format response login Anda
-       // Asumsi response: {ok:true, data:{nama:"..."}} atau {ok:true, nama:"..."}
-       var userData = res.data || res; 
-       if(userData.nama){
-         USER = userData;
-         sessionStorage.setItem("EUP_USER", JSON.stringify(USER));
-         enterApp();
-       } else { $id("lg-msg").textContent="Login gagal"; }
-    } else { $id("lg-msg").textContent="Login gagal"; }
-  });
+    btn.disabled=false;
+    // PERBAIKAN LOGIKA LOGIN DI SINI
+    if(res && res.ok){ 
+       USER = { nama: res.nama || (res.data && res.data.nama) };
+       sessionStorage.setItem("EUP_USER", JSON.stringify(USER));
+       enterApp();
+    } else { 
+       msg.textContent=(res&&res.msg)||"Login gagal."; 
+    }
+  }, function(e){ btn.disabled=false; msg.textContent="Error koneksi."; });
 }
 
 function enterApp(){
+  $id("user-nama").textContent=USER.nama;
   $id("login-area").classList.add("hidden");
-  $id("app-shell").classList.remove("hidden");
-  
-  // Load Header & Sidebar dari Apps Script dulu
-  loadShell(function(){
-    // Setelah header/sidebar muncul, baru set nama user & load dashboard
-    if($id("user-nama")) $id("user-nama").textContent = USER.nama;
-    loadPage("Dashboard");
-  });
+  $id("app").classList.remove("hidden");
+  loadPage("Dashboard");
 }
 
 function logout(){
+  USER=null;
   sessionStorage.clear();
   location.reload();
 }
 
-/* === NAVIGASI === */
-// Fungsi ini harus ada di global scope karena dipanggil oleh onclick di Sidebar.html
-window.toggleSidebar = function(){
-  var sb=$id("app-sidebar"), ov=$id("sidebar-overlay");
-  if(sb.classList.contains("open")){ sb.classList.remove("open"); ov.classList.remove("show"); }
-  else { sb.classList.add("open"); ov.classList.add("show"); }
-};
+function toggleSidebar(){
+  var sb=$id("sidebar"), ov=$id("overlay");
+  sb.classList.toggle("open");
+  ov.classList.toggle("show", sb.classList.contains("open"));
+}
 
-window.loadPage = function(name){
-  toggleSidebar(); // Tutup sidebar
-  $id("content").innerHTML='<div style="padding:20px;text-align:center;">Memuat...</div>';
+function inject(html, el){
+  el.innerHTML=html;
+  var scripts=el.querySelectorAll("script");
+  for(var i=scripts.length-1;i>=0;i--){
+    var old=scripts[i], nw=document.createElement("script");
+    if(old.src) nw.src=old.src; else nw.text=old.textContent;
+    document.body.appendChild(nw);
+    if(old.parentNode) old.parentNode.removeChild(old);
+  }
+  // Fix tombol + (FAB) agar besar meski ada aturan global 14px
+  setTimeout(function(){
+    var fabs = document.querySelectorAll('.fp-fab, .dm-fab');
+    for(var j=0;j<fabs.length;j++){
+      fabs[j].style.cssText += "font-size:32px !important; line-height:58px !important; text-align:center !important;";
+    }
+  }, 200);
+}
+
+var PAGE_TTL=300000;
+function loadPage(name){
+  toggleSidebar();
+  $id("content").innerHTML='<div class="boot-msg">Memuat '+name+'...</div>';
   
-  // Cache logic (sama seperti sebelumnya)
   var key="EUP_HTML_"+name;
   try{
     var raw=sessionStorage.getItem(key);
-    if(raw){ var c=JSON.parse(raw); if(c.html && (Date.now()-c.t)<300000){ injectPage(c.html, name); return; } }
+    if(raw){ var c=JSON.parse(raw); if(c.html && (Date.now()-c.t)<PAGE_TTL){ inject(c.html, $id("content")); runInit(name); return; } }
   }catch(e){}
 
   api({action:"getPage",name:name}, function(res){
     var html=(res&&res.html)||(res&&res.data&&res.data.html);
     if(html){
       try{ sessionStorage.setItem(key, JSON.stringify({t:Date.now(),html:html})); }catch(e){}
-      injectPage(html, name);
+      inject(html, $id("content"));
+      runInit(name);
     }
   });
-};
+}
 
-function injectPage(html, name){
-  $id("content").innerHTML=html;
-  var scripts=$id("content").querySelectorAll("script");
-  for(var i=0;i<scripts.length;i++){
-    var s=document.createElement("script");
-    if(scripts[i].src) s.src=scripts[i].src; else s.text=scripts[i].textContent;
-    document.body.appendChild(s);
-  }
+function runInit(name){
   setTimeout(function(){
-    var fn=window["init_"+name]||window["init_"+name.toLowerCase()];
-    if(fn) fn();
-    
-    // Fix tombol + (FAB)
-    var fabs=document.querySelectorAll('.fp-fab,.dm-fab');
-    for(var j=0;j<fabs.length;j++) fabs[j].style.cssText+="font-size:32px!important;font-family:Arial!important;";
+    var fn=window["init_"+name]||window["init_"+name.toLowerCase()]||window["init_"+name.toUpperCase()];
+    if(fn){ try{ fn(); }catch(e){ console.error(e); } }
   },200);
 }
 
-/* === SCANNER (Singkat) === */
-var scanStream=null, scanTimer=null;
-window.__SCANNER__ = {
-  start: function(){
-    navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}}).then(function(s){
-      scanStream=s; $id("sc-video").srcObject=s; $id("sc-modal").classList.add("show");
-      scanTimer=setInterval(function(){
-        // Logic scan sederhana (placeholder)
-        // Di sini Anda butuh jsQR logic lengkap seperti sebelumnya
-      }, 500);
-    });
-  },
-  stop: function(){
-    if(scanStream) scanStream.getTracks().forEach(t=>t.stop());
-    clearInterval(scanTimer); $id("sc-modal").classList.remove("show");
-  }
-};
-// Note: Saya ringkas scanner di sini biar kode tidak kepanjangan. 
-// Pastikan logic jsQR lengkap tetap ada kalau mau scan beneran.
-// Tapi untuk struktur Header/Sidebar terpisah, ini sudah cukup.
+/* === SCANNER LOGIC === */
+var scanStream=null, scanTimer=null, scanSent=false, torchOn=false, scanCv=null;
+var SCAN_OUT=700, SCAN_CROP=0.74, SCAN_MS=250;
 
+function startScanner(deviceId){
+  stopScanner(true); scanSent=false;
+  if(!navigator.mediaDevices){ alert("Kamera tidak didukung."); return; }
+  var vid={width:{ideal:1280},height:{ideal:720}};
+  if(deviceId) vid.deviceId={exact:deviceId}; else vid.facingMode="environment";
+  
+  navigator.mediaDevices.getUserMedia({video:vid,audio:false}).then(function(stream){
+    scanStream=stream;
+    var v=$id("sc-video"); v.srcObject=stream; v.play();
+    if(!scanCv) scanCv=document.createElement("canvas");
+    listCams(deviceId);
+    $id("sc-modal").classList.add("show");
+    scanTimer=setInterval(scanTick,SCAN_MS);
+  }).catch(function(e){ alert("Gagal buka kamera: "+e.message); });
+}
+
+function stopScanner(keepModal){
+  if(scanTimer){ clearInterval(scanTimer); scanTimer=null; }
+  if(scanStream){ scanStream.getTracks().forEach(function(t){ t.stop(); }); scanStream=null; }
+  var v=$id("sc-video"); if(v) v.srcObject=null;
+  torchOn=false;
+  if(!keepModal) $id("sc-modal").classList.remove("show");
+}
+
+function scanTick(){
+  if(scanSent||!scanStream||typeof jsQR==="undefined") return;
+  var v=$id("sc-video");
+  if(!v.videoWidth||v.readyState<2) return;
+  var side=Math.floor(Math.min(v.videoWidth,v.videoHeight)*SCAN_CROP);
+  var ox=Math.floor((v.videoWidth-side)/2), oy=Math.floor((v.videoHeight-side)/2);
+  scanCv.width=SCAN_OUT; scanCv.height=SCAN_OUT;
+  var cx=scanCv.getContext("2d",{willReadFrequently:true});
+  cx.drawImage(v, ox,oy,side,side, 0,0,SCAN_OUT,SCAN_OUT);
+  var code=jsQR(cx.getImageData(0,0,SCAN_OUT,SCAN_OUT).data,SCAN_OUT,SCAN_OUT);
+  if(code&&code.data){
+    scanSent=true;
+    window.dispatchEvent(new CustomEvent("DMS_KPC_SCAN",{detail:{text:code.data}}));
+    setTimeout(stopScanner, 300);
+  }
+}
+
+function listCams(activeId){
+  navigator.mediaDevices.enumerateDevices().then(function(devs){
+    var sel=$id("sc-cams"); sel.innerHTML="";
+    devs.filter(function(d){return d.kind=="videoinput"}).forEach(function(c,i){
+      var o=document.createElement("option"); o.value=c.deviceId; o.textContent=c.label||("Cam "+(i+1));
+      if(activeId==c.deviceId) o.selected=true;
+      sel.appendChild(o);
+    });
+  });
+}
+function onCamChange(){ startScanner($id("sc-cams").value); }
+function onZoom(el){
+  if(!scanStream) return;
+  var t=scanStream.getVideoTracks()[0];
+  if(t.getCapabilities().zoom){
+    t.applyConstraints({advanced:[{zoom:Math.min(Math.max(Number(el.value),1),3)}]});
+  }
+}
+function toggleTorch(){
+  if(!scanStream) return;
+  var t=scanStream.getVideoTracks()[0];
+  if(t.getCapabilities().torch){
+    torchOn=!torchOn; t.applyConstraints({advanced:[{torch:torchOn}]});
+  }
+}
+window.__SCANNER__ = { start: startScanner, stop: stopScanner };
+
+/* AUTO LOGIN CHECK */
 (function(){
-  var s=sessionStorage.getItem("EUP_USER");
-  if(s){ USER=JSON.parse(s); if(USER.nama) enterApp(); }
+  try{
+    var s=sessionStorage.getItem("EUP_USER");
+    if(s){ USER=JSON.parse(s); if(USER.nama) enterApp(); }
+  }catch(e){}
 })();
 </script>
 </body>
