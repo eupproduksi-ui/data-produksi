@@ -108,7 +108,7 @@ a{text-decoration:none;color:inherit;font-family:'Arial',sans-serif !important;}
 .sc-btn-torch{width:50px;height:50px;border-radius:50%;background:#2196f3;color:#fff;font-size:24px !important;display:flex;align-items:center;justify-content:center;margin-left:auto}
 
 /* ============================================================
-   PERBAIKAN KHUSUS HP (MOBILE RESPONSIVE FOR HEADER TITLE)
+   PERBAIKAN KHUSUS HP (MOBILE RESPONSIVE FOR HEADER TITLE & ICON)
    ============================================================ */
 @media screen and (max-width: 700px) {
   .header-title {
@@ -118,7 +118,12 @@ a{text-decoration:none;color:inherit;font-family:'Arial',sans-serif !important;}
     margin-top: 2px; /* Sedikit geser ke atas jika perlu */
   }
   
-  /* Opsional: Jika masih terasa penuh, bisa sembunyikan sebagian teks via CSS class tambahan nanti, tapi ini cukup efektif */
+  /* PERBAIKAN BARU: UKURAN IKON GARIS TIGA AGAR SERASI DENGAN TEKS 14PX */
+  .menu-btn {
+    font-size: 20px !important; /* Diturunkan dari 28px menjadi 20px */
+    padding: 0 4px !important;  /* Padding samping dikurangi sedikit */
+    line-height: 1 !important;
+  }
 }
 </style>
 </head>
