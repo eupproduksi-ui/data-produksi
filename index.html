@@ -22,9 +22,9 @@ a{text-decoration:none;color:inherit}
 .header-title{font-weight:bold;font-size:18px !important;letter-spacing:1px;flex:1;}
 .user-badge{background:#0d3f92;border-radius:20px;padding:6px 15px;font-weight:bold;font-size:14px !important;}
 
-/* SIDEBAR STYLE (PUTIH - LEBAR RAMPING 230px) */
+/* SIDEBAR STYLE (PUTIH - SUPER SEMPIT 150px) */
 .sidebar{
-  position:fixed;left:-260px;top:0;bottom:0;width:230px; /* <-- DIUBAH KE 230px */
+  position:fixed;left:-170px;top:0;bottom:0;width:150px; /* <-- DIPAKSA KE 150px */
   background:#ffffff; 
   z-index:100;transition:.25s ease-in-out;overflow-y:auto; 
   padding-top:70px; 
@@ -34,13 +34,17 @@ a{text-decoration:none;color:inherit}
 }
 .sidebar.open{left:0;}
 
-/* MENU LINKS (JARAK ANTARMENU DIPERLEBAR) */
+/* MENU LINKS (PADAT MAKSIMAL) */
 .sidebar a{
   display:block;color:#333333; 
-  padding:16px 20px; /* <-- JARAK VERTIKAL DINAikkan jadi 16px */
+  padding:18px 6px; /* <-- PADDING HORISONTAL DIKURANGI JADI 6px (AGAR MUAT TULISAN PANJANG) */
   border-bottom:1px solid #f0f0f0; 
   font-size:14px !important;cursor:pointer;
   text-decoration:none;
+  font-weight:bold;
+  white-space:nowrap; /* Paksa satu baris, jangan turun ke bawah */
+  overflow:hidden;    /* Sembunyikan sisa jika kepanjangan */
+  text-overflow: ellipsis; /* Beri tanda titik tiga (...) jika terpotong */
 }
 .sidebar a:hover{background:#f5f5f5;color:#1155cc;} 
 
@@ -50,7 +54,8 @@ a{text-decoration:none;color:inherit}
   color:#c00 !important; 
   font-weight:bold;
   border-top:1px solid #eee;
-  padding:16px 20px; /* <-- SAMAKAN DENGAN MENU ATASNYA */
+  padding:18px 6px; /* <-- SAMAKAN DENGAN MENU ATASNYA */
+  white-space:nowrap;
 }
 .logout-link:hover{background:#ffebee;}
 
