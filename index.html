@@ -46,7 +46,7 @@ a{text-decoration:none;color:inherit;font-family:'Arial',sans-serif !important;}
 .app-header{position:sticky;top:0;z-index:50;background:#1155cc;color:#fff;display:flex;align-items:center;gap:14px;padding:12px 16px;height:60px;}
 .menu-btn{font-size:28px !important;line-height:1;color:#fff;padding:0 8px;} 
 .header-title{font-weight:bold;font-size:18px !important;letter-spacing:1px;flex:1;}
-.user-badge{background:#0d3f92;border-radius:20px;padding:6px 15px;font-weight:bold;font-size:14px !important;}
+.user-badge{background:#0d3f92;border-radius:20px;padding:6px 15px;font-weight:bold;font-size:14px !important;white-space:nowrap;}
 
 .sidebar{
   position:fixed;left:-170px;top:0;bottom:0;width:150px; /* <-- LEBAR 150px SESUAI REQUEST TERAKHIR */
@@ -106,6 +106,20 @@ a{text-decoration:none;color:inherit;font-family:'Arial',sans-serif !important;}
 .sc-select{flex:1;min-width:140px;padding:8px;border:1px solid #cfd6e0;border-radius:6px;font-size:14px !important;font-weight:bold}
 .sc-btn{background:#1155cc;color:#fff;border:none;padding:10px 15px;border-radius:6px;font-size:14px !important;font-weight:bold;cursor:pointer}
 .sc-btn-torch{width:50px;height:50px;border-radius:50%;background:#2196f3;color:#fff;font-size:24px !important;display:flex;align-items:center;justify-content:center;margin-left:auto}
+
+/* ============================================================
+   PERBAIKAN KHUSUS HP (MOBILE RESPONSIVE FOR HEADER TITLE)
+   ============================================================ */
+@media screen and (max-width: 700px) {
+  .header-title {
+    font-size: 14px !important; /* Kecilkan dari 18px jadi 14px agar muat 1 baris */
+    letter-spacing: 0.5px !important; /* Rapatkan spasi huruf */
+    line-height: 1.2 !important;
+    margin-top: 2px; /* Sedikit geser ke atas jika perlu */
+  }
+  
+  /* Opsional: Jika masih terasa penuh, bisa sembunyikan sebagian teks via CSS class tambahan nanti, tapi ini cukup efektif */
+}
 </style>
 </head>
 <body>
