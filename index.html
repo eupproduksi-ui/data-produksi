@@ -136,7 +136,8 @@ a{text-decoration:none;color:inherit}
       <a onclick="loadPage('Dashboard')">Dashboard</a>
       <a onclick="loadPage('FormProduksi')">Buku Produksi</a>
       <a onclick="loadPage('Dimensi')">Data Dimensi</a>
-      <a onclick="logout()" class="logout-link">logout</a>
+      <!-- PERBAIKAN: Teks diubah dari 'logout' jadi 'Keluar' -->
+      <a onclick="logout()" class="logout-link">Keluar</a>
     </nav>
     <div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
     <main id="content" class="main-content"></main>
@@ -208,6 +209,9 @@ function doLogin(){
 }
 
 function enterApp(){
+  // PERBAIKAN: Pastikan sidebar tertutup saat masuk app pertama kali
+  closeSidebar();
+  
   $id("user-nama").textContent=USER.nama;
   $id("login-area").classList.add("hidden");
   $id("app").classList.remove("hidden");
@@ -218,6 +222,13 @@ function logout(){
   USER=null;
   sessionStorage.clear();
   location.reload();
+}
+
+// FUNGSI BARU: TUTUP SIDEBAR SECARA EKSPISIT (AGAR TIDAK NYANGKUT SAAT REFRESH)
+function closeSidebar(){
+  var sb=$id("sidebar"), ov=$id("overlay");
+  if(sb) sb.classList.remove("open");
+  if(ov) ov.classList.remove("show");
 }
 
 function toggleSidebar(){
@@ -245,7 +256,10 @@ function inject(html, el){
 
 var PAGE_TTL=300000;
 function loadPage(name){
-  toggleSidebar();
+  // PERBAIKAN KRUSIAL: Gunakan closeSidebar(), BUKAN toggleSidebar()
+  // Ini mencegah sidebar ikut terbuka saat pindah menu atau refresh.
+  closeSidebar();
+  
   $id("content").innerHTML='<div class="boot-msg">Memuat '+name+'...</div>';
   
   var key="EUP_HTML_"+name;
