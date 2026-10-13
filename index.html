@@ -159,7 +159,13 @@ a{text-decoration:none;color:inherit;font-family:'Arial',sans-serif !important;}
       <a onclick="loadPage('Dashboard')">Dashboard</a>
       <a onclick="loadPage('FormProduksi')">Buku Produksi</a>
       <a onclick="loadPage('Dimensi')">Data Dimensi</a>
-      <a onclick="logout()" class="logout-link">Keluar</a>
+      <!-- ===== PENYISIPAN 2 (BARU): 4 MENU via GITHUB — link lama di atas TIDAK diubah ===== -->
+      <a onclick="loadMenu('LogMesin')">Log Mesin</a>
+      <a onclick="loadMenu('SettingMesin')">Setting Mesin</a>
+      <a onclick="loadMenu('KerusakanMesin')">Kerusakan Mesin</a>
+      <a onclick="loadMenu('PerbaikanMesin')">Perbaikan Mesin</a>
+      <!-- ================= AKHIR PENYISIPAN 2 ================= -->
+      <a onclick="logout()" class="logout-link">Logout</a>
     </nav>
     <div id="overlay" class="overlay" onclick="closeSidebar()"></div>
     <main id="content" class="main-content"></main>
@@ -204,6 +210,28 @@ a{text-decoration:none;color:inherit;font-family:'Arial',sans-serif !important;}
 <script>
 var API_URL="https://script.google.com/macros/s/AKfycbwzk6T_YFrgmHOp2N2JGG-s9YL0_Fkhf7z8zkwNU9HwSsLT0V_nM3paaAP1PRfn1LIlnw/exec";
 var USER=null;
+
+/* =========================================================
+   ===== PENYISIPAN 1 (BARU): URL GITHUB UNTUK 4 MENU =====
+   EDIT HANYA DI BLOCK INI. Tempel 4 URL raw GitHub.
+   - Repo WAJIB PUBLIC.
+   - Format benar: https://raw.githubusercontent.com/USER/REPO/BRANCH/NAMAFILE.html
+     (kalau kamu tempel link github.com/.../blob/... atau /raw/...,
+      fungsi ghRaw() di bawah otomatis mengubahnya ke raw).
+   - Cara ambil URL: buka file di GitHub > tombol "Raw" > copy alamat
+     di address bar (atau klik ikon ... > Copy raw URL).
+   - Backend (google.script.run) TETAP Apps Script deployment aktif;
+     GitHub HANYA jadi sumber tampilan/HTML 4 menu ini.
+   - Dashboard / Buku Produksi / Data Dimensi TIDAK ada di sini
+     (masih muat dari Apps Script seperti semula, tidak berubah).
+   ========================================================= */
+var GITHUB_HTML={
+  LogMesin:        "https://raw.githubusercontent.com/GANTI_USER/GANTI_REPO/main/LogMesin.html",        // <<< TEMPEL URL
+  SettingMesin:    "https://raw.githubusercontent.com/GANTI_USER/GANTI_REPO/main/SettingMesin.html",    // <<< TEMPEL URL
+  KerusakanMesin:  "https://raw.githubusercontent.com/GANTI_USER/GANTI_REPO/main/KerusakanMesin.html",  // <<< TEMPEL URL
+  PerbaikanMesin:  "https://raw.githubusercontent.com/GANTI_USER/GANTI_REPO/main/PerbaikanMesin.html"   // <<< TEMPEL URL
+};
+/* ================= AKHIR PENYISIPAN 1 ================= */
 
 function $id(x){ return document.getElementById(x); }
 
@@ -306,6 +334,52 @@ function runInit(name){
     if(fn){ try{ fn(); }catch(e){ console.error(e); } }
   },200);
 }
+
+/* =========================================================
+   ===== PENYISIPAN 3 (BARU): MUAT 4 MENU DARI GITHUB =====
+   ghRaw()  : normalisasi link github.com/blob|raw -> raw.githubusercontent.com
+   loadMenu(): fetch HTML mentah dari GitHub -> inject -> runInit.
+               Cache & TTL mengikuti pola loadPage (key EUP_HTML_<name>).
+               google.script.run di dalam HTML tsbb tetap jalan karena
+               halaman Index di-serve HtmlService (konteks yang sama
+               dengan loadPage/getPage yang sudah berjalan).
+   loadPage TIDAK diubah sedikit pun.
+   ========================================================= */
+function ghRaw(u){
+  u=String(u||"").trim();
+  var m=u.match(/^https?:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/(.+)$/);
+  if(m) return "https://raw.githubusercontent.com/"+m[1]+"/"+m[2]+"/"+m[3];
+  var m2=u.match(/^https?:\/\/github\.com\/([^/]+)\/([^/]+)\/raw\/(.+)$/);
+  if(m2) return "https://raw.githubusercontent.com/"+m2[1]+"/"+m2[2]+"/"+m2[3];
+  return u;
+}
+function loadMenu(name){
+  closeSidebar();
+  var contentEl=$id("content");
+  var url=ghRaw(GITHUB_HTML[name]);
+  if(!url || /GANTI_|TEMPEL|DI[_ ]SINI|XXXX|YOUR_/i.test(url)){
+    contentEl.innerHTML='<div class="err-box">URL GitHub untuk menu "<b>'+esc1(name)+'</b>" belum diisi.<br>Buka Index.html, cari blok <b>GITHUB_HTML</b>, tempel URL raw GitHub-nya (repo harus PUBLIC).</div>';
+    return;
+  }
+  contentEl.innerHTML='<div class="boot-msg">Memuat '+esc1(name)+'...</div>';
+  var key="EUP_HTML_"+name;
+  try{
+    var raw=sessionStorage.getItem(key);
+    if(raw){ var c=JSON.parse(raw); if(c.html && (Date.now()-c.t)<PAGE_TTL){ inject(c.html, contentEl); runInit(name); return; } }
+  }catch(e){}
+  fetch(url,{cache:"no-store"})
+    .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.text(); })
+    .then(function(html){
+      try{ sessionStorage.setItem(key, JSON.stringify({t:Date.now(),html:html})); }catch(e){}
+      inject(html, contentEl);
+      runInit(name);
+    })
+    .catch(function(e){
+      contentEl.innerHTML='<div class="err-box">Gagal muat dari GitHub ("<b>'+esc1(name)+'</b>"):<br>'+esc1(String(e&&e.message||e))+'<br><small>Pastikan repo PUBLIC &amp; URL memakai raw.githubusercontent.com (atau link blob yang otomatis dikonversi).</small></div>';
+    });
+}
+function esc1(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+/* ================= AKHIR PENYISIPAN 3 ================= */
 
 /* === SCANNER LOGIC === */
 var scanStream=null, scanTimer=null, scanSent=false, torchOn=false, scanCv=null;
