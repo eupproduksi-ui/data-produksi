@@ -337,49 +337,43 @@ function loadMenu(name){
     .catch(function(){ loadPage(name); });          // 2) fallback: dari Apps Script (getPage)
 }
 
-/* ===== SHIM google.script.run -> fetch (agar 4 anak jalan di GitHub TANPA DIUBAH) =====
-   4 file anak tetap menulis google.script.run...; di github.io shim ini menerjemahkannya
-   ke api() (fetch ke Web App Apps Script) - persis cara Buku Produksi/Dimensi bicara.
-   Di script.google.com shim TIDAK dipasang (pakai google.script.run asli).
-   ARG : urutan argumen tiap fungsi server -> nama field payload fpRoute.
-   RAW : fungsi yg handler anak-nya mengharapkan nilai MENTAH (array/string), bukan envelope.
-   Kalau nanti menambah panggilan BARU di file anak: daftarkan di ARG (+RAW bila perlu) DAN
-   buka cabangnya di fpRoute (Code.gs). Tanpa itu, panggilan baru balas "Aksi tidak dikenal". */
+/* ===== JEMBATAN UNIVERSAL google.script.run -> fetch (TANPA DAFTAR AKSI) =====
+   Proxy menerjemahkan SETIAP panggilan google.script.run.NAMA(a,b,...) menjadi
+   fetch({action:NAMA, args:[a,b,...], __direct:1}). Server (_callDirect di Code.gs)
+   memanggil fungsi NAMA apa adanya dan mengembalikan NILAI RETURN-nya TANPA dibungkus,
+   sehingga handler anak menerima persis seperti google.script.run ASLI di Apps Script.
+   -> Dimensi, Dashboard, Produksi, Login, 4 menu, dan MENU MASA DEPAN jalan OTOMATIS,
+      tanpa perlu mendaftarkan aksi satu per satu (akar masalah "Memuat form…" kemarin).
+   Di script.google.com jembatan TIDAK dipasang (pakai google.script.run asli), jadi
+   Apps Script tetap 100% normal. File anak TIDAK DIUBAH. */
 (function(){
   if(/script\.google\.com/i.test(location.hostname)) return;   // di Apps Script: biarkan asli
   window.google = window.google || {};
   var store = window.google.script = window.google.script || {};
-  var ARG = {
-    getMesin:[], getTeknisi:[],
-    settingGetAll:["userNama"], settingSimpan:["p","userNama"], settingGetNextNo:["mesin","tglIso"],
-    kerusakanGetAll:["userNama"], kerusakanSimpan:["p","userNama"], kerusakanGetNextNo:["mesin","tglIso"],
-    perbaikanGetAll:["userNama"], perbaikanSimpan:["p","userNama"], perbaikanGetNextNo:["mesin","tglIso"],
-    logGetAll:["userNama"], logApprove:["items","userNama"]
-  };
-  var RAW = { getMesin:1, getTeknisi:1, settingGetNextNo:1, kerusakanGetNextNo:1, perbaikanGetNextNo:1 };
-  function deliver(name,res,okCb,failCb){
-    if(RAW[name]){
-      if(res && typeof res==="object" && res.ok===true && ("data" in res)) return okCb(res.data);
-      if(res && typeof res==="object" && res.ok===false) return failCb?failCb(new Error(res.msg||"Gagal")):okCb(res);
-      return okCb(res);
-    }
-    return okCb(res);   // envelope handlers (settingGetAll/kerusakanGetAll/logGetAll/dsb) terima res apa adanya
-  }
   function makeRun(){
-    var okCb=null, failCb=null, apiObj={};
-    Object.keys(ARG).forEach(function(name){
-      apiObj[name]=function(){
-        var args=Array.prototype.slice.call(arguments), payload={action:name}, nm=ARG[name];
-        for(var i=0;i<nm.length;i++) payload[nm[i]]=args[i];
-        api(payload,
-            function(res){ deliver(name,res, okCb||function(){}, failCb); },
-            function(e){ if(failCb) failCb(e); });
-        return apiObj;
-      };
+    var okCb=null, failCb=null;
+    var proxy=new Proxy({}, {
+      get:function(t, prop){
+        if(prop==="withSuccessHandler") return function(fn){ okCb=fn; return proxy; };
+        if(prop==="withFailureHandler") return function(fn){ failCb=fn; return proxy; };
+        if(typeof prop!=="string") return undefined;
+        return function(){
+          var args=Array.prototype.slice.call(arguments);
+          fetch(API_URL,{method:"POST",body:JSON.stringify({action:prop,args:args,__direct:1})})
+            .then(function(r){ return r.json(); })
+            .then(function(res){
+              if(res && typeof res==="object" && ("__directErr" in res)){
+                if(failCb) failCb(new Error(res.__directErr));   // padanan withFailureHandler
+                return;
+              }
+              if(okCb) okCb(res);   // res = nilai return fungsi server APA ADANYA (spt Apps Script)
+            })
+            .catch(function(e){ if(failCb) failCb(e); });
+          return proxy;
+        };
+      }
     });
-    apiObj.withSuccessHandler=function(fn){ okCb=fn; return apiObj; };
-    apiObj.withFailureHandler=function(fn){ failCb=fn; return apiObj; };
-    return apiObj;
+    return proxy;
   }
   try{ Object.defineProperty(store,"run",{ get: makeRun, configurable:true }); }
   catch(e){ store.run=makeRun(); }
