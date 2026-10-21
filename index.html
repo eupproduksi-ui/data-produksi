@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>EUP GUDANG TAIPA</title>
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+<!-- Merriweather = Google Font (butuh internet saat muat; fallback Georgia di daftar GF_OPTS). Bobot 400+700 krn aplikasi paksa bold. display=swap = teks tampil pakai fallback dulu, tidak kedip kosong. -->
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
 <style>
 /* === RESET GLOBAL ARIAL BOLD HALUS TAJAM === */
 * { 
@@ -20,8 +22,9 @@
 }
 body{background:#f4f6f9;min-height:100vh;display:flex;flex-direction:column}
 .hidden{display:none!important}
-button{cursor:pointer;border:none;background:none;font-family:'Arial',sans-serif !important;}
-a{text-decoration:none;color:inherit;font-family:'Arial',sans-serif !important;}
+/* << FIX-SIDEBAR: font-family…!important DIHAPUS dari button & a, biar override universal * dari menu Font Global menang di sidebar (<a>) & tombol. Tampilan lain (cursor/border/bg/text-decoration/color) TIDAK berubah. */
+button{cursor:pointer;border:none;background:none;}
+a{text-decoration:none;color:inherit;}
 
 /* =========================================
    1. HALAMAN LOGIN (GLASSMORPHISM - ARIAL)
@@ -32,10 +35,10 @@ a{text-decoration:none;color:inherit;font-family:'Arial',sans-serif !important;}
 .lg-title{font-size:22px;letter-spacing:3px;color:#3d3d3d;font-weight:bold;margin-bottom:28px}
 .lg-line{display:flex;align-items:center;gap:10px;border-bottom:1px solid #6f6f6f;margin-bottom:22px;padding:6px 2px}
 .lg-line svg{width:18px;height:18px;fill:#4c4c4c;flex:0 0 auto}
-.lg-line input{flex:1;border:none;outline:none;background:transparent!important;font-size:15px;color:#2f2f2f;padding:6px 0;font-weight:bold;font-family:'Arial',sans-serif !important;}
+.lg-line input{flex:1;border:none;outline:none;background:transparent!important;font-size:15px;color:#2f2f2f;padding:6px 0;font-weight:bold;}
 .lg-line input:-webkit-autofill{-webkit-text-fill-color:#2f2f2f;transition:background-color 99999s ease-in-out 0s}
 .lg-line input::placeholder{color:#8a8a8a;font-weight:normal}
-.lg-btn{width:72%;margin:0 auto;background:#565656;color:#fff;border:none;border-radius:8px;padding:13px 0;font-size:14px;font-weight:bold;letter-spacing:2px;cursor:pointer;display:block;font-family:'Arial',sans-serif !important;}
+.lg-btn{width:72%;margin:0 auto;background:#565656;color:#fff;border:none;border-radius:8px;padding:13px 0;font-size:14px;font-weight:bold;letter-spacing:2px;cursor:pointer;display:block;}
 .lg-btn:hover{background:#3f3f3f}
 .lg-msg{color:#b00020;font-size:12px;min-height:14px;margin-top:8px;font-weight:bold}
 .lg-foot{margin-top:0;color:#4a4a4a;font-size:12px;letter-spacing:1px;font-style:italic;font-weight:bold;font-family:'Arial',sans-serif}
@@ -79,7 +82,10 @@ a{text-decoration:none;color:inherit;font-family:'Arial',sans-serif !important;}
 .overlay.show{display:block;}
 
 .main-content{flex:1;padding:16px;max-width:1200px;margin:auto;width:100%;}
-.boot-msg{padding:20px;color:#888;text-align:center;font-size:14px !important;}
+/* << SPIN: placeholder TANPA HURUF (menggantikan teks "Memuat ..."). Hanya muncul sesaat saat markup belum ada di cache. */
+.boot-spin-wrap{display:flex;align-items:center;justify-content:center;padding:40px 0}
+.boot-spin{width:34px;height:34px;border:4px solid #d7dde8;border-top-color:#1155cc;border-radius:50%;animation:bspin .8s linear infinite}
+@keyframes bspin{to{transform:rotate(360deg)}}
 .err-box{padding:20px;color:#c00;background:#ffebee;border:2px solid #c00;border-radius:8px;margin:20px;font-size:14px !important;}
 
 /* SCANNER MODAL */
@@ -125,6 +131,35 @@ a{text-decoration:none;color:inherit;font-family:'Arial',sans-serif !important;}
     line-height: 1 !important;
   }
 }
+
+/* ============================================================================
+   >>> MENU FONT GLOBAL (SERVER-SYNC) <<<
+   Sumber kebenaran = SERVER (Document Properties, lewat getFontGlobal/setFontGlobal
+   di Code.gs) -> SAMA untuk Apps Script & GitHub & semua perangkat & semua user.
+   localStorage = HANYA cerminan/cache lokal: (a) gambar seketika saat boot (anti-blank,
+   offline-safe), (b) dipakai kalau server gagal dihubungi. Menu "Font Global" tampil &
+   bisa diatur di Apps Script DAN preview editor (gfIsAdminHost = BUKAN github.io);
+   di GitHub disembunyikan (gfHideMenuIfNotAdmin) tapi TETAP ikut font via sync server.
+   Override style (gfEnsureOverride, di akhir <body>) + hook Canvas (gxF) membuat
+   halaman anak & PNG download ikut TANPA mengubah file anak sedikit pun.
+   ============================================================================ */
+:root{ --fg:'Arial', Helvetica, sans-serif; }
+.gf-modal{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:10001;display:none;align-items:center;justify-content:center;padding:16px}
+.gf-modal.show{display:flex}
+.gf-box{background:#fff;border-radius:10px;width:380px;max-width:100%;padding:20px;position:relative}
+.gf-box h3{color:#1155cc;margin:0 0 4px}
+.gf-box p{color:#666;margin:0 0 14px}
+.gf-x{position:absolute;top:12px;right:12px;background:#eee;border:none;border-radius:50%;width:34px;height:34px;font-size:16px !important;cursor:pointer}
+.gf-row{margin-bottom:14px}
+.gf-row label{display:block;color:#333;margin-bottom:6px}
+.gf-select{width:100%;padding:11px;border:1px solid #cfd6e0;border-radius:6px;font-weight:bold !important;background:#fff}
+.gf-foot{display:flex;gap:10px;margin-top:4px}
+.gf-btn{flex:1;padding:11px;border-radius:6px;font-weight:bold !important;cursor:pointer;border:none;font-size:14px !important}
+.gf-ok{background:#1155cc;color:#fff}
+.gf-cancel{background:#e3e7ee;color:#333}
+.gf-reset{background:#fff;color:#c00;border:1px solid #c00 !important}
+.gf-msg2{color:#b00020;font-size:12px !important;min-height:14px;margin-top:10px;font-weight:bold}   /* << pesan gagal simpan/ke server */
+.gf-note{font-size:12px !important;color:#888;margin-top:12px;font-weight:normal !important;line-height:1.5}
 </style>
 </head>
 <body>
@@ -165,6 +200,7 @@ a{text-decoration:none;color:inherit;font-family:'Arial',sans-serif !important;}
       <a onclick="loadMenu('KerusakanMesin')">Kerusakan Mesin</a>
       <a onclick="loadMenu('PerbaikanMesin')">Perbaikan Mesin</a>
       <!-- ================================================================================= -->
+      <a id="gf-menu" onclick="gfOpen()">Font Global</a>   <!-- << disembunyikan otomatis HANYA di github.io lewat gfHideMenuIfNotAdmin -->
       <a onclick="logout()" class="logout-link">Logout</a>
     </nav>
     <div id="overlay" class="overlay" onclick="closeSidebar()"></div>
@@ -204,6 +240,28 @@ a{text-decoration:none;color:inherit;font-family:'Arial',sans-serif !important;}
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- 4. MODAL FONT GLOBAL -->
+<div id="gf-modal" class="gf-modal">
+  <div class="gf-box">
+    <button class="gf-x" onclick="gfClose()">&#10005;</button>
+    <h3>FONT GLOBAL</h3>
+    <p>Ubah jenis font seluruh aplikasi dari satu tempat ini.</p>
+    <div class="gf-row">
+      <label>JENIS FONT</label>
+      <select id="gf-sel" class="gf-select" onchange="gfPreview()"></select>
+    </div>
+    <div class="gf-foot">
+      <button class="gf-btn gf-ok" id="gf-apply-btn" onclick="gfTerapkan()">TERAPKAN</button>
+      <button class="gf-btn gf-cancel" onclick="gfClose()">BATAL</button>
+    </div>
+    <div class="gf-foot" style="margin-top:10px">
+      <button class="gf-btn gf-reset" onclick="gfReset()">RESET ke Arial</button>
+    </div>
+    <div id="gf-msg2" class="gf-msg2"></div>
+    <div class="gf-note">Bisa diatur di <b>Apps Script</b> &amp; preview editor. GitHub &amp; semua perangkat otomatis ikut font yang diset di sini (butuh internet saat menekan TERAPKAN/RESET). Merriweather = Google&nbsp;Font (offline otomatis jadi Georgia). Preview langsung saat dipilih; TERAPKAN menyimpan ke server.</div>
   </div>
 </div>
 
@@ -288,7 +346,7 @@ function loadPage(name){
   // Ini mencegah sidebar ikut terbuka saat pindah menu atau refresh.
   closeSidebar();
   
-  $id("content").innerHTML='<div class="boot-msg">Memuat '+name+'...</div>';
+  $id("content").innerHTML='<div class="boot-spin-wrap"><div class="boot-spin"></div></div>';   /* << SPIN: tanpa teks "Memuat" */
   
   var key="EUP_HTML_"+name;
   try{
@@ -321,7 +379,7 @@ function runInit(name){
 function loadMenu(name){
   closeSidebar();
   var contentEl=$id("content");
-  contentEl.innerHTML='<div class="boot-msg">Memuat '+name+'...</div>';
+  contentEl.innerHTML='<div class="boot-spin-wrap"><div class="boot-spin"></div></div>';   /* << SPIN: tanpa teks "Memuat" */
   var key="EUP_HTML_"+name;
   try{
     var raw=sessionStorage.getItem(key);
@@ -342,8 +400,8 @@ function loadMenu(name){
    fetch({action:NAMA, args:[a,b,...], __direct:1}). Server (_callDirect di Code.gs)
    memanggil fungsi NAMA apa adanya dan mengembalikan NILAI RETURN-nya TANPA dibungkus,
    sehingga handler anak menerima persis seperti google.script.run ASLI di Apps Script.
-   -> Dimensi, Dashboard, Produksi, Login, 4 menu, dan MENU MASA DEPAN jalan OTOMATIS,
-      tanpa perlu mendaftarkan aksi satu per satu (akar masalah "Memuat form…" kemarin).
+   -> Dimensi, Dashboard, Produksi, Login, 4 menu, getFontGlobal/setFontGlobal, dan MENU
+      MASA DEPAN jalan OTOMATIS, tanpa perlu mendaftarkan aksi satu per satu.
    Di script.google.com jembatan TIDAK dipasang (pakai google.script.run asli), jadi
    Apps Script tetap 100% normal. File anak TIDAK DIUBAH. */
 (function(){
@@ -450,6 +508,156 @@ function toggleTorch(){
   }
 }
 window.__SCANNER__ = { start: startScanner, stop: stopScanner };
+
+/* ============================================================================
+   >>> FONT GLOBAL (gf*) — SUMBER KEBENARAN = SERVER, cache lokal = cerminan <<<
+   - gfIsAdminHost(): TAMPIL & boleh mengatur di Apps Script /exec MAUPUN preview
+     editor (domain googleusercontent). HANYA github.io yang disembunyikan & tidak
+     boleh mengatur. (DULU bug: "harus script.google.com" -> preview editor salah
+     dianggap GitHub -> menu hilang. KINI dibalik: "sembunyi HANYA di github.io".)
+   - gfSyncFromServer(): saat boot, tanya server getFontGlobal(); sukses -> cache
+     lokal := server (termasuk "" = default) -> terapkan; gagal/offline -> DIAM,
+     pakai cache lokal. Dipadu gfApplyLocal() yang jalan DULU saat boot -> layar
+     tidak pernah blank & tetap jalan offline (stale-while-revalidate).
+   - gfTerapkan/gfReset(): kirim ke server DULU; HANYA kalau server mengiyakan
+     cache lokal ditulis & modal ditutup. Kalau server gagal -> preview dibatalkan
+     (revert) + pesan merah di modal, TIDAK ada state "lokal punya tapi server
+     tidak" (yang bikin divergensi). Jadi ganti font butuh internet; font terakhir
+     yang tersinkron tetap tampil walau offline.
+   - gxF() dibaca hook Canvas (di bawah) -> PNG download ikut font, TANPA mengubah
+     FormProduksi.html / Dimensi.html.
+   TIDAK menyentuh inject/loadPage/loadMenu/scanner/jembatan sama sekali.
+   ============================================================================ */
+var GF_KEY="EUP_FONT";                 /* cache LOKAL per-domain (cerminan server + fallback offline) */
+var GF_DEFAULT="'Arial', Helvetica, sans-serif";
+var GF_OPTS=[
+  ["Arial (default)","'Arial', Helvetica, sans-serif"],
+  ["Helvetica","'Helvetica', Arial, sans-serif"],
+  ["Verdana","Verdana, Geneva, sans-serif"],
+  ["Tahoma","Tahoma, Geneva, sans-serif"],
+  ["Trebuchet MS","'Trebuchet MS', sans-serif"],
+  ["Georgia","Georgia, 'Times New Roman', serif"],
+  ["Merriweather","'Merriweather', Georgia, 'Times New Roman', serif"],   /* Google Font; fallback Georgia (serif sistem) biar tetap serif walau offline/belum turun. */
+  ["Times New Roman","'Times New Roman', Times, serif"],
+  ["Courier New","'Courier New', Courier, monospace"],
+  ["Impact","Impact, Charcoal, sans-serif"],
+  ["Comic Sans MS","'Comic Sans MS', 'Comic Sans', cursive"]
+];
+function gfIsAdminHost(){ return !/github\.io/i.test(location.hostname); }   /* << FIX BUG MENU-HILANG: dulu "harus script.google.com" -> preview editor (googleusercontent) salah dianggap GitHub -> menu sembunyi. KINI "sembunyi HANYA di github.io". Apps Script /exec & preview editor = tampil & bisa atur; GitHub = ikut saja. */
+function gfLocalRaw(){ try{ return (localStorage.getItem(GF_KEY)||"").trim(); }catch(e){ return ""; } }
+function gfLocalVal(){ var v=gfLocalRaw(); return v||GF_DEFAULT; }
+function gfSetLocal(v){ try{ if(!v||v===GF_DEFAULT) localStorage.removeItem(GF_KEY); else localStorage.setItem(GF_KEY,v); }catch(e){} }
+function gxF(){ return gfLocalVal(); }   /* keluarga font aktif utk hook Canvas (baca cache lokal yg sudah diselaraskan server) */
+function gfSetVar(f){ document.documentElement.style.setProperty("--fg", f||GF_DEFAULT); }
+function gfEnsureOverride(){
+  var ov=document.getElementById("gf-override");
+  if(!ov){ ov=document.createElement("style"); ov.id="gf-override"; }
+  ov.textContent="*{font-family:var(--fg,"+GF_DEFAULT+") !important;}";
+  if(ov.parentNode) ov.parentNode.removeChild(ov);   /* re-append -> selalu paling akhir -> selalu menang cascade */
+  document.body.appendChild(ov);
+}
+function gfApplyLocal(){ gfSetVar(gfLocalVal()); gfEnsureOverride(); }   /* terapkan dari cache lokal (instan, offline-safe) */
+
+/* sinkron dari SERVER (sumber kebenaran lintas domain & perangkat). success -> cache lokal :=
+   server (termasuk "" = default) -> terapkan ulang. failure/offline -> DIAM, pertahankan
+   cache lokal (jangan pernah crash/blank gara-gara network). */
+function gfSyncFromServer(){
+  try{
+    google.script.run
+      .withSuccessHandler(function(res){
+        var v=(res&&res.ok&&typeof res.data==="string")?res.data:"";
+        gfSetLocal(v);                 /* v=="" -> hapus cache -> default (server memang sumber kebenaran) */
+        gfApplyLocal();
+      })
+      .withFailureHandler(function(){ /* offline / server error: biarkan cache lokal, jangan crash */ })
+      .getFontGlobal();
+  }catch(e){}
+}
+
+function gfOpen(){
+  var sel=$id("gf-sel");
+  sel.innerHTML=GF_OPTS.map(function(o){ return '<option value="'+o[1]+'">'+o[0]+'</option>'; }).join("");
+  var cur=gfLocalRaw(), found=false;
+  for(var i=0;i<GF_OPTS.length;i++){ if(GF_OPTS[i][1]===cur){ found=true; break; } }
+  sel.value = found ? cur : GF_DEFAULT;   /* nilai tak dikenal -> tampil default */
+  gfPreview();
+  var m=$id("gf-msg2"); if(m) m.textContent="";   /* bersihkan pesan error sebelumnya */
+  $id("gf-modal").classList.add("show");
+}
+function gfPreview(){ gfSetVar($id("gf-sel").value); }   /* lihat langsung tanpa menyimpan (CSS var, belum disinkron) */
+function gfTerapkan(){
+  if(!gfIsAdminHost()) return;                            /* lapis-2: GitHub tidak pernah sampai sini (menu tersembunyi) */
+  var v=$id("gf-sel").value;
+  var btn=$id("gf-apply-btn");
+  if(btn){ btn.disabled=true; btn.textContent="MENYIMPAN..."; }
+  var done=function(ok,msg){
+    if(btn){ btn.disabled=false; btn.textContent="TERAPKAN"; }
+    if(ok){ gfSetLocal(v); gfApplyLocal(); $id("gf-modal").classList.remove("show"); }   /* server iya -> kunci cache lokal + tutup */
+    else { gfApplyLocal(); var m=$id("gf-msg2"); if(m) m.textContent=msg||"Gagal simpan ke server. Coba lagi."; }   /* server tidak -> revert preview + pesan, modal tetap buka */
+  };
+  try{
+    google.script.run
+      .withSuccessHandler(function(res){ done(!!(res&&res.ok), (res&&res.msg)||""); })
+      .withFailureHandler(function(e){ done(false,"Gagal terhubung server: "+(e&&e.message?e.message:e)); })
+      .setFontGlobal(v);
+  }catch(e){ done(false,"Gagal: "+(e&&e.message?e.message:e)); }
+}
+function gfReset(){
+  if(!gfIsAdminHost()) return;
+  var btn=$id("gf-apply-btn");
+  if(btn){ btn.disabled=true; btn.textContent="MENYIMPAN..."; }
+  var done=function(ok,msg){
+    if(btn){ btn.disabled=false; btn.textContent="TERAPKAN"; }
+    if(ok){ gfSetLocal(""); gfApplyLocal(); $id("gf-modal").classList.remove("show"); }   /* reset = "" di server -> default */
+    else { gfApplyLocal(); var m=$id("gf-msg2"); if(m) m.textContent=msg||"Gagal reset ke server. Coba lagi."; }
+  };
+  try{
+    google.script.run
+      .withSuccessHandler(function(res){ done(!!(res&&res.ok),(res&&res.msg)||""); })
+      .withFailureHandler(function(e){ done(false,"Gagal terhubung server: "+(e&&e.message?e.message:e)); })
+      .setFontGlobal("");
+  }catch(e){ done(false,"Gagal: "+(e&&e.message?e.message:e)); }
+}
+function gfClose(){ gfApplyLocal(); $id("gf-modal").classList.remove("show"); }   /* batal -> revert preview ke cache tersimpan */
+function gfHideMenuIfNotAdmin(){ if(!gfIsAdminHost()){ var a=$id("gf-menu"); if(a) a.style.display="none"; } }   /* github.io: sembunyikan menu; Apps Script & preview: tampil */
+
+/* ============================================================================
+   >>> HOOK CANVAS FONT-DOWNLOAD (TETAP UTUH, tidak diubah ronde ini) <<<
+   PNG download digambar via Canvas yang TIDAK membaca CSS DOM; font-nya hard-code
+   "...Arial, sans-serif..." di FormProduksi (fpDrawCanvas) & Dimensi (dmDownload).
+   Kita bungkus SETTER ctx.font: setiap kali anak menulis font mengandung
+   "Arial, sans-serif", string itu ditukar dengan gxF() (font global aktif, yang kini
+   bersumber dari cache lokal yang sudah diselaraskan SERVER) sebelum Canvas membacanya.
+   Efek otomatis ke SEMUA ctx.font (produksi, dimensi, masa depan) TANPA mengubah file
+   anak. Dibungkus try/catch + cek typeof: environment tak mendukung -> canvas tetap
+   Arial biasa (graceful, tidak pernah error).
+   ============================================================================ */
+(function(){
+  try{
+    if(typeof CanvasRenderingContext2D==="undefined") return;
+    var p=CanvasRenderingContext2D.prototype;
+    var d=Object.getOwnPropertyDescriptor(p,"font");
+    if(!d||!d.set) return;
+    var oSet=d.set, oGet=d.get;
+    Object.defineProperty(p,"font",{
+      configurable:true,
+      get:function(){ return oGet?oGet.call(this):""; },
+      set:function(v){
+        if(typeof v==="string"){ v=v.replace(/Arial,\s*sans-serif/g, gxF()); }
+        oSet.call(this,v);
+      }
+    });
+  }catch(e){}
+})();
+
+/* << BOOT FONT GLOBAL: (1) gambar seketika dari cache lokal -> anti-blank & offline-safe;
+   (2) sembunyikan menu HANYA kalau github.io; (3) selaraskan dengan server di belakang.
+   Urutan ini bikin GitHub ikut font (sync server) TANPA pernah bisa MENGATUR (menu sembunyi
+   + gfTerapkan/gfReset di-lapis-2 matikan di github.io). Diletakkan SEBELUM auto-login/inject
+   pertama -> berlaku sejak layar login. */
+gfApplyLocal();
+gfHideMenuIfNotAdmin();
+gfSyncFromServer();
 
 /* AUTO LOGIN CHECK */
 (function(){
