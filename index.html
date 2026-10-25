@@ -88,30 +88,39 @@ a{text-decoration:none;color:inherit;}
 @keyframes bspin{to{transform:rotate(360deg)}}
 .err-box{padding:20px;color:#c00;background:#ffebee;border:2px solid #c00;border-radius:8px;margin:20px;font-size:14px !important;}
 
-/* SCANNER MODAL */
-.sc-modal{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:10000;display:none;align-items:center;justify-content:center;padding:16px}
+/* SCANNER MODAL (R2 - gaya WMS, TAMPILAN SAJA) */
+.sc-modal{position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:10000;display:none;align-items:center;justify-content:center;padding:16px}
 .sc-modal.show{display:flex}
-.sc-box{background:#fff;border-radius:10px;width:520px;max-width:100%;max-height:90vh;overflow:auto}
-.sc-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:#fff;border-bottom:1px solid #e3e7ee}
-.sc-title{font-weight:bold;color:#112233;font-size:16px !important}
-.sc-close{background:#eee;border:none;border-radius:50%;width:36px;height:36px;font-size:18px !important;cursor:pointer}
-.sc-body{padding:12px}
-.sc-video-wrap{position:relative;background:#000;border-radius:8px;overflow:hidden}
-.sc-video{width:100%;max-height:60vh;display:block;object-fit:cover}
+.sc-box{background:#fff;border-radius:14px;width:520px;max-width:100%;max-height:92vh;overflow:auto;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.sc-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px}
+.sc-title{font-weight:bold;color:#0f172a;font-size:16px !important}
+.sc-close{background:none;border:none;color:#94a3b8;font-size:20px !important;cursor:pointer;line-height:1;padding:2px 6px}
+.sc-close:hover{color:#334155}
+.sc-body{padding:0 14px 14px}
+.sc-video-wrap{position:relative;background:#000;border-radius:10px;overflow:hidden;aspect-ratio:1/1}
+.sc-video{width:100%;height:100%;display:block;object-fit:cover}
 .sc-ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
-.sc-box-inner{position:relative;width:70%;max-width:300px;aspect-ratio:1/1;border:2px solid rgba(255,255,255,0.3)}
-.sc-corner{position:absolute;width:40px;height:40px;border:0 solid #fff}
-.sc-tl{top:-2px;left:-2px;border-top-width:4px;border-left-width:4px}
-.sc-tr{top:-2px;right:-2px;border-top-width:4px;border-right-width:4px}
-.sc-bl{bottom:-2px;left:-2px;border-bottom-width:4px;border-left-width:4px}
-.sc-br{bottom:-2px;right:-2px;border-bottom-width:4px;border-right-width:4px}
-.sc-controls{padding:10px;}
-.sc-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.sc-label{font-weight:bold;color:#333;white-space:nowrap;font-size:14px !important}
-.sc-input-range{flex:1;padding:8px;border:1px solid #ccc;border-radius:4px;font-size:14px !important}
-.sc-select{flex:1;min-width:140px;padding:8px;border:1px solid #cfd6e0;border-radius:6px;font-size:14px !important;font-weight:bold}
+.sc-box-inner{position:relative;width:58%;max-width:300px;aspect-ratio:1/1;border:none}
+.sc-corner{position:absolute;width:46px;height:46px;border:0 solid #fff}
+.sc-tl{top:0;left:0;border-top-width:5px;border-left-width:5px}
+.sc-tr{top:0;right:0;border-top-width:5px;border-right-width:5px}
+.sc-bl{bottom:0;left:0;border-bottom-width:5px;border-left-width:5px}
+.sc-br{bottom:0;right:0;border-bottom-width:5px;border-right-width:5px}
+.sc-controls{padding:14px 2px 2px}
+.sc-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.sc-row:last-child{margin-bottom:0}
+.sc-label{font-weight:bold;color:#334155;white-space:nowrap;font-size:13px !important}
+.sc-input-range{flex:1;-webkit-appearance:none;appearance:none;height:4px;border-radius:4px;background:#e2e8f0;outline:none}
+.sc-input-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;background:#3b82f6;cursor:pointer}
+.sc-input-range::-moz-range-thumb{width:16px;height:16px;border:none;border-radius:50%;background:#3b82f6;cursor:pointer}
+.sc-zoom-val{color:#94a3b8;font-size:12px !important;white-space:nowrap;font-weight:bold}
+.sc-select{padding:7px 10px;border:1px solid #cbd5e1;border-radius:8px;font-size:12px !important;font-weight:bold;background:#fff;color:#0f172a;flex:0 1 auto;min-width:120px;max-width:200px}
+.sc-link{background:none;border:none;color:#334155;font-weight:bold;font-size:13px !important;cursor:pointer;padding:6px 4px;margin-left:auto;white-space:nowrap;text-decoration:none}
+.sc-link:hover{color:#1155cc;text-decoration:underline}
+.sc-cam-count{color:#94a3b8;font-weight:bold}
 .sc-btn{background:#1155cc;color:#fff;border:none;padding:10px 15px;border-radius:6px;font-size:14px !important;font-weight:bold;cursor:pointer}
 .sc-btn-torch{width:50px;height:50px;border-radius:50%;background:#2196f3;color:#fff;font-size:24px !important;display:flex;align-items:center;justify-content:center;margin-left:auto}
+/* SC-R2-CSS */
 
 /* ============================================================
    PERBAIKAN KHUSUS HP (MOBILE RESPONSIVE FOR HEADER TITLE & ICON)
@@ -192,6 +201,9 @@ a{text-decoration:none;color:inherit;}
   <div style="position:relative;">
     <nav id="sidebar" class="sidebar">
       <a onclick="loadPage('Dashboard')">Dashboard</a>
+      <a onclick="loadPage('Statistik')">Statistik Produksi</a>
+      <a onclick="loadPage('LaporanProduksi')">Laporan Produksi</a>
+      <a onclick="loadPage('RekapDimensi')">Rekap Dimensi</a>
       <a onclick="loadPage('FormProduksi')">Buku Produksi</a>
       <a onclick="loadPage('Dimensi')">Data Dimensi</a>
       <!-- ===== 4 MENU GITHUB: loadMenu (relatif + fallback). GITHUB_HTML/ghRaw DIHAPUS. ===== -->
@@ -208,7 +220,7 @@ a{text-decoration:none;color:inherit;}
   </div>
 </div>
 
-<!-- 3. SCANNER MODAL -->
+<!-- 3. SCANNER MODAL (R2 - gaya WMS, TAMPILAN SAJA; JS scanner TIDAK diubah) -->
 <div id="sc-modal" class="sc-modal">
   <div class="sc-box">
     <div class="sc-header">
@@ -227,21 +239,19 @@ a{text-decoration:none;color:inherit;}
       </div>
       <div class="sc-controls">
         <div class="sc-row">
-          <span class="sc-label">Zoom</span>
-          <input type="range" id="sc-zoom" min="1" max="3" step="0.1" value="1" class="sc-input-range" oninput="onZoom(this)">
+          <input type="range" id="sc-zoom" min="1" max="3" step="0.1" value="1" class="sc-input-range" oninput="onZoom(this);this.nextElementSibling.textContent=this.value+'x zoom'">
+          <span class="sc-zoom-val">1x zoom</span>
         </div>
         <div class="sc-row">
-          <span class="sc-label">Kamera</span>
+          <span class="sc-label">Select Camera<span class="sc-cam-count"></span></span>
           <select id="sc-cams" class="sc-select" onchange="onCamChange()"></select>
-        </div>
-        <div class="sc-row">
-          <button class="sc-btn" onclick="stopScanner()" style="flex:1">Tutup Scanner</button>
-          <button class="sc-btn-torch" onclick="toggleTorch()">&#128294;</button>
+          <button class="sc-link" onclick="stopScanner()">Stop Scanning</button>
         </div>
       </div>
     </div>
   </div>
 </div>
+<!-- SC-R2-HTML -->
 
 <!-- 4. MODAL FONT GLOBAL -->
 <div id="gf-modal" class="gf-modal">
