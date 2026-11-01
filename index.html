@@ -5,30 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>EUP GUDANG TAIPA</title>
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
-<!-- Merriweather = Google Font (butuh internet saat muat; fallback Georgia di daftar GF_OPTS). Bobot 400+700 krn aplikasi paksa bold. display=swap = teks tampil pakai fallback dulu, tidak kedip kosong. -->
 <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
 <style>
-/* === RESET GLOBAL ARIAL BOLD HALUS TAJAM === */
-* { 
-  box-sizing:border-box; 
-  margin:0; 
-  padding:0; 
-  font-family: 'Arial', Helvetica, sans-serif !important; 
-  font-size: 14px !important; 
-  font-weight: bold !important; 
-  -webkit-font-smoothing: antialiased; 
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-}
+* { box-sizing:border-box; margin:0; padding:0; font-family: 'Arial', Helvetica, sans-serif !important; font-size: 14px !important; font-weight: bold !important; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
 body{background:#f4f6f9;min-height:100vh;display:flex;flex-direction:column}
 .hidden{display:none!important}
-/* << FIX-SIDEBAR: font-family…!important DIHAPUS dari button & a, biar override universal * dari menu Font Global menang di sidebar (<a>) & tombol. Tampilan lain (cursor/border/bg/text-decoration/color) TIDAK berubah. */
 button{cursor:pointer;border:none;background:none;}
 a{text-decoration:none;color:inherit;}
-
-/* =========================================
-   1. HALAMAN LOGIN (GLASSMORPHISM - ARIAL)
-   ========================================= */
 .lg-bg{position:fixed;inset:0;background:linear-gradient(160deg,#bdbdbd 0%,#969696 55%,#7d7d7d 100%);display:flex;align-items:center;justify-content:center;padding:16px;z-index:100}
 .lg-card{width:400px;max-width:94%;background:linear-gradient(135deg,rgba(255,255,255,.55) 0%,rgba(255,255,255,.22) 50%,rgba(255,255,255,.45) 100%);border:1px solid rgba(255,255,255,.65);border-radius:22px;box-shadow:0 18px 40px rgba(0,0,0,.28);padding:34px 30px 24px;text-align:center;position:relative;overflow:hidden;backdrop-filter:blur(10px);}
 .lg-card:before{content:"";position:absolute;top:-40%;left:-25%;width:55%;height:180%;background:linear-gradient(115deg,rgba(255,255,255,.4),rgba(255,255,255,0) 60%);transform:rotate(8deg);pointer-events:none}
@@ -42,53 +25,23 @@ a{text-decoration:none;color:inherit;}
 .lg-btn:hover{background:#3f3f3f}
 .lg-msg{color:#b00020;font-size:12px;min-height:14px;margin-top:8px;font-weight:bold}
 .lg-foot{margin-top:0;color:#4a4a4a;font-size:12px;letter-spacing:1px;font-style:italic;font-weight:bold;font-family:'Arial',sans-serif}
-
-/* =========================================
-   2. HEADER & SIDEBAR (STABILISASI TOTAL)
-   ========================================= */
 .app-header{position:sticky;top:0;z-index:50;background:#1155cc;color:#fff;display:flex;align-items:center;gap:14px;padding:12px 16px;height:60px;}
 .menu-btn{font-size:28px !important;line-height:1;color:#fff;padding:0 8px;} 
 .header-title{font-weight:bold;font-size:18px !important;letter-spacing:1px;flex:1;}
 .user-badge{background:#0d3f92;border-radius:20px;padding:6px 15px;font-weight:bold;font-size:14px !important;white-space:nowrap;}
-
-.sidebar{
-  position:fixed;left:-170px;top:0;bottom:0;width:150px; /* <-- LEBAR 150px SESUAI REQUEST TERAKHIR */
-  background:#ffffff; 
-  z-index:100;transition:.25s ease-in-out;overflow-y:auto; 
-  padding-top:70px; 
-  display:flex; flex-direction:column; 
-  border-right:1px solid #e3e7ee; 
-  box-shadow:2px 0 10px rgba(0,0,0,0.05);
-}
+.sidebar{position:fixed;left:-170px;top:0;bottom:0;width:150px;background:#ffffff;z-index:100;transition:.25s ease-in-out;overflow-y:auto;padding-top:70px;display:flex;flex-direction:column;border-right:1px solid #e3e7ee;box-shadow:2px 0 10px rgba(0,0,0,0.05);}
 .sidebar.open{left:0;}
-.sidebar a{
-  display:block;color:#333333; 
-  padding:18px 6px; /* <-- PADDING RAP MAKSIMAL */
-  border-bottom:1px solid #f0f0f0; 
-  font-size:14px !important;cursor:pointer;
-  text-decoration:none;
-  font-weight:bold;
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-}
+.sidebar a{display:block;color:#333333;padding:18px 6px;border-bottom:1px solid #f0f0f0;font-size:14px !important;cursor:pointer;text-decoration:none;font-weight:bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .sidebar a:hover{background:#f5f5f5;color:#1155cc;} 
-
-.logout-link{
-  margin-top:auto; color:#c00 !important; font-weight:bold;
-  border-top:1px solid #eee; padding:18px 6px; white-space:nowrap;
-}
+.logout-link{margin-top:auto;color:#c00 !important;font-weight:bold;border-top:1px solid #eee;padding:18px 6px;white-space:nowrap;}
 .logout-link:hover{background:#ffebee;}
-
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:90;display:none;}
 .overlay.show{display:block;}
-
 .main-content{flex:1;padding:16px;max-width:1200px;margin:auto;width:100%;}
-/* << SPIN: placeholder TANPA HURUF (menggantikan teks "Memuat ..."). Hanya muncul sesaat saat markup belum ada di cache. */
 .boot-spin-wrap{display:flex;align-items:center;justify-content:center;padding:40px 0}
 .boot-spin{width:34px;height:34px;border:4px solid #d7dde8;border-top-color:#1155cc;border-radius:50%;animation:bspin .8s linear infinite}
 @keyframes bspin{to{transform:rotate(360deg)}}
 .err-box{padding:20px;color:#c00;background:#ffebee;border:2px solid #c00;border-radius:8px;margin:20px;font-size:14px !important;}
-
-/* SCANNER MODAL (R2 - gaya WMS, TAMPILAN SAJA) */
 .sc-modal{position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:10000;display:none;align-items:center;justify-content:center;padding:16px}
 .sc-modal.show{display:flex}
 .sc-box{background:#fff;border-radius:14px;width:520px;max-width:100%;max-height:92vh;overflow:auto;box-shadow:0 20px 50px rgba(0,0,0,.3)}
@@ -120,38 +73,10 @@ a{text-decoration:none;color:inherit;}
 .sc-cam-count{color:#94a3b8;font-weight:bold}
 .sc-btn{background:#1155cc;color:#fff;border:none;padding:10px 15px;border-radius:6px;font-size:14px !important;font-weight:bold;cursor:pointer}
 .sc-btn-torch{width:50px;height:50px;border-radius:50%;background:#2196f3;color:#fff;font-size:24px !important;display:flex;align-items:center;justify-content:center;margin-left:auto}
-/* SC-R2-CSS */
-
-/* ============================================================
-   PERBAIKAN KHUSUS HP (MOBILE RESPONSIVE FOR HEADER TITLE & ICON)
-   ============================================================ */
 @media screen and (max-width: 700px) {
-  .header-title {
-    font-size: 14px !important; /* Kecilkan dari 18px jadi 14px agar muat 1 baris */
-    letter-spacing: 0.5px !important; /* Rapatkan spasi huruf */
-    line-height: 1.2 !important;
-    margin-top: 2px; /* Sedikit geser ke atas jika perlu */
-  }
-  
-  /* PERBAIKAN BARU: UKURAN IKON GARIS TIGA AGAR SERASI DENGAN TEKS 14PX */
-  .menu-btn {
-    font-size: 20px !important; /* Diturunkan dari 28px menjadi 20px */
-    padding: 0 4px !important;  /* Padding samping dikurangi sedikit */
-    line-height: 1 !important;
-  }
+  .header-title { font-size: 14px !important; letter-spacing: 0.5px !important; line-height: 1.2 !important; margin-top: 2px; }
+  .menu-btn { font-size: 20px !important; padding: 0 4px !important; line-height: 1 !important; }
 }
-
-/* ============================================================================
-   >>> MENU FONT GLOBAL (SERVER-SYNC) <<<
-   Sumber kebenaran = SERVER (Document Properties, lewat getFontGlobal/setFontGlobal
-   di Code.gs) -> SAMA untuk Apps Script & GitHub & semua perangkat & semua user.
-   localStorage = HANYA cerminan/cache lokal: (a) gambar seketika saat boot (anti-blank,
-   offline-safe), (b) dipakai kalau server gagal dihubungi. Menu "Font Global" tampil &
-   bisa diatur di Apps Script DAN preview editor (gfIsAdminHost = BUKAN github.io);
-   di GitHub disembunyikan (gfHideMenuIfNotAdmin) tapi TETAP ikut font via sync server.
-   Override style (gfEnsureOverride, di akhir <body>) + hook Canvas (gxF) membuat
-   halaman anak & PNG download ikut TANPA mengubah file anak sedikit pun.
-   ============================================================================ */
 :root{ --fg:'Arial', Helvetica, sans-serif; }
 .gf-modal{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:10001;display:none;align-items:center;justify-content:center;padding:16px}
 .gf-modal.show{display:flex}
@@ -167,13 +92,12 @@ a{text-decoration:none;color:inherit;}
 .gf-ok{background:#1155cc;color:#fff}
 .gf-cancel{background:#e3e7ee;color:#333}
 .gf-reset{background:#fff;color:#c00;border:1px solid #c00 !important}
-.gf-msg2{color:#b00020;font-size:12px !important;min-height:14px;margin-top:10px;font-weight:bold}   /* << pesan gagal simpan/ke server */
+.gf-msg2{color:#b00020;font-size:12px !important;min-height:14px;margin-top:10px;font-weight:bold}
 .gf-note{font-size:12px !important;color:#888;margin-top:12px;font-weight:normal !important;line-height:1.5}
 </style>
 </head>
 <body>
 
-<!-- 1. LOGIN AREA -->
 <div id="login-area" class="lg-bg">
   <div class="lg-card">
     <div class="lg-title">EUP GUDANG TAIPA</div>
@@ -191,7 +115,6 @@ a{text-decoration:none;color:inherit;}
   </div>
 </div>
 
-<!-- 2. APP SHELL -->
 <div id="app" class="hidden">
   <header class="app-header">
     <button class="menu-btn" onclick="toggleSidebar()">&#9776;</button>
@@ -206,13 +129,12 @@ a{text-decoration:none;color:inherit;}
       <a onclick="loadPage('RekapDimensi')">Rekap Dimensi</a>
       <a onclick="loadPage('FormProduksi')">Buku Produksi</a>
       <a onclick="loadPage('Dimensi')">Data Dimensi</a>
-      <!-- ===== 4 MENU GITHUB: loadMenu (relatif + fallback). GITHUB_HTML/ghRaw DIHAPUS. ===== -->
       <a onclick="loadMenu('LogMesin')">Log Mesin</a>
       <a onclick="loadMenu('SettingMesin')">Setting Mesin</a>
       <a onclick="loadMenu('KerusakanMesin')">Kerusakan Mesin</a>
       <a onclick="loadMenu('PerbaikanMesin')">Perbaikan Mesin</a>
-      <!-- ================================================================================= -->
-      <a id="gf-menu" onclick="gfOpen()">Font Global</a>   <!-- << disembunyikan otomatis HANYA di github.io lewat gfHideMenuIfNotAdmin -->
+      <a onclick="loadMenu('ServisBerkala')">Servis Berkala</a>
+      <a id="gf-menu" onclick="gfOpen()">Font Global</a>
       <a onclick="logout()" class="logout-link">Logout</a>
     </nav>
     <div id="overlay" class="overlay" onclick="closeSidebar()"></div>
@@ -220,7 +142,6 @@ a{text-decoration:none;color:inherit;}
   </div>
 </div>
 
-<!-- 3. SCANNER MODAL (R2 - gaya WMS, TAMPILAN SAJA; JS scanner TIDAK diubah) -->
 <div id="sc-modal" class="sc-modal">
   <div class="sc-box">
     <div class="sc-header">
@@ -251,9 +172,7 @@ a{text-decoration:none;color:inherit;}
     </div>
   </div>
 </div>
-<!-- SC-R2-HTML -->
 
-<!-- 4. MODAL FONT GLOBAL -->
 <div id="gf-modal" class="gf-modal">
   <div class="gf-box">
     <button class="gf-x" onclick="gfClose()">&#10005;</button>
@@ -276,406 +195,115 @@ a{text-decoration:none;color:inherit;}
 </div>
 
 <script>
-var API_URL="https://script.google.com/macros/s/AKfycbwzk6T_YFrgmHOp2N2JGG-s9YL0_Fkhf7z8zkwNU9HwSsLT0V_nM3paaAP1PRfn1LIlnw/exec";
+var API_URL="https://script.google.com/macros/s/AKfycbwcKOfb6y5USg7k5oh8oI9jE4T91R8TjBjv6wyuzarEQwk-l95j_RPp9uHsBaD2TbWnbw/exec";
 var USER=null;
-
 function $id(x){ return document.getElementById(x); }
-
-function api(params, cb, fail){
-  fetch(API_URL,{method:"POST",body:JSON.stringify(params)})
-    .then(r=>r.json()).then(cb).catch(e=>{ if(fail) fail(e); });
-}
-
+function api(params, cb, fail){ fetch(API_URL,{method:"POST",body:JSON.stringify(params)}).then(r=>r.json()).then(cb).catch(e=>{ if(fail) fail(e); }); }
 function doLogin(){
-  var u=$id("lg-user").value.trim();
-  var p=$id("lg-pass").value;
-  var msg=$id("lg-msg");
+  var u=$id("lg-user").value.trim(); var p=$id("lg-pass").value; var msg=$id("lg-msg");
   if(!u||!p){ msg.textContent="Isi username & password."; return; }
   msg.textContent="Memproses..."; 
-  
   api({action:"login",user:u,pass:p}, function(res){
-    if(res && res.ok){ 
-       USER = { nama: res.nama || (res.data && res.data.nama) };
-       sessionStorage.setItem("EUP_USER", JSON.stringify(USER));
-       enterApp();
-    } else { 
-       msg.textContent=(res&&res.msg)||"Login gagal."; 
-    }
+    if(res && res.ok){ USER = { nama: res.nama || (res.data && res.data.nama) }; sessionStorage.setItem("EUP_USER", JSON.stringify(USER)); enterApp(); }
+    else { msg.textContent=(res&&res.msg)||"Login gagal."; }
   }, function(e){ msg.textContent="Error koneksi."; });
 }
-
-function enterApp(){
-  // Pastikan sidebar tertutup saat masuk app pertama kali
-  closeSidebar();
-  
-  $id("user-nama").textContent=USER.nama;
-  $id("login-area").classList.add("hidden");
-  $id("app").classList.remove("hidden");
-  loadPage("Dashboard");
-}
-
-function logout(){
-  USER=null;
-  sessionStorage.clear();
-  location.reload();
-}
-
-// FUNGSI BARU: TUTUP SIDEBAR SECARA EKSPISIT (AGAR TIDAK NYANGKUT SAAT REFRESH)
-function closeSidebar(){
-  var sb=$id("sidebar"), ov=$id("overlay");
-  if(sb) sb.classList.remove("open");
-  if(ov) ov.classList.remove("show");
-}
-
-function toggleSidebar(){
-  var sb=$id("sidebar"), ov=$id("overlay");
-  sb.classList.toggle("open");
-  ov.classList.toggle("show", sb.classList.contains("open"));
-}
-
+function enterApp(){ closeSidebar(); $id("user-nama").textContent=USER.nama; $id("login-area").classList.add("hidden"); $id("app").classList.remove("hidden"); loadPage("Dashboard"); }
+function logout(){ USER=null; sessionStorage.clear(); location.reload(); }
+function closeSidebar(){ var sb=$id("sidebar"), ov=$id("overlay"); if(sb) sb.classList.remove("open"); if(ov) ov.classList.remove("show"); }
+function toggleSidebar(){ var sb=$id("sidebar"), ov=$id("overlay"); sb.classList.toggle("open"); ov.classList.toggle("show", sb.classList.contains("open")); }
 function inject(html, el){
   el.innerHTML=html;
   var scripts=el.querySelectorAll("script");
-  for(var i=scripts.length-1;i>=0;i--){
-    var old=scripts[i], nw=document.createElement("script");
-    if(old.src) nw.src=old.src; else nw.text=old.textContent;
-    document.body.appendChild(nw);
-    if(old.parentNode) old.parentNode.removeChild(old);
-  }
-  setTimeout(function(){
-    var fabs = document.querySelectorAll('.fp-fab, .dm-fab');
-    for(var j=0;j<fabs.length;j++){
-      fabs[j].style.cssText += "font-size:32px !important; line-height:58px !important; text-align:center !important;";
-    }
-  }, 200);
+  for(var i=scripts.length-1;i>=0;i--){ var old=scripts[i], nw=document.createElement("script"); if(old.src) nw.src=old.src; else nw.text=old.textContent; document.body.appendChild(nw); if(old.parentNode) old.parentNode.removeChild(old); }
+  setTimeout(function(){ var fabs = document.querySelectorAll('.fp-fab, .dm-fab'); for(var j=0;j<fabs.length;j++){ fabs[j].style.cssText += "font-size:32px !important; line-height:58px !important; text-align:center !important;"; } }, 200);
 }
-
-var PAGE_TTL=300000;
+var PAGE_TTL=0;
 function loadPage(name){
-  // PERBAIKAN KRUSIAL: Gunakan closeSidebar(), BUKAN toggleSidebar()
-  // Ini mencegah sidebar ikut terbuka saat pindah menu atau refresh.
   closeSidebar();
-  
-  $id("content").innerHTML='<div class="boot-spin-wrap"><div class="boot-spin"></div></div>';   /* << SPIN: tanpa teks "Memuat" */
-  
+  $id("content").innerHTML='<div class="boot-spin-wrap"><div class="boot-spin"></div></div>';
   var key="EUP_HTML_"+name;
-  try{
-    var raw=sessionStorage.getItem(key);
-    if(raw){ var c=JSON.parse(raw); if(c.html && (Date.now()-c.t)<PAGE_TTL){ inject(c.html, $id("content")); runInit(name); return; } }
-  }catch(e){}
-
+  try{ var raw=sessionStorage.getItem(key); if(raw){ var c=JSON.parse(raw); if(c.html && (Date.now()-c.t)<PAGE_TTL){ inject(c.html, $id("content")); runInit(name); return; } } }catch(e){}
   api({action:"getPage",name:name}, function(res){
     var html=(res&&res.html)||(res&&res.data&&res.data.html);
-    if(html){
-      try{ sessionStorage.setItem(key, JSON.stringify({t:Date.now(),html:html})); }catch(e){}
-      inject(html, $id("content"));
-      runInit(name);
-    }
+    if(html){ try{ if(PAGE_TTL>0) sessionStorage.setItem(key, JSON.stringify({t:Date.now(),html:html})); }catch(e){} inject(html, $id("content")); runInit(name); }
   });
 }
-
-function runInit(name){
-  setTimeout(function(){
-    var fn=window["init_"+name]||window["init_"+name.toLowerCase()]||window["init_"+name.toUpperCase()];
-    if(fn){ try{ fn(); }catch(e){ console.error(e); } }
-  },200);
-}
-
-/* ===== MUAT 4 MENU DARI GITHUB (relatif, satu origin) -> fallback Apps Script =====
-   Tidak ada GITHUB_HTML / tidak perlu tempel URL. File diambil dari folder yang sama
-   dgn Index (LogMesin.html dst). Kalau tidak ada di GitHub, otomatis loadPage()
-   mengambilnya dari Apps Script (getPage) - sama spt Dashboard/Produksi/Dimensi.
-   loadPage TIDAK diubah sedikit pun. */
+function runInit(name){ setTimeout(function(){ var fn=window["init_"+name]||window["init_"+name.toLowerCase()]||window["init_"+name.toUpperCase()]; if(fn){ try{ fn(); }catch(e){ console.error(e); } } },200); }
 function loadMenu(name){
   closeSidebar();
   var contentEl=$id("content");
-  contentEl.innerHTML='<div class="boot-spin-wrap"><div class="boot-spin"></div></div>';   /* << SPIN: tanpa teks "Memuat" */
+  contentEl.innerHTML='<div class="boot-spin-wrap"><div class="boot-spin"></div></div>';
   var key="EUP_HTML_"+name;
-  try{
-    var raw=sessionStorage.getItem(key);
-    if(raw){ var c=JSON.parse(raw); if(c.html && (Date.now()-c.t)<PAGE_TTL){ inject(c.html, contentEl); runInit(name); return; } }
-  }catch(e){}
-  fetch(name+".html",{cache:"no-store"})            // 1) dari GitHub (relatif)
+  try{ var raw=sessionStorage.getItem(key); if(raw){ var c=JSON.parse(raw); if(c.html && (Date.now()-c.t)<PAGE_TTL){ inject(c.html, contentEl); runInit(name); return; } } }catch(e){}
+  fetch(name+".html",{cache:"no-store"})
     .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.text(); })
-    .then(function(html){
-      try{ sessionStorage.setItem(key, JSON.stringify({t:Date.now(),html:html})); }catch(e){}
-      inject(html, contentEl);
-      runInit(name);
-    })
-    .catch(function(){ loadPage(name); });          // 2) fallback: dari Apps Script (getPage)
+    .then(function(html){ try{ if(PAGE_TTL>0) sessionStorage.setItem(key, JSON.stringify({t:Date.now(),html:html})); }catch(e){} inject(html, contentEl); runInit(name); })
+    .catch(function(){ loadPage(name); });
 }
-
-/* ===== JEMBATAN UNIVERSAL google.script.run -> fetch (TANPA DAFTAR AKSI) =====
-   Proxy menerjemahkan SETIAP panggilan google.script.run.NAMA(a,b,...) menjadi
-   fetch({action:NAMA, args:[a,b,...], __direct:1}). Server (_callDirect di Code.gs)
-   memanggil fungsi NAMA apa adanya dan mengembalikan NILAI RETURN-nya TANPA dibungkus,
-   sehingga handler anak menerima persis seperti google.script.run ASLI di Apps Script.
-   -> Dimensi, Dashboard, Produksi, Login, 4 menu, getFontGlobal/setFontGlobal, dan MENU
-      MASA DEPAN jalan OTOMATIS, tanpa perlu mendaftarkan aksi satu per satu.
-   Di script.google.com jembatan TIDAK dipasang (pakai google.script.run asli), jadi
-   Apps Script tetap 100% normal. File anak TIDAK DIUBAH. */
 (function(){
-  if(/script\.google\.com/i.test(location.hostname)) return;   // di Apps Script: biarkan asli
+  if(/script\.google\.com/i.test(location.hostname)) return;
   window.google = window.google || {};
   var store = window.google.script = window.google.script || {};
   function makeRun(){
     var okCb=null, failCb=null;
-    var proxy=new Proxy({}, {
-      get:function(t, prop){
-        if(prop==="withSuccessHandler") return function(fn){ okCb=fn; return proxy; };
-        if(prop==="withFailureHandler") return function(fn){ failCb=fn; return proxy; };
-        if(typeof prop!=="string") return undefined;
-        return function(){
-          var args=Array.prototype.slice.call(arguments);
-          fetch(API_URL,{method:"POST",body:JSON.stringify({action:prop,args:args,__direct:1})})
-            .then(function(r){ return r.json(); })
-            .then(function(res){
-              if(res && typeof res==="object" && ("__directErr" in res)){
-                if(failCb) failCb(new Error(res.__directErr));   // padanan withFailureHandler
-                return;
-              }
-              if(okCb) okCb(res);   // res = nilai return fungsi server APA ADANYA (spt Apps Script)
-            })
-            .catch(function(e){ if(failCb) failCb(e); });
-          return proxy;
-        };
-      }
-    });
+    var proxy=new Proxy({}, { get:function(t, prop){
+      if(prop==="withSuccessHandler") return function(fn){ okCb=fn; return proxy; };
+      if(prop==="withFailureHandler") return function(fn){ failCb=fn; return proxy; };
+      if(typeof prop!=="string") return undefined;
+      return function(){ var args=Array.prototype.slice.call(arguments); fetch(API_URL,{method:"POST",body:JSON.stringify({action:prop,args:args,__direct:1})}).then(function(r){ return r.json(); }).then(function(res){ if(res && typeof res==="object" && ("__directErr" in res)){ if(failCb) failCb(new Error(res.__directErr)); return; } if(okCb) okCb(res); }).catch(function(e){ if(failCb) failCb(e); }); return proxy; };
+    }});
     return proxy;
   }
-  try{ Object.defineProperty(store,"run",{ get: makeRun, configurable:true }); }
-  catch(e){ store.run=makeRun(); }
+  try{ Object.defineProperty(store,"run",{ get: makeRun, configurable:true }); } catch(e){ store.run=makeRun(); }
 })();
-
-/* === SCANNER LOGIC === */
 var scanStream=null, scanTimer=null, scanSent=false, torchOn=false, scanCv=null;
 var SCAN_OUT=700, SCAN_CROP=0.74, SCAN_MS=250;
-
 function startScanner(deviceId){
   stopScanner(true); scanSent=false;
   if(!navigator.mediaDevices){ alert("Kamera tidak didukung."); return; }
   var vid={width:{ideal:1280},height:{ideal:720}};
   if(deviceId) vid.deviceId={exact:deviceId}; else vid.facingMode="environment";
-  
-  navigator.mediaDevices.getUserMedia({video:vid,audio:false}).then(function(stream){
-    scanStream=stream;
-    var v=$id("sc-video"); v.srcObject=stream; v.play();
-    if(!scanCv) scanCv=document.createElement("canvas");
-    listCams(deviceId);
-    $id("sc-modal").classList.add("show");
-    scanTimer=setInterval(scanTick,SCAN_MS);
-  }).catch(function(e){ alert("Gagal buka kamera: "+e.message); });
+  navigator.mediaDevices.getUserMedia({video:vid,audio:false}).then(function(stream){ scanStream=stream; var v=$id("sc-video"); v.srcObject=stream; v.play(); if(!scanCv) scanCv=document.createElement("canvas"); listCams(deviceId); $id("sc-modal").classList.add("show"); scanTimer=setInterval(scanTick,SCAN_MS); }).catch(function(e){ alert("Gagal buka kamera: "+e.message); });
 }
-
-function stopScanner(keepModal){
-  if(scanTimer){ clearInterval(scanTimer); scanTimer=null; }
-  if(scanStream){ scanStream.getTracks().forEach(function(t){ t.stop(); }); scanStream=null; }
-  var v=$id("sc-video"); if(v) v.srcObject=null;
-  torchOn=false;
-  if(!keepModal) $id("sc-modal").classList.remove("show");
-}
-
+function stopScanner(keepModal){ if(scanTimer){ clearInterval(scanTimer); scanTimer=null; } if(scanStream){ scanStream.getTracks().forEach(function(t){ t.stop(); }); scanStream=null; } var v=$id("sc-video"); if(v) v.srcObject=null; torchOn=false; if(!keepModal) $id("sc-modal").classList.remove("show"); }
 function scanTick(){
   if(scanSent||!scanStream||typeof jsQR==="undefined") return;
-  var v=$id("sc-video");
-  if(!v.videoWidth||v.readyState<2) return;
+  var v=$id("sc-video"); if(!v.videoWidth||v.readyState<2) return;
   var side=Math.floor(Math.min(v.videoWidth,v.videoHeight)*SCAN_CROP);
   var ox=Math.floor((v.videoWidth-side)/2), oy=Math.floor((v.videoHeight-side)/2);
   scanCv.width=SCAN_OUT; scanCv.height=SCAN_OUT;
   var cx=scanCv.getContext("2d",{willReadFrequently:true});
   cx.drawImage(v, ox,oy,side,side, 0,0,SCAN_OUT,SCAN_OUT);
   var code=jsQR(cx.getImageData(0,0,SCAN_OUT,SCAN_OUT).data,SCAN_OUT,SCAN_OUT);
-  if(code&&code.data){
-    scanSent=true;
-    window.dispatchEvent(new CustomEvent("DMS_KPC_SCAN",{detail:{text:code.data}}));
-    setTimeout(stopScanner, 300);
-  }
+  if(code&&code.data){ scanSent=true; window.dispatchEvent(new CustomEvent("DMS_KPC_SCAN",{detail:{text:code.data}})); setTimeout(stopScanner, 300); }
 }
-
-function listCams(activeId){
-  navigator.mediaDevices.enumerateDevices().then(function(devs){
-    var sel=$id("sc-cams"); sel.innerHTML="";
-    devs.filter(function(d){return d.kind=="videoinput"}).forEach(function(c,i){
-      var o=document.createElement("option"); o.value=c.deviceId; o.textContent=c.label||("Cam "+(i+1));
-      if(activeId==c.deviceId) o.selected=true;
-      sel.appendChild(o);
-    });
-  });
-}
+function listCams(activeId){ navigator.mediaDevices.enumerateDevices().then(function(devs){ var sel=$id("sc-cams"); sel.innerHTML=""; devs.filter(function(d){return d.kind=="videoinput"}).forEach(function(c,i){ var o=document.createElement("option"); o.value=c.deviceId; o.textContent=c.label||("Cam "+(i+1)); if(activeId==c.deviceId) o.selected=true; sel.appendChild(o); }); }); }
 function onCamChange(){ startScanner($id("sc-cams").value); }
-function onZoom(el){
-  if(!scanStream) return;
-  var t=scanStream.getVideoTracks()[0];
-  if(t.getCapabilities().zoom){
-    t.applyConstraints({advanced:[{zoom:Math.min(Math.max(Number(el.value),1),3)}]});
-  }
-}
-function toggleTorch(){
-  if(!scanStream) return;
-  var t=scanStream.getVideoTracks()[0];
-  if(t.getCapabilities().torch){
-    torchOn=!torchOn; t.applyConstraints({advanced:[{torch:torchOn}]});
-  }
-}
+function onZoom(el){ if(!scanStream) return; var t=scanStream.getVideoTracks()[0]; if(t.getCapabilities().zoom){ t.applyConstraints({advanced:[{zoom:Math.min(Math.max(Number(el.value),1),3)}]}); } }
+function toggleTorch(){ if(!scanStream) return; var t=scanStream.getVideoTracks()[0]; if(t.getCapabilities().torch){ torchOn=!torchOn; t.applyConstraints({advanced:[{torch:torchOn}]}); } }
 window.__SCANNER__ = { start: startScanner, stop: stopScanner };
-
-/* ============================================================================
-   >>> FONT GLOBAL (gf*) — SUMBER KEBENARAN = SERVER, cache lokal = cerminan <<<
-   - gfIsAdminHost(): TAMPIL & boleh mengatur di Apps Script /exec MAUPUN preview
-     editor (domain googleusercontent). HANYA github.io yang disembunyikan & tidak
-     boleh mengatur. (DULU bug: "harus script.google.com" -> preview editor salah
-     dianggap GitHub -> menu hilang. KINI dibalik: "sembunyi HANYA di github.io".)
-   - gfSyncFromServer(): saat boot, tanya server getFontGlobal(); sukses -> cache
-     lokal := server (termasuk "" = default) -> terapkan; gagal/offline -> DIAM,
-     pakai cache lokal. Dipadu gfApplyLocal() yang jalan DULU saat boot -> layar
-     tidak pernah blank & tetap jalan offline (stale-while-revalidate).
-   - gfTerapkan/gfReset(): kirim ke server DULU; HANYA kalau server mengiyakan
-     cache lokal ditulis & modal ditutup. Kalau server gagal -> preview dibatalkan
-     (revert) + pesan merah di modal, TIDAK ada state "lokal punya tapi server
-     tidak" (yang bikin divergensi). Jadi ganti font butuh internet; font terakhir
-     yang tersinkron tetap tampil walau offline.
-   - gxF() dibaca hook Canvas (di bawah) -> PNG download ikut font, TANPA mengubah
-     FormProduksi.html / Dimensi.html.
-   TIDAK menyentuh inject/loadPage/loadMenu/scanner/jembatan sama sekali.
-   ============================================================================ */
-var GF_KEY="EUP_FONT";                 /* cache LOKAL per-domain (cerminan server + fallback offline) */
+var GF_KEY="EUP_FONT";
 var GF_DEFAULT="'Arial', Helvetica, sans-serif";
-var GF_OPTS=[
-  ["Arial (default)","'Arial', Helvetica, sans-serif"],
-  ["Helvetica","'Helvetica', Arial, sans-serif"],
-  ["Verdana","Verdana, Geneva, sans-serif"],
-  ["Tahoma","Tahoma, Geneva, sans-serif"],
-  ["Trebuchet MS","'Trebuchet MS', sans-serif"],
-  ["Georgia","Georgia, 'Times New Roman', serif"],
-  ["Merriweather","'Merriweather', Georgia, 'Times New Roman', serif"],   /* Google Font; fallback Georgia (serif sistem) biar tetap serif walau offline/belum turun. */
-  ["Times New Roman","'Times New Roman', Times, serif"],
-  ["Courier New","'Courier New', Courier, monospace"],
-  ["Impact","Impact, Charcoal, sans-serif"],
-  ["Comic Sans MS","'Comic Sans MS', 'Comic Sans', cursive"]
-];
-function gfIsAdminHost(){ return !/github\.io/i.test(location.hostname); }   /* << FIX BUG MENU-HILANG: dulu "harus script.google.com" -> preview editor (googleusercontent) salah dianggap GitHub -> menu sembunyi. KINI "sembunyi HANYA di github.io". Apps Script /exec & preview editor = tampil & bisa atur; GitHub = ikut saja. */
+var GF_OPTS=[["Arial (default)","'Arial', Helvetica, sans-serif"],["Helvetica","'Helvetica', Arial, sans-serif"],["Verdana","Verdana, Geneva, sans-serif"],["Tahoma","Tahoma, Geneva, sans-serif"],["Trebuchet MS","'Trebuchet MS', sans-serif"],["Georgia","Georgia, 'Times New Roman', serif"],["Merriweather","'Merriweather', Georgia, 'Times New Roman', serif"],["Times New Roman","'Times New Roman', Times, serif"],["Courier New","'Courier New', Courier, monospace"],["Impact","Impact, Charcoal, sans-serif"],["Comic Sans MS","'Comic Sans MS', 'Comic Sans', cursive"]];
+function gfIsAdminHost(){ return !/github\.io/i.test(location.hostname); }
 function gfLocalRaw(){ try{ return (localStorage.getItem(GF_KEY)||"").trim(); }catch(e){ return ""; } }
 function gfLocalVal(){ var v=gfLocalRaw(); return v||GF_DEFAULT; }
 function gfSetLocal(v){ try{ if(!v||v===GF_DEFAULT) localStorage.removeItem(GF_KEY); else localStorage.setItem(GF_KEY,v); }catch(e){} }
-function gxF(){ return gfLocalVal(); }   /* keluarga font aktif utk hook Canvas (baca cache lokal yg sudah diselaraskan server) */
+function gxF(){ return gfLocalVal(); }
 function gfSetVar(f){ document.documentElement.style.setProperty("--fg", f||GF_DEFAULT); }
-function gfEnsureOverride(){
-  var ov=document.getElementById("gf-override");
-  if(!ov){ ov=document.createElement("style"); ov.id="gf-override"; }
-  ov.textContent="*{font-family:var(--fg,"+GF_DEFAULT+") !important;}";
-  if(ov.parentNode) ov.parentNode.removeChild(ov);   /* re-append -> selalu paling akhir -> selalu menang cascade */
-  document.body.appendChild(ov);
-}
-function gfApplyLocal(){ gfSetVar(gfLocalVal()); gfEnsureOverride(); }   /* terapkan dari cache lokal (instan, offline-safe) */
-
-/* sinkron dari SERVER (sumber kebenaran lintas domain & perangkat). success -> cache lokal :=
-   server (termasuk "" = default) -> terapkan ulang. failure/offline -> DIAM, pertahankan
-   cache lokal (jangan pernah crash/blank gara-gara network). */
-function gfSyncFromServer(){
-  try{
-    google.script.run
-      .withSuccessHandler(function(res){
-        var v=(res&&res.ok&&typeof res.data==="string")?res.data:"";
-        gfSetLocal(v);                 /* v=="" -> hapus cache -> default (server memang sumber kebenaran) */
-        gfApplyLocal();
-      })
-      .withFailureHandler(function(){ /* offline / server error: biarkan cache lokal, jangan crash */ })
-      .getFontGlobal();
-  }catch(e){}
-}
-
-function gfOpen(){
-  var sel=$id("gf-sel");
-  sel.innerHTML=GF_OPTS.map(function(o){ return '<option value="'+o[1]+'">'+o[0]+'</option>'; }).join("");
-  var cur=gfLocalRaw(), found=false;
-  for(var i=0;i<GF_OPTS.length;i++){ if(GF_OPTS[i][1]===cur){ found=true; break; } }
-  sel.value = found ? cur : GF_DEFAULT;   /* nilai tak dikenal -> tampil default */
-  gfPreview();
-  var m=$id("gf-msg2"); if(m) m.textContent="";   /* bersihkan pesan error sebelumnya */
-  $id("gf-modal").classList.add("show");
-}
-function gfPreview(){ gfSetVar($id("gf-sel").value); }   /* lihat langsung tanpa menyimpan (CSS var, belum disinkron) */
-function gfTerapkan(){
-  if(!gfIsAdminHost()) return;                            /* lapis-2: GitHub tidak pernah sampai sini (menu tersembunyi) */
-  var v=$id("gf-sel").value;
-  var btn=$id("gf-apply-btn");
-  if(btn){ btn.disabled=true; btn.textContent="MENYIMPAN..."; }
-  var done=function(ok,msg){
-    if(btn){ btn.disabled=false; btn.textContent="TERAPKAN"; }
-    if(ok){ gfSetLocal(v); gfApplyLocal(); $id("gf-modal").classList.remove("show"); }   /* server iya -> kunci cache lokal + tutup */
-    else { gfApplyLocal(); var m=$id("gf-msg2"); if(m) m.textContent=msg||"Gagal simpan ke server. Coba lagi."; }   /* server tidak -> revert preview + pesan, modal tetap buka */
-  };
-  try{
-    google.script.run
-      .withSuccessHandler(function(res){ done(!!(res&&res.ok), (res&&res.msg)||""); })
-      .withFailureHandler(function(e){ done(false,"Gagal terhubung server: "+(e&&e.message?e.message:e)); })
-      .setFontGlobal(v);
-  }catch(e){ done(false,"Gagal: "+(e&&e.message?e.message:e)); }
-}
-function gfReset(){
-  if(!gfIsAdminHost()) return;
-  var btn=$id("gf-apply-btn");
-  if(btn){ btn.disabled=true; btn.textContent="MENYIMPAN..."; }
-  var done=function(ok,msg){
-    if(btn){ btn.disabled=false; btn.textContent="TERAPKAN"; }
-    if(ok){ gfSetLocal(""); gfApplyLocal(); $id("gf-modal").classList.remove("show"); }   /* reset = "" di server -> default */
-    else { gfApplyLocal(); var m=$id("gf-msg2"); if(m) m.textContent=msg||"Gagal reset ke server. Coba lagi."; }
-  };
-  try{
-    google.script.run
-      .withSuccessHandler(function(res){ done(!!(res&&res.ok),(res&&res.msg)||""); })
-      .withFailureHandler(function(e){ done(false,"Gagal terhubung server: "+(e&&e.message?e.message:e)); })
-      .setFontGlobal("");
-  }catch(e){ done(false,"Gagal: "+(e&&e.message?e.message:e)); }
-}
-function gfClose(){ gfApplyLocal(); $id("gf-modal").classList.remove("show"); }   /* batal -> revert preview ke cache tersimpan */
-function gfHideMenuIfNotAdmin(){ if(!gfIsAdminHost()){ var a=$id("gf-menu"); if(a) a.style.display="none"; } }   /* github.io: sembunyikan menu; Apps Script & preview: tampil */
-
-/* ============================================================================
-   >>> HOOK CANVAS FONT-DOWNLOAD (TETAP UTUH, tidak diubah ronde ini) <<<
-   PNG download digambar via Canvas yang TIDAK membaca CSS DOM; font-nya hard-code
-   "...Arial, sans-serif..." di FormProduksi (fpDrawCanvas) & Dimensi (dmDownload).
-   Kita bungkus SETTER ctx.font: setiap kali anak menulis font mengandung
-   "Arial, sans-serif", string itu ditukar dengan gxF() (font global aktif, yang kini
-   bersumber dari cache lokal yang sudah diselaraskan SERVER) sebelum Canvas membacanya.
-   Efek otomatis ke SEMUA ctx.font (produksi, dimensi, masa depan) TANPA mengubah file
-   anak. Dibungkus try/catch + cek typeof: environment tak mendukung -> canvas tetap
-   Arial biasa (graceful, tidak pernah error).
-   ============================================================================ */
-(function(){
-  try{
-    if(typeof CanvasRenderingContext2D==="undefined") return;
-    var p=CanvasRenderingContext2D.prototype;
-    var d=Object.getOwnPropertyDescriptor(p,"font");
-    if(!d||!d.set) return;
-    var oSet=d.set, oGet=d.get;
-    Object.defineProperty(p,"font",{
-      configurable:true,
-      get:function(){ return oGet?oGet.call(this):""; },
-      set:function(v){
-        if(typeof v==="string"){ v=v.replace(/Arial,\s*sans-serif/g, gxF()); }
-        oSet.call(this,v);
-      }
-    });
-  }catch(e){}
-})();
-
-/* << BOOT FONT GLOBAL: (1) gambar seketika dari cache lokal -> anti-blank & offline-safe;
-   (2) sembunyikan menu HANYA kalau github.io; (3) selaraskan dengan server di belakang.
-   Urutan ini bikin GitHub ikut font (sync server) TANPA pernah bisa MENGATUR (menu sembunyi
-   + gfTerapkan/gfReset di-lapis-2 matikan di github.io). Diletakkan SEBELUM auto-login/inject
-   pertama -> berlaku sejak layar login. */
-gfApplyLocal();
-gfHideMenuIfNotAdmin();
-gfSyncFromServer();
-
-/* AUTO LOGIN CHECK */
-(function(){
-  try{
-    var s=sessionStorage.getItem("EUP_USER");
-    if(s){ USER=JSON.parse(s); if(USER.nama) enterApp(); }
-  }catch(e){}
-})();
+function gfEnsureOverride(){ var ov=document.getElementById("gf-override"); if(!ov){ ov=document.createElement("style"); ov.id="gf-override"; } ov.textContent="*{font-family:var(--fg,"+GF_DEFAULT+") !important;}"; if(ov.parentNode) ov.parentNode.removeChild(ov); document.body.appendChild(ov); }
+function gfApplyLocal(){ gfSetVar(gfLocalVal()); gfEnsureOverride(); }
+function gfSyncFromServer(){ try{ google.script.run.withSuccessHandler(function(res){ var v=(res&&res.ok&&typeof res.data==="string")?res.data:""; gfSetLocal(v); gfApplyLocal(); }).withFailureHandler(function(){ }).getFontGlobal(); }catch(e){} }
+function gfOpen(){ var sel=$id("gf-sel"); sel.innerHTML=GF_OPTS.map(function(o){ return '<option value="'+o[1]+'">'+o[0]+'</option>'; }).join(""); var cur=gfLocalRaw(), found=false; for(var i=0;i<GF_OPTS.length;i++){ if(GF_OPTS[i][1]===cur){ found=true; break; } } sel.value = found ? cur : GF_DEFAULT; gfPreview(); var m=$id("gf-msg2"); if(m) m.textContent=""; $id("gf-modal").classList.add("show"); }
+function gfPreview(){ gfSetVar($id("gf-sel").value); }
+function gfTerapkan(){ if(!gfIsAdminHost()) return; var v=$id("gf-sel").value; var btn=$id("gf-apply-btn"); if(btn){ btn.disabled=true; btn.textContent="MENYIMPAN..."; } var done=function(ok,msg){ if(btn){ btn.disabled=false; btn.textContent="TERAPKAN"; } if(ok){ gfSetLocal(v); gfApplyLocal(); $id("gf-modal").classList.remove("show"); } else { gfApplyLocal(); var m=$id("gf-msg2"); if(m) m.textContent=msg||"Gagal simpan ke server. Coba lagi."; } }; try{ google.script.run.withSuccessHandler(function(res){ done(!!(res&&res.ok), (res&&res.msg)||""); }).withFailureHandler(function(e){ done(false,"Gagal terhubung server: "+(e&&e.message?e.message:e)); }).setFontGlobal(v); }catch(e){ done(false,"Gagal: "+(e&&e.message?e.message:e)); } }
+function gfReset(){ if(!gfIsAdminHost()) return; var btn=$id("gf-apply-btn"); if(btn){ btn.disabled=true; btn.textContent="MENYIMPAN..."; } var done=function(ok,msg){ if(btn){ btn.disabled=false; btn.textContent="TERAPKAN"; } if(ok){ gfSetLocal(""); gfApplyLocal(); $id("gf-modal").classList.remove("show"); } else { gfApplyLocal(); var m=$id("gf-msg2"); if(m) m.textContent=msg||"Gagal reset ke server. Coba lagi."; } }; try{ google.script.run.withSuccessHandler(function(res){ done(!!(res&&res.ok),(res&&res.msg)||""); }).withFailureHandler(function(e){ done(false,"Gagal terhubung server: "+(e&&e.message?e.message:e)); }).setFontGlobal(""); }catch(e){ done(false,"Gagal: "+(e&&e.message?e.message:e)); } }
+function gfClose(){ gfApplyLocal(); $id("gf-modal").classList.remove("show"); }
+function gfHideMenuIfNotAdmin(){ if(!gfIsAdminHost()){ var a=$id("gf-menu"); if(a) a.style.display="none"; } }
+(function(){ try{ if(typeof CanvasRenderingContext2D==="undefined") return; var p=CanvasRenderingContext2D.prototype; var d=Object.getOwnPropertyDescriptor(p,"font"); if(!d||!d.set) return; var oSet=d.set, oGet=d.get; Object.defineProperty(p,"font",{ configurable:true, get:function(){ return oGet?oGet.call(this):""; }, set:function(v){ if(typeof v==="string"){ v=v.replace(/Arial,\s*sans-serif/g, gxF()); } oSet.call(this,v); } }); }catch(e){} })();
+gfApplyLocal(); gfHideMenuIfNotAdmin(); gfSyncFromServer();
+(function(){ try{ var s=sessionStorage.getItem("EUP_USER"); if(s){ USER=JSON.parse(s); if(USER.nama) enterApp(); } }catch(e){} })();
 </script>
 </body>
 </html>
