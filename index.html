@@ -42,41 +42,43 @@ a{text-decoration:none;color:inherit;}
 @keyframes bspin{to{transform:rotate(360deg)}}
 .err-box{padding:20px;color:#c00;background:#ffebee;border:2px solid #c00;border-radius:8px;margin:20px;font-size:14px !important;}
 
-/* << SCANNER BARU: bingkai dalam frosted putih, video full, sudut tajam, mengikuti orientasi tablet.
-   Tidak ada teks kontrol di bawah (slider zoom, select camera, stop scanning dibuang).
-   Tombol X di header (stop+tutup), tombol senter kecil di pojok kanan bawah (ikon saja). */
-.sc-modal{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:10000;display:none;align-items:stretch;justify-content:center;padding:0}
+/* << SCANNER v3 (KARTU TENGAH, persis contoh): BUKAN full-screen. Kartu putih di tengah latar redup;
+   video menempel penuh LEBAR kartu (tanpa padding samping); kepala kartu = judul + ✕ (stop+tutup);
+   bawah video = strip putih kecil hanya IKON senter (tanpa teks zoom/select/stop).
+   Bingkai dalam = 4 siku putih tebal + lapisan frosted putih semi-transparan di dalamnya.
+   Semua sudut TAMPAK (border-radius 0). Orientasi: portrait -> kartu sempit & video tinggi;
+   landscape -> kartu lebar & video melebar. Logika scan (jsQR/decode/auto-fill) TIDAK berubah. */
+.sc-modal{position:fixed;inset:0;background:rgba(15,23,42,.6);z-index:10000;display:none;align-items:center;justify-content:center;padding:16px}
 .sc-modal.show{display:flex}
-.sc-box{background:#000;width:100%;height:100%;max-width:100%;max-height:100vh;display:flex;flex-direction:column;overflow:hidden;border-radius:0}
-.sc-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#000;z-index:10}
-.sc-title{font-weight:bold;color:#fff;font-size:16px !important}
-.sc-close{background:none;border:none;color:#fff;font-size:28px !important;cursor:pointer;line-height:1;padding:4px 8px;border-radius:0}
-.sc-close:hover{color:#1155cc}
-.sc-body{flex:1;display:flex;align-items:center;justify-content:center;padding:0;overflow:hidden;background:#000}
-.sc-video-wrap{position:relative;width:100%;height:100%;background:#000;overflow:hidden;border-radius:0}
+.sc-box{background:#fff;border-radius:0;width:min(92vw,440px);max-width:100%;max-height:92vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.sc-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#fff;border-bottom:1px solid #e3e7ee;flex:0 0 auto}
+.sc-title{font-weight:bold;color:#0f172a;font-size:16px !important}
+.sc-close{background:none;border:none;color:#94a3b8;font-size:22px !important;cursor:pointer;line-height:1;padding:2px 6px;border-radius:0}
+.sc-close:hover{color:#334155}
+.sc-body{flex:0 0 auto;padding:0;background:#000}
+.sc-video-wrap{position:relative;width:100%;background:#000;overflow:hidden;border-radius:0;aspect-ratio:3/4;max-height:60vh}
 .sc-video{width:100%;height:100%;display:block;object-fit:cover}
 .sc-ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
-.sc-box-inner{position:relative;width:60%;max-width:500px;aspect-ratio:1/1;border:none}
-.sc-frost{position:absolute;inset:0;background:rgba(255,255,255,.25);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);border-radius:0}
-.sc-corner{position:absolute;width:50px;height:50px;border:0 solid #fff;border-radius:0;z-index:5}
+.sc-box-inner{position:relative;width:64%;max-width:320px;aspect-ratio:1/1;border:none}
+.sc-frost{position:absolute;inset:0;background:rgba(255,255,255,.28);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);border-radius:0}
+.sc-corner{position:absolute;width:46px;height:46px;border:0 solid #fff;border-radius:0;z-index:5}
 .sc-tl{top:0;left:0;border-top-width:6px;border-left-width:6px}
 .sc-tr{top:0;right:0;border-top-width:6px;border-right-width:6px}
 .sc-bl{bottom:0;left:0;border-bottom-width:6px;border-left-width:6px}
 .sc-br{bottom:0;right:0;border-bottom-width:6px;border-right-width:6px}
-.sc-torch{position:absolute;bottom:30px;right:30px;width:56px;height:56px;border-radius:0;background:#2196f3;color:#fff;font-size:28px !important;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;box-shadow:0 4px 12px rgba(0,0,0,.4);border:none}
+.sc-foot{flex:0 0 auto;display:flex;justify-content:flex-end;align-items:center;padding:10px 14px;background:#fff}
+.sc-torch{width:52px;height:52px;border-radius:0;background:#2196f3;color:#fff;font-size:26px !important;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;box-shadow:0 3px 10px rgba(0,0,0,.25)}
 .sc-torch:hover{background:#1976d2}
 .sc-torch:active{transform:scale(.95)}
-
-/* << SCANNER RESPONSIVE: tablet horizontal = video melebar, tablet vertikal = video memanjang */
 @media (orientation:landscape){
-  .sc-box-inner{width:50%;max-width:400px}
+  .sc-box{width:min(92vw,640px)}
+  .sc-video-wrap{aspect-ratio:16/9;max-height:70vh}
+  .sc-box-inner{width:46%;max-width:300px}
 }
 @media (orientation:portrait){
-  .sc-box-inner{width:70%;max-width:350px}
-}
-@media (max-width:700px){
-  .sc-box-inner{width:80%;max-width:300px}
-  .sc-torch{bottom:20px;right:20px;width:50px;height:50px;font-size:24px !important}
+  .sc-box{width:min(92vw,440px)}
+  .sc-video-wrap{aspect-ratio:3/4;max-height:60vh}
+  .sc-box-inner{width:64%;max-width:320px}
 }
 
 @media screen and (max-width: 700px) {
@@ -161,14 +163,14 @@ a{text-decoration:none;color:inherit;}
         <div class="sc-ov">
           <div class="sc-box-inner">
             <div class="sc-frost"></div>
-            <span class="sc-corner sc-tl"></span>
-            <span class="sc-corner sc-tr"></span>
-            <span class="sc-corner sc-bl"></span>
-            <span class="sc-corner sc-br"></span>
+            <span class="sc-corner sc-tl"></span><span class="sc-corner sc-tr"></span>
+            <span class="sc-corner sc-bl"></span><span class="sc-corner sc-br"></span>
           </div>
         </div>
-        <button class="sc-torch" onclick="toggleTorch()" title="Senter">&#128294;</button>
       </div>
+    </div>
+    <div class="sc-foot">
+      <button class="sc-torch" onclick="toggleTorch()" title="Senter">&#128294;</button>
     </div>
   </div>
 </div>
