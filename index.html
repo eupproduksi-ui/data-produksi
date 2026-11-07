@@ -42,40 +42,39 @@ a{text-decoration:none;color:inherit;}
 @keyframes bspin{to{transform:rotate(360deg)}}
 .err-box{padding:20px;color:#c00;background:#ffebee;border:2px solid #c00;border-radius:8px;margin:20px;font-size:14px !important;}
 
-/* << SCANNER v5 (KARTU TENGAH): v5 DELTA -> (1) TINGGI video ditambah (portrait 2:3 @70vh, landscape @78vh);
-   (2) kepala kartu dua baris: ADD KPC di atas + subtitle EUP GUDANG TAIPA di bawahnya;
-   (3) BINGKAI DALAM dikecilkan lagi ~5mm (portrait 46%/240px, landscape 33%/220px, siku 34px);
-   (4) frosted putih DIKURANGI ke 12% (kaca tipis, tidak menutup gambar).
-   Tetap: kartu putih tengah, video full-lebar kartu, sudut tajam, tanpa senter/foot, orientasi responsif.
+/* << SCANNER v7-FINAL (KARTU TENGAH): akumulasi semua kesepakatan ->
+   - Kepala kartu HANYA "ADD KPC" + ✕; judul halaman "EUP GUDANG TAIPA" di strip putih BAWAH video.
+   - Video full-lebar kartu, TINGGI ditambah (portrait 2:3 @70vh, landscape 16:9 @78vh).
+   - BINGKAI DALAM FIXED 200px + siku 34px di KEDUA orientasi (TIDAK berubah potret<->landscape;
+     patch "30% tinggi video" DIBATALKAN, jangan dipasang).
+   - Frosted putih tipis 6%; semua sudut tajam; tanpa senter/foot; orientasi responsif utk kartu & video.
    Logika scan (jsQR/decode/auto-fill KPC) TIDAK berubah. */
 .sc-modal{position:fixed;inset:0;background:rgba(15,23,42,.6);z-index:10000;display:none;align-items:center;justify-content:center;padding:16px}
 .sc-modal.show{display:flex}
 .sc-box{background:#fff;border-radius:0;width:min(92vw,440px);max-width:100%;max-height:94vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.35)}
 .sc-header{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:#fff;border-bottom:1px solid #e3e7ee;flex:0 0 auto}
 .sc-title{font-weight:bold;color:#0f172a;font-size:16px !important;line-height:1.2}
-.sc-subtitle{color:#1155cc;font-size:11px !important;letter-spacing:1px;margin-top:2px;font-weight:bold;line-height:1.2}
 .sc-close{background:none;border:none;color:#94a3b8;font-size:22px !important;cursor:pointer;line-height:1;padding:2px 6px;border-radius:0}
 .sc-close:hover{color:#334155}
 .sc-body{flex:0 0 auto;padding:0;background:#000}
 .sc-video-wrap{position:relative;width:100%;background:#000;overflow:hidden;border-radius:0;aspect-ratio:2/3;max-height:70vh}
 .sc-video{width:100%;height:100%;display:block;object-fit:cover}
 .sc-ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
-.sc-box-inner{position:relative;width:46%;max-width:240px;aspect-ratio:1/1;border:none}
-.sc-frost{position:absolute;inset:0;background:rgba(255,255,255,.12);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);border-radius:0}
+.sc-box-inner{position:relative;width:200px;max-width:60%;aspect-ratio:1/1;border:none}
+.sc-frost{position:absolute;inset:0;background:rgba(255,255,255,.06);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);border-radius:0}
 .sc-corner{position:absolute;width:34px;height:34px;border:0 solid #fff;border-radius:0;z-index:5}
 .sc-tl{top:0;left:0;border-top-width:5px;border-left-width:5px}
 .sc-tr{top:0;right:0;border-top-width:5px;border-right-width:5px}
 .sc-bl{bottom:0;left:0;border-bottom-width:5px;border-left-width:5px}
 .sc-br{bottom:0;right:0;border-bottom-width:5px;border-right-width:5px}
+.sc-pagefoot{flex:0 0 auto;background:#fff;border-top:1px solid #e3e7ee;text-align:center;padding:10px 14px;color:#1155cc;font-size:12px !important;letter-spacing:2px;font-weight:bold}
 @media (orientation:landscape){
   .sc-box{width:min(92vw,640px)}
   .sc-video-wrap{aspect-ratio:16/9;max-height:78vh}
-  .sc-box-inner{width:33%;max-width:220px}
 }
 @media (orientation:portrait){
   .sc-box{width:min(92vw,440px)}
   .sc-video-wrap{aspect-ratio:2/3;max-height:70vh}
-  .sc-box-inner{width:46%;max-width:240px}
 }
 
 @media screen and (max-width: 700px) {
@@ -151,10 +150,7 @@ a{text-decoration:none;color:inherit;}
 <div id="sc-modal" class="sc-modal">
   <div class="sc-box">
     <div class="sc-header">
-      <div>
-        <div class="sc-title">ADD KPC</div>
-        <div class="sc-subtitle">EUP GUDANG TAIPA</div>
-      </div>
+      <div class="sc-title">ADD KPC</div>
       <button class="sc-close" onclick="stopScanner()">&#10005;</button>
     </div>
     <div class="sc-body">
@@ -169,6 +165,7 @@ a{text-decoration:none;color:inherit;}
         </div>
       </div>
     </div>
+    <div class="sc-pagefoot">EUP GUDANG TAIPA</div>
   </div>
 </div>
 
@@ -197,7 +194,7 @@ a{text-decoration:none;color:inherit;}
 var API_URL="https://script.google.com/macros/s/AKfycbwcKOfb6y5USg7k5oh8oI9jE4T91R8TjBjv6wyuzarEQwk-l95j_RPp9uHsBaD2TbWnbw/exec";
 var USER=null;
 function $id(x){ return document.getElementById(x); }
-function api(params, cb, fail){ fetch(API_URL,{method:"POST",body:JSON.stringify(params)}).then(r=>r.json()).then(cb).catch(e=>{ if(fail) fail(e); }); }
+function api(params, cb, fail){ fetch(API_URL,{method:"POST",body:JSON.stringify(params)}).then(r=>r.json()).then(cb).catch(e){ if(fail) fail(e); }); }
 function doLogin(){
   var u=$id("lg-user").value.trim(); var p=$id("lg-pass").value; var msg=$id("lg-msg");
   if(!u||!p){ msg.textContent="Isi username & password."; return; }
