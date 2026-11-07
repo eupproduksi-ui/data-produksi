@@ -41,37 +41,44 @@ a{text-decoration:none;color:inherit;}
 .boot-spin{width:34px;height:34px;border:4px solid #d7dde8;border-top-color:#1155cc;border-radius:50%;animation:bspin .8s linear infinite}
 @keyframes bspin{to{transform:rotate(360deg)}}
 .err-box{padding:20px;color:#c00;background:#ffebee;border:2px solid #c00;border-radius:8px;margin:20px;font-size:14px !important;}
-.sc-modal{position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:10000;display:none;align-items:center;justify-content:center;padding:16px}
+
+/* << SCANNER BARU: bingkai dalam frosted putih, video full, sudut tajam, mengikuti orientasi tablet.
+   Tidak ada teks kontrol di bawah (slider zoom, select camera, stop scanning dibuang).
+   Tombol X di header (stop+tutup), tombol senter kecil di pojok kanan bawah (ikon saja). */
+.sc-modal{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:10000;display:none;align-items:stretch;justify-content:center;padding:0}
 .sc-modal.show{display:flex}
-.sc-box{background:#fff;border-radius:14px;width:520px;max-width:100%;max-height:92vh;overflow:auto;box-shadow:0 20px 50px rgba(0,0,0,.3)}
-.sc-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px}
-.sc-title{font-weight:bold;color:#0f172a;font-size:16px !important}
-.sc-close{background:none;border:none;color:#94a3b8;font-size:20px !important;cursor:pointer;line-height:1;padding:2px 6px}
-.sc-close:hover{color:#334155}
-.sc-body{padding:0 14px 14px}
-.sc-video-wrap{position:relative;background:#000;border-radius:10px;overflow:hidden;aspect-ratio:1/1}
+.sc-box{background:#000;width:100%;height:100%;max-width:100%;max-height:100vh;display:flex;flex-direction:column;overflow:hidden;border-radius:0}
+.sc-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#000;z-index:10}
+.sc-title{font-weight:bold;color:#fff;font-size:16px !important}
+.sc-close{background:none;border:none;color:#fff;font-size:28px !important;cursor:pointer;line-height:1;padding:4px 8px;border-radius:0}
+.sc-close:hover{color:#1155cc}
+.sc-body{flex:1;display:flex;align-items:center;justify-content:center;padding:0;overflow:hidden;background:#000}
+.sc-video-wrap{position:relative;width:100%;height:100%;background:#000;overflow:hidden;border-radius:0}
 .sc-video{width:100%;height:100%;display:block;object-fit:cover}
 .sc-ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
-.sc-box-inner{position:relative;width:58%;max-width:300px;aspect-ratio:1/1;border:none}
-.sc-corner{position:absolute;width:46px;height:46px;border:0 solid #fff}
-.sc-tl{top:0;left:0;border-top-width:5px;border-left-width:5px}
-.sc-tr{top:0;right:0;border-top-width:5px;border-right-width:5px}
-.sc-bl{bottom:0;left:0;border-bottom-width:5px;border-left-width:5px}
-.sc-br{bottom:0;right:0;border-bottom-width:5px;border-right-width:5px}
-.sc-controls{padding:14px 2px 2px}
-.sc-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.sc-row:last-child{margin-bottom:0}
-.sc-label{font-weight:bold;color:#334155;white-space:nowrap;font-size:13px !important}
-.sc-input-range{flex:1;-webkit-appearance:none;appearance:none;height:4px;border-radius:4px;background:#e2e8f0;outline:none}
-.sc-input-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;background:#3b82f6;cursor:pointer}
-.sc-input-range::-moz-range-thumb{width:16px;height:16px;border:none;border-radius:50%;background:#3b82f6;cursor:pointer}
-.sc-zoom-val{color:#94a3b8;font-size:12px !important;white-space:nowrap;font-weight:bold}
-.sc-select{padding:7px 10px;border:1px solid #cbd5e1;border-radius:8px;font-size:12px !important;font-weight:bold;background:#fff;color:#0f172a;flex:0 1 auto;min-width:120px;max-width:200px}
-.sc-link{background:none;border:none;color:#334155;font-weight:bold;font-size:13px !important;cursor:pointer;padding:6px 4px;margin-left:auto;white-space:nowrap;text-decoration:none}
-.sc-link:hover{color:#1155cc;text-decoration:underline}
-.sc-cam-count{color:#94a3b8;font-weight:bold}
-.sc-btn{background:#1155cc;color:#fff;border:none;padding:10px 15px;border-radius:6px;font-size:14px !important;font-weight:bold;cursor:pointer}
-.sc-btn-torch{width:50px;height:50px;border-radius:50%;background:#2196f3;color:#fff;font-size:24px !important;display:flex;align-items:center;justify-content:center;margin-left:auto}
+.sc-box-inner{position:relative;width:60%;max-width:500px;aspect-ratio:1/1;border:none}
+.sc-frost{position:absolute;inset:0;background:rgba(255,255,255,.25);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);border-radius:0}
+.sc-corner{position:absolute;width:50px;height:50px;border:0 solid #fff;border-radius:0;z-index:5}
+.sc-tl{top:0;left:0;border-top-width:6px;border-left-width:6px}
+.sc-tr{top:0;right:0;border-top-width:6px;border-right-width:6px}
+.sc-bl{bottom:0;left:0;border-bottom-width:6px;border-left-width:6px}
+.sc-br{bottom:0;right:0;border-bottom-width:6px;border-right-width:6px}
+.sc-torch{position:absolute;bottom:30px;right:30px;width:56px;height:56px;border-radius:0;background:#2196f3;color:#fff;font-size:28px !important;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;box-shadow:0 4px 12px rgba(0,0,0,.4);border:none}
+.sc-torch:hover{background:#1976d2}
+.sc-torch:active{transform:scale(.95)}
+
+/* << SCANNER RESPONSIVE: tablet horizontal = video melebar, tablet vertikal = video memanjang */
+@media (orientation:landscape){
+  .sc-box-inner{width:50%;max-width:400px}
+}
+@media (orientation:portrait){
+  .sc-box-inner{width:70%;max-width:350px}
+}
+@media (max-width:700px){
+  .sc-box-inner{width:80%;max-width:300px}
+  .sc-torch{bottom:20px;right:20px;width:50px;height:50px;font-size:24px !important}
+}
+
 @media screen and (max-width: 700px) {
   .header-title { font-size: 14px !important; letter-spacing: 0.5px !important; line-height: 1.2 !important; margin-top: 2px; }
   .menu-btn { font-size: 20px !important; padding: 0 4px !important; line-height: 1 !important; }
@@ -153,21 +160,14 @@ a{text-decoration:none;color:inherit;}
         <video id="sc-video" playsinline autoplay muted class="sc-video"></video>
         <div class="sc-ov">
           <div class="sc-box-inner">
-            <span class="sc-corner sc-tl"></span><span class="sc-corner sc-tr"></span>
-            <span class="sc-corner sc-bl"></span><span class="sc-corner sc-br"></span>
+            <div class="sc-frost"></div>
+            <span class="sc-corner sc-tl"></span>
+            <span class="sc-corner sc-tr"></span>
+            <span class="sc-corner sc-bl"></span>
+            <span class="sc-corner sc-br"></span>
           </div>
         </div>
-      </div>
-      <div class="sc-controls">
-        <div class="sc-row">
-          <input type="range" id="sc-zoom" min="1" max="3" step="0.1" value="1" class="sc-input-range" oninput="onZoom(this);this.nextElementSibling.textContent=this.value+'x zoom'">
-          <span class="sc-zoom-val">1x zoom</span>
-        </div>
-        <div class="sc-row">
-          <span class="sc-label">Select Camera<span class="sc-cam-count"></span></span>
-          <select id="sc-cams" class="sc-select" onchange="onCamChange()"></select>
-          <button class="sc-link" onclick="stopScanner()">Stop Scanning</button>
-        </div>
+        <button class="sc-torch" onclick="toggleTorch()" title="Senter">&#128294;</button>
       </div>
     </div>
   </div>
@@ -209,7 +209,17 @@ function doLogin(){
   }, function(e){ msg.textContent="Error koneksi."; });
 }
 function enterApp(){ closeSidebar(); $id("user-nama").textContent=USER.nama; $id("login-area").classList.add("hidden"); $id("app").classList.remove("hidden"); loadPage("Dashboard"); }
-function logout(){ USER=null; sessionStorage.clear(); location.reload(); }
+function logout(){
+  USER=null;
+  try{ sessionStorage.clear(); }catch(e){}
+  try{ var c=$id("content"); if(c) c.innerHTML=""; }catch(e){}
+  var a=$id("app"); if(a) a.classList.add("hidden");
+  var l=$id("login-area"); if(l) l.classList.remove("hidden");
+  var u=$id("lg-user"); if(u) u.value="";
+  var p=$id("lg-pass"); if(p) p.value="";
+  var m=$id("lg-msg"); if(m) m.textContent="";
+  closeSidebar();
+}
 function closeSidebar(){ var sb=$id("sidebar"), ov=$id("overlay"); if(sb) sb.classList.remove("open"); if(ov) ov.classList.remove("show"); }
 function toggleSidebar(){ var sb=$id("sidebar"), ov=$id("overlay"); sb.classList.toggle("open"); ov.classList.toggle("show", sb.classList.contains("open")); }
 function inject(html, el){
@@ -264,7 +274,7 @@ function startScanner(deviceId){
   if(!navigator.mediaDevices){ alert("Kamera tidak didukung."); return; }
   var vid={width:{ideal:1280},height:{ideal:720}};
   if(deviceId) vid.deviceId={exact:deviceId}; else vid.facingMode="environment";
-  navigator.mediaDevices.getUserMedia({video:vid,audio:false}).then(function(stream){ scanStream=stream; var v=$id("sc-video"); v.srcObject=stream; v.play(); if(!scanCv) scanCv=document.createElement("canvas"); listCams(deviceId); $id("sc-modal").classList.add("show"); scanTimer=setInterval(scanTick,SCAN_MS); }).catch(function(e){ alert("Gagal buka kamera: "+e.message); });
+  navigator.mediaDevices.getUserMedia({video:vid,audio:false}).then(function(stream){ scanStream=stream; var v=$id("sc-video"); v.srcObject=stream; v.play(); if(!scanCv) scanCv=document.createElement("canvas"); $id("sc-modal").classList.add("show"); scanTimer=setInterval(scanTick,SCAN_MS); }).catch(function(e){ alert("Gagal buka kamera: "+e.message); });
 }
 function stopScanner(keepModal){ if(scanTimer){ clearInterval(scanTimer); scanTimer=null; } if(scanStream){ scanStream.getTracks().forEach(function(t){ t.stop(); }); scanStream=null; } var v=$id("sc-video"); if(v) v.srcObject=null; torchOn=false; if(!keepModal) $id("sc-modal").classList.remove("show"); }
 function scanTick(){
@@ -278,9 +288,6 @@ function scanTick(){
   var code=jsQR(cx.getImageData(0,0,SCAN_OUT,SCAN_OUT).data,SCAN_OUT,SCAN_OUT);
   if(code&&code.data){ scanSent=true; window.dispatchEvent(new CustomEvent("DMS_KPC_SCAN",{detail:{text:code.data}})); setTimeout(stopScanner, 300); }
 }
-function listCams(activeId){ navigator.mediaDevices.enumerateDevices().then(function(devs){ var sel=$id("sc-cams"); sel.innerHTML=""; devs.filter(function(d){return d.kind=="videoinput"}).forEach(function(c,i){ var o=document.createElement("option"); o.value=c.deviceId; o.textContent=c.label||("Cam "+(i+1)); if(activeId==c.deviceId) o.selected=true; sel.appendChild(o); }); }); }
-function onCamChange(){ startScanner($id("sc-cams").value); }
-function onZoom(el){ if(!scanStream) return; var t=scanStream.getVideoTracks()[0]; if(t.getCapabilities().zoom){ t.applyConstraints({advanced:[{zoom:Math.min(Math.max(Number(el.value),1),3)}]}); } }
 function toggleTorch(){ if(!scanStream) return; var t=scanStream.getVideoTracks()[0]; if(t.getCapabilities().torch){ torchOn=!torchOn; t.applyConstraints({advanced:[{torch:torchOn}]}); } }
 window.__SCANNER__ = { start: startScanner, stop: stopScanner };
 var GF_KEY="EUP_FONT";
