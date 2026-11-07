@@ -42,12 +42,12 @@ a{text-decoration:none;color:inherit;}
 @keyframes bspin{to{transform:rotate(360deg)}}
 .err-box{padding:20px;color:#c00;background:#ffebee;border:2px solid #c00;border-radius:8px;margin:20px;font-size:14px !important;}
 
-/* << SCANNER v3 (KARTU TENGAH, persis contoh): BUKAN full-screen. Kartu putih di tengah latar redup;
-   video menempel penuh LEBAR kartu (tanpa padding samping); kepala kartu = judul + ✕ (stop+tutup);
-   bawah video = strip putih kecil hanya IKON senter (tanpa teks zoom/select/stop).
-   Bingkai dalam = 4 siku putih tebal + lapisan frosted putih semi-transparan di dalamnya.
-   Semua sudut TAMPAK (border-radius 0). Orientasi: portrait -> kartu sempit & video tinggi;
-   landscape -> kartu lebar & video melebar. Logika scan (jsQR/decode/auto-fill) TIDAK berubah. */
+/* << SCANNER v4 (KARTU TENGAH): kartu putih di tengah latar redup; video full-lebar kartu; kepala = judul + ✕.
+   v4 DELTA: (1) tombol senter + strip bawah (sc-foot) DIBUANG seluruhnya; (2) BINGKAI DALAM dikecilkan
+   (portrait 52%/max260px, landscape 38%/max240px; siku 38px/5px). Bingkai = 4 siku putih tajam +
+   lapisan frosted putih semi-transparan di dalamnya. Semua sudut border-radius 0.
+   Orientasi: portrait -> kartu sempit & video tinggi; landscape -> kartu lebar & video melebar.
+   Logika scan (jsQR/decode/auto-fill KPC) TIDAK berubah. */
 .sc-modal{position:fixed;inset:0;background:rgba(15,23,42,.6);z-index:10000;display:none;align-items:center;justify-content:center;padding:16px}
 .sc-modal.show{display:flex}
 .sc-box{background:#fff;border-radius:0;width:min(92vw,440px);max-width:100%;max-height:92vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.35)}
@@ -59,26 +59,22 @@ a{text-decoration:none;color:inherit;}
 .sc-video-wrap{position:relative;width:100%;background:#000;overflow:hidden;border-radius:0;aspect-ratio:3/4;max-height:60vh}
 .sc-video{width:100%;height:100%;display:block;object-fit:cover}
 .sc-ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
-.sc-box-inner{position:relative;width:64%;max-width:320px;aspect-ratio:1/1;border:none}
+.sc-box-inner{position:relative;width:52%;max-width:260px;aspect-ratio:1/1;border:none}
 .sc-frost{position:absolute;inset:0;background:rgba(255,255,255,.28);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);border-radius:0}
-.sc-corner{position:absolute;width:46px;height:46px;border:0 solid #fff;border-radius:0;z-index:5}
-.sc-tl{top:0;left:0;border-top-width:6px;border-left-width:6px}
-.sc-tr{top:0;right:0;border-top-width:6px;border-right-width:6px}
-.sc-bl{bottom:0;left:0;border-bottom-width:6px;border-left-width:6px}
-.sc-br{bottom:0;right:0;border-bottom-width:6px;border-right-width:6px}
-.sc-foot{flex:0 0 auto;display:flex;justify-content:flex-end;align-items:center;padding:10px 14px;background:#fff}
-.sc-torch{width:52px;height:52px;border-radius:0;background:#2196f3;color:#fff;font-size:26px !important;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;box-shadow:0 3px 10px rgba(0,0,0,.25)}
-.sc-torch:hover{background:#1976d2}
-.sc-torch:active{transform:scale(.95)}
+.sc-corner{position:absolute;width:38px;height:38px;border:0 solid #fff;border-radius:0;z-index:5}
+.sc-tl{top:0;left:0;border-top-width:5px;border-left-width:5px}
+.sc-tr{top:0;right:0;border-top-width:5px;border-right-width:5px}
+.sc-bl{bottom:0;left:0;border-bottom-width:5px;border-left-width:5px}
+.sc-br{bottom:0;right:0;border-bottom-width:5px;border-right-width:5px}
 @media (orientation:landscape){
   .sc-box{width:min(92vw,640px)}
   .sc-video-wrap{aspect-ratio:16/9;max-height:70vh}
-  .sc-box-inner{width:46%;max-width:300px}
+  .sc-box-inner{width:38%;max-width:240px}
 }
 @media (orientation:portrait){
   .sc-box{width:min(92vw,440px)}
   .sc-video-wrap{aspect-ratio:3/4;max-height:60vh}
-  .sc-box-inner{width:64%;max-width:320px}
+  .sc-box-inner{width:52%;max-width:260px}
 }
 
 @media screen and (max-width: 700px) {
@@ -168,9 +164,6 @@ a{text-decoration:none;color:inherit;}
           </div>
         </div>
       </div>
-    </div>
-    <div class="sc-foot">
-      <button class="sc-torch" onclick="toggleTorch()" title="Senter">&#128294;</button>
     </div>
   </div>
 </div>
@@ -269,7 +262,7 @@ function loadMenu(name){
   }
   try{ Object.defineProperty(store,"run",{ get: makeRun, configurable:true }); } catch(e){ store.run=makeRun(); }
 })();
-var scanStream=null, scanTimer=null, scanSent=false, torchOn=false, scanCv=null;
+var scanStream=null, scanTimer=null, scanSent=false, scanCv=null;
 var SCAN_OUT=700, SCAN_CROP=0.74, SCAN_MS=250;
 function startScanner(deviceId){
   stopScanner(true); scanSent=false;
@@ -278,7 +271,7 @@ function startScanner(deviceId){
   if(deviceId) vid.deviceId={exact:deviceId}; else vid.facingMode="environment";
   navigator.mediaDevices.getUserMedia({video:vid,audio:false}).then(function(stream){ scanStream=stream; var v=$id("sc-video"); v.srcObject=stream; v.play(); if(!scanCv) scanCv=document.createElement("canvas"); $id("sc-modal").classList.add("show"); scanTimer=setInterval(scanTick,SCAN_MS); }).catch(function(e){ alert("Gagal buka kamera: "+e.message); });
 }
-function stopScanner(keepModal){ if(scanTimer){ clearInterval(scanTimer); scanTimer=null; } if(scanStream){ scanStream.getTracks().forEach(function(t){ t.stop(); }); scanStream=null; } var v=$id("sc-video"); if(v) v.srcObject=null; torchOn=false; if(!keepModal) $id("sc-modal").classList.remove("show"); }
+function stopScanner(keepModal){ if(scanTimer){ clearInterval(scanTimer); scanTimer=null; } if(scanStream){ scanStream.getTracks().forEach(function(t){ t.stop(); }); scanStream=null; } var v=$id("sc-video"); if(v) v.srcObject=null; if(!keepModal) $id("sc-modal").classList.remove("show"); }
 function scanTick(){
   if(scanSent||!scanStream||typeof jsQR==="undefined") return;
   var v=$id("sc-video"); if(!v.videoWidth||v.readyState<2) return;
@@ -290,7 +283,6 @@ function scanTick(){
   var code=jsQR(cx.getImageData(0,0,SCAN_OUT,SCAN_OUT).data,SCAN_OUT,SCAN_OUT);
   if(code&&code.data){ scanSent=true; window.dispatchEvent(new CustomEvent("DMS_KPC_SCAN",{detail:{text:code.data}})); setTimeout(stopScanner, 300); }
 }
-function toggleTorch(){ if(!scanStream) return; var t=scanStream.getVideoTracks()[0]; if(t.getCapabilities().torch){ torchOn=!torchOn; t.applyConstraints({advanced:[{torch:torchOn}]}); } }
 window.__SCANNER__ = { start: startScanner, stop: stopScanner };
 var GF_KEY="EUP_FONT";
 var GF_DEFAULT="'Arial', Helvetica, sans-serif";
