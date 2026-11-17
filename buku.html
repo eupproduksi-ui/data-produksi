@@ -10,21 +10,65 @@
     padding:0 16px;font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:bold;letter-spacing:1px;
     display:flex;align-items:center;gap:10px}
   .app-hd .u{margin-left:auto;background:#0d3f92;border-radius:16px;padding:6px 14px;font-size:13px;white-space:nowrap}
+  /* << LOGIN GATE */
+  .lp-login{position:fixed;inset:0;background:#f4f6f9;z-index:10000;display:flex;align-items:center;justify-content:center;padding:16px}
+  .lp-login.hidden{display:none}
+  .lp-box{background:#fff;border:1px solid #e3e7ee;border-radius:10px;padding:26px 22px;width:360px;max-width:100%;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.08)}
+  .lp-box h2{color:#1155cc;margin:0 0 4px;font-size:18px;font-family:Arial,sans-serif}
+  .lp-box p{color:#888;font-size:12px;font-weight:normal!important;margin:0 0 16px;font-family:Arial,sans-serif}
+  .lp-box input{width:100%;box-sizing:border-box;padding:12px;border:1px solid #cfd6e0;border-radius:8px;font-weight:bold;margin-bottom:12px;text-transform:uppercase;font-family:Arial,sans-serif}
+  .lp-box button{width:100%;padding:12px;background:#1155cc;color:#fff;border:none;border-radius:8px;font-weight:bold;letter-spacing:1px;cursor:pointer;font-family:Arial,sans-serif}
+  .lp-box button:active{background:#0d3f92}
+  /* << FIX v-standalone: aturan .hidden generik (section, errbar, login) — tanpa ini tampilan menumpuk & bar merah selalu muncul. */
+  .hidden{display:none !important}
 </style>
 </head>
 <body>
 <header class="app-hd">EUP GUDANG TAIPA <span class="u" id="uname">-</span></header>
 
+<!-- << LOGIN GATE: wajib isi nama operator + MASUK sebelum menu muncul. TIDAK ada ?user= lagi. -->
+<div id="fp-login" class="lp-login">
+  <div class="lp-box">
+    <h2>EUP GUDANG TAIPA</h2>
+    <p>Masuk untuk lanjut ke <b>BUKU PRODUKSI</b></p>
+    <input id="fp-login-nama" placeholder="NAMA OPERATOR" autocomplete="off"
+           onkeydown="if(event.key==='Enter')fpLogin()">
+    <button onclick="fpLogin()">MASUK</button>
+  </div>
+</div>
+
 <script>
-/* Identitas operator: buku.html?user=NAMA  (disimpan di HP biar tidak ketik ulang). */
-var q=new URLSearchParams(location.search);
-var u=(q.get("user")||localStorage.getItem("EUP_USER")||"-").toUpperCase();
-localStorage.setItem("EUP_USER",u);
-var USER={nama:u};
-document.getElementById("uname").textContent=u;
+/* << Identity HANYA dari login (localStorage), BUKAN dari URL. */
+var USER={nama:"-"};
+function fpSetUser(n){
+  USER={nama:n};
+  document.getElementById("uname").textContent=n;
+}
+function fpLogin(){
+  var n=(document.getElementById("fp-login-nama").value||"").trim().toUpperCase();
+  if(!n){ alert("Isi nama operator dulu."); return; }
+  localStorage.setItem("EUP_USER",n);
+  localStorage.setItem("EUP_LOGGED","1");
+  fpSetUser(n);
+  document.getElementById("fp-login").classList.add("hidden");
+  fpStartMenu();
+}
+function fpStartMenu(){ if(window.init_FormProduksi) window.init_FormProduksi(); }
+/* Gate saat halaman dibuka: kalau belum login -> tampilkan layar login, menu TIDAK di-init. */
+(function(){
+  var logged=localStorage.getItem("EUP_LOGGED")==="1";
+  var n=localStorage.getItem("EUP_USER")||"";
+  if(logged && n){
+    fpSetUser(n);
+    document.getElementById("fp-login").classList.add("hidden");
+    window.__RP_AUTO_START=true;
+  } else {
+    window.__RP_AUTO_START=false;
+  }
+})();
 </script>
 
-<!-- FP-CAM-FILE-START :: vFP-23 (standalone buku.html) -->
+<!-- FP-CAM-FILE-START :: vFP-23 (standalone buku.html + login gate + fix .hidden) -->
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
 <style>
 * { 
@@ -1099,8 +1143,8 @@ function fpCloseFS(){
 <!-- FP-CAM-FILE-END -->
 
 <script>
-/* Boot mandiri untuk standalone buku.html */
-if(window.init_FormProduksi) window.init_FormProduksi();
+/* Boot HANYA kalau sudah login; kalau belum, menu tidak di-init sampai fpLogin() sukses. */
+if(window.__RP_AUTO_START){ fpStartMenu(); }
 </script>
 </body>
 </html>
