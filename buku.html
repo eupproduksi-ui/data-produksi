@@ -6,38 +6,54 @@
 <title>BUKU PRODUKSI · EUP GUDANG TAIPA</title>
 <style>
   body{background:#f4f6f9;margin:0;padding-bottom:52px}
-  /* HEADER spt gambar: burger kiri + judul + chip nama kanan */
-  .app-hd{position:sticky;top:0;z-index:60;height:60px;box-sizing:border-box;background:#1155cc;color:#fff;
-    padding:0 14px;font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:bold;letter-spacing:1px;
-    display:flex;align-items:center;gap:12px}
-  .app-burger{flex:0 0 auto;width:40px;height:40px;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;justify-content:center;gap:5px;padding:0 6px}
-  .app-burger span{display:block;height:3px;background:#fff;border-radius:2px}
-  .app-title{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  /* HEADER disamakan dgn url utama: burger besar + judul besar */
+  .app-hd{position:sticky;top:0;z-index:60;height:64px;box-sizing:border-box;background:#1155cc;color:#fff;
+    padding:0 14px;font-family:Arial,Helvetica,sans-serif;font-size:20px;font-weight:bold;letter-spacing:1px;
+    display:flex;align-items:center;gap:14px}
+  .app-burger{flex:0 0 auto;width:44px;height:44px;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;justify-content:center;gap:6px;padding:0 6px}
+  .app-burger span{display:block;height:4px;background:#fff;border-radius:2px}
+  .app-title{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:inherit}
   .app-hd .u{flex:0 0 auto;background:#0d3f92;border-radius:16px;padding:6px 14px;font-size:13px;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
   .app-hd .u svg{width:14px;height:14px;fill:#fff}
+  @media (max-width:700px){
+    .app-hd{font-size:18px;height:60px;gap:10px}
+    .app-burger{width:40px;height:40px;gap:5px}
+    .app-burger span{height:3.5px}
+  }
   /* FOOTER spt gambar */
   .app-ft{position:fixed;left:0;right:0;bottom:0;z-index:40;background:#f4f6f9;border-top:1px solid #e3e7ee;color:#888;text-align:center;padding:11px 10px;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;letter-spacing:1px}
-  /* SIDEBAR isi hanya LOGOUT */
+  /* SIDEBAR: LOGOUT di BAWAH (margin-top:auto) spt url utama */
   .lp-side{position:fixed;left:0;top:0;bottom:0;width:230px;background:#fff;z-index:9990;transform:translateX(-105%);transition:transform .25s ease;box-shadow:2px 0 12px rgba(0,0,0,.15);display:flex;flex-direction:column}
   .lp-side.open{transform:translateX(0)}
-  .lp-side-hd{background:#1155cc;color:#fff;padding:16px 18px;font-family:Arial,sans-serif;font-weight:bold;letter-spacing:1px}
-  .lp-side-item{display:flex;align-items:center;gap:10px;background:none;border:none;border-bottom:1px solid #eef1f6;padding:14px 18px;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;color:#333;cursor:pointer;text-align:left}
+  .lp-side-hd{background:#1155cc;color:#fff;padding:18px;font-family:Arial,sans-serif;font-weight:bold;letter-spacing:1px;font-size:16px}
+  .lp-side-item{display:flex;align-items:center;gap:10px;background:none;border:none;padding:14px 18px;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;color:#333;cursor:pointer;text-align:left}
   .lp-side-item svg{width:18px;height:18px;fill:#d32f2f}
   .lp-side-item:active{background:#f2f6fc}
+  .lp-side-item.logout{margin-top:auto;border-top:1px solid #e3e7ee;background:#fafafa}
   .lp-side-mask{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:9989;display:none}
-  /* LOGIN spt gambar: latar abu, kartu silver, input underline ber-ikon, tombol gelap */
+  /* LOGIN spt gambar: latar abu, kartu silver, input underline TANPA putih */
   .lp-login{position:fixed;inset:0;background:#9b9b9b;z-index:10000;display:flex;align-items:center;justify-content:center;padding:16px}
   .lp-login.hidden{display:none}
-  .lp-box{background:linear-gradient(180deg,#e0e0e0,#c9c9c9);border-radius:14px;padding:34px 30px 30px;width:400px;max-width:100%;text-align:center;box-shadow:0 14px 40px rgba(0,0,0,.35)}
+  .lp-box{background:linear-gradient(180deg,#dcdcdc,#c6c6c6);border-radius:14px;padding:34px 30px 30px;width:400px;max-width:100%;text-align:center;box-shadow:0 14px 40px rgba(0,0,0,.35)}
   .lp-title{color:#555;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;letter-spacing:3px;margin-bottom:26px}
-  .lp-field{display:flex;align-items:center;gap:10px;border-bottom:1px solid #8f8f8f;margin-bottom:22px;padding:6px 2px}
+  .lp-field{display:flex;align-items:center;gap:10px;border-bottom:1px solid #8f8f8f;margin-bottom:22px;padding:6px 2px;background:transparent}
   .lp-field svg{flex:0 0 auto;width:18px;height:18px;fill:#6d6d6d}
-  .lp-field input{flex:1;min-width:0;background:transparent;border:none;outline:none;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;color:#333;padding:6px 0}
+  .lp-field input{flex:1;min-width:0;background:transparent !important;border:none;outline:none;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;color:#333 !important;padding:6px 0;box-shadow:none !important}
   .lp-field input::placeholder{color:#8a8a8a;font-weight:normal}
+  /* << hilangkan putih saat autofill browser (username/password tersimpan) */
+  .lp-field input:-webkit-autofill,
+  .lp-field input:-webkit-autofill:hover,
+  .lp-field input:-webkit-autofill:focus{
+    -webkit-box-shadow:0 0 0 1000px rgba(0,0,0,0) inset;
+    box-shadow:0 0 0 1000px rgba(0,0,0,0) inset;
+    -webkit-text-fill-color:#333;
+    caret-color:#333;
+    background-color:transparent !important;
+    transition:background-color 99999s ease-in-out 0s;
+  }
   .lp-btn{display:block;margin:6px auto 0;background:#3b3b3b;color:#fff;border:none;border-radius:6px;padding:13px 46px;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;letter-spacing:2px;cursor:pointer}
   .lp-btn:active{background:#222}
   .lp-err{margin-top:14px;color:#8e1b1b;font-family:Arial,sans-serif;font-size:12px;font-weight:bold;min-height:14px}
-  /* FIX wajib: .hidden generik */
   .hidden{display:none !important}
 </style>
 </head>
@@ -51,13 +67,13 @@
 
 <aside id="lp-side" class="lp-side">
   <div class="lp-side-hd">MENU</div>
-  <button class="lp-side-item" onclick="lpLogout()"><svg viewBox="0 0 24 24"><path d="M10 17v-2h5V9h-5V7l-4 4 4 4zm6-14H8c-1.1 0-2 .9-2 2v4h2V5h8v14H8v-4H6v4c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>LOGOUT</button>
+  <!-- LOGOUT di BAWAH sidebar (margin-top:auto) -->
+  <button class="lp-side-item logout" onclick="lpLogout()"><svg viewBox="0 0 24 24"><path d="M10 17v-2h5V9h-5V7l-4 4 4 4zm6-14H8c-1.1 0-2 .9-2 2v4h2V5h8v14H8v-4H6v4c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>LOGOUT</button>
 </aside>
 <div id="lp-side-mask" class="lp-side-mask" onclick="lpToggleSide()"></div>
 
 <footer class="app-ft">EUP GUDANG TAIPA</footer>
 
-<!-- LOGIN GATE (username + password) -->
 <div id="fp-login" class="lp-login">
   <div class="lp-box">
     <div class="lp-title">EUP GUDANG TAIPA</div>
@@ -76,10 +92,7 @@
 </div>
 
 <script>
-/* Identity hanya dari login (localStorage), BUKAN dari URL. */
 var USER={nama:"-"};
-/* OPSIONAL: kalau server TIDAK punya action "login", isi daftar ini utk login client-side.
-   Format: {"USERNAME":"password"}  contoh: {"DEDI":"1234"} . Kosongkan {} kalau mau murni server. */
 var LP_LOCAL_USERS={};
 function fpSetUser(n){
   USER={nama:n};
@@ -163,7 +176,7 @@ function fpStartMenu(){ if(window.init_FormProduksi) window.init_FormProduksi();
 .fp-scanicon{flex:0 0 auto;width:46px;height:46px;padding:0;border:1px solid #d9dee8;border-radius:8px;background:#fff;color:#1155cc;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;margin-left:8px}
 .fp-scanicon:active{transform:scale(.95);background:#e8eefb}
 .fp-scanicon svg{width:24px;height:24px;fill:currentColor}
-.fp-crumb{display:flex;align-items:center;gap:12px;margin-bottom:14px;position:sticky;top:60px;z-index:30;flex-wrap:wrap}
+.fp-crumb{display:flex;align-items:center;gap:12px;margin-bottom:14px;position:sticky;top:64px;z-index:30;flex-wrap:wrap}
 .fp-crumb button{background:#fff;border:1px solid #dfe4ec;border-radius:8px;padding:8px 14px;color:#1155cc;cursor:pointer;}
 .fp-crumb span{color:#1155cc;letter-spacing:1px;text-transform:uppercase;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .fp-tot-inline{display:inline}
@@ -262,7 +275,7 @@ body.fp-nofab .fp-fab{display:none !important}
   #fp-view-form .fp-frow > label{flex:0 0 100%;width:auto;min-width:0;white-space:normal;margin:0}
   #fp-view-form .fp-frow > input,#fp-view-form .fp-frow > select{flex:1 1 auto;min-width:0;width:auto}
   #fp-view-form .fp-frow > .fp-scanicon{flex:0 0 auto;margin-left:0}
-  .fp-crumb{gap:8px}
+  .fp-crumb{gap:8px;top:60px}
   .fp-crumb button{padding:6px 10px;font-size:12px!important}
   .fp-btn-md{padding:6px 10px;font-size:12px!important}
   .fp-btn-md svg{width:12px;height:12px}
