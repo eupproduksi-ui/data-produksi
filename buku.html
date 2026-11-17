@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BUKU PRODUKSI · EUP GUDANG TAIPA</title>
+<style>
+  body{background:#f4f6f9;margin:0}
+  .app-hd{position:sticky;top:0;z-index:60;height:60px;box-sizing:border-box;background:#1155cc;color:#fff;
+    padding:0 16px;font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:bold;letter-spacing:1px;
+    display:flex;align-items:center;gap:10px}
+  .app-hd .u{margin-left:auto;background:#0d3f92;border-radius:16px;padding:6px 14px;font-size:13px;white-space:nowrap}
+</style>
+</head>
+<body>
+<header class="app-hd">EUP GUDANG TAIPA <span class="u" id="uname">-</span></header>
+
+<script>
+/* Identitas operator: buku.html?user=NAMA  (disimpan di HP biar tidak ketik ulang). */
+var q=new URLSearchParams(location.search);
+var u=(q.get("user")||localStorage.getItem("EUP_USER")||"-").toUpperCase();
+localStorage.setItem("EUP_USER",u);
+var USER={nama:u};
+document.getElementById("uname").textContent=u;
+</script>
+
+<!-- FP-CAM-FILE-START :: vFP-23 (standalone buku.html) -->
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+<style>
+* { 
+  box-sizing:border-box; 
+  margin:0; 
+  padding:0; 
+  font-family: 'Arial', Helvetica, sans-serif !important; 
+  font-size: 14px !important; 
+  font-weight: bold !important; 
+  -webkit-font-smoothing: antialiased; 
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+.fp-card{background:#fff;border:1px solid #e3e7ee;border-radius:8px;padding:14px;margin-bottom:14px}
+.fp-primary{background:#1155cc;color:#fff;border:none;border-radius:6px;padding:12px 22px;font-weight:bold;letter-spacing:1px;cursor:pointer}
+.fp-full{width:100%}
+.fp-outline{background:#fff;color:#1155cc;border:1px solid #1155cc;border-radius:6px;padding:12px 20px;font-weight:bold;cursor:pointer}
+.fp-green{background:#22a555;color:#fff;border:none;border-radius:6px;padding:12px 22px;font-weight:bold;letter-spacing:1px;cursor:pointer}
+.fp-gray{background:#e3e7ee;color:#333;border:none;border-radius:6px;padding:12px 22px;font-weight:bold;letter-spacing:1px;cursor:pointer}
+.fp-camera{background:#0F9488;color:#fff;border:none;border-radius:6px;padding:12px 22px;font-weight:bold;letter-spacing:1px;cursor:pointer}
+
+.fp-print-foot button { font-size: 12px !important; padding: 8px 14px !important; min-width: auto !important; letter-spacing: 0.5px !important; }
+.fp-print-foot button svg { width: 14px !important; height: 14px !important; vertical-align: middle; margin-right: 4px; }
+
+.fp-delbtn { background: #ffebee; border: none; border-radius: 6px; width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; }
+.fp-delbtn:hover { background: #ffcdd2; transform: scale(1.1); }
+.fp-delbtn:active { transform: scale(0.95); }
+.fp-delbtn svg { width: 18px; height: 18px; fill: #d32f2f; }
+
+.fp-scanicon{flex:0 0 auto;width:46px;height:46px;padding:0;border:1px solid #d9dee8;border-radius:8px;background:#fff;color:#1155cc;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;margin-left:8px}
+.fp-scanicon:active{transform:scale(.95);background:#e8eefb}
+.fp-scanicon svg{width:24px;height:24px;fill:currentColor}
+.fp-crumb{display:flex;align-items:center;gap:12px;margin-bottom:14px;position:sticky;top:60px;z-index:30;flex-wrap:wrap}
+.fp-crumb button{background:#fff;border:1px solid #dfe4ec;border-radius:8px;padding:8px 14px;color:#1155cc;cursor:pointer;}
+.fp-crumb span{color:#1155cc;letter-spacing:1px;text-transform:uppercase;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fp-tot-inline{display:inline}
+.fp-total-badge{display:none}
+.fp-crumb-row2{display:contents}
+.fp-crumb-date{display:inline}
+.fp-btn-md{padding:8px 14px;font-size:13px!important;border-radius:8px;font-weight:bold;letter-spacing:.5px;cursor:pointer;border:1px solid #1155cc;background:#fff;color:#1155cc;flex:0 0 auto;white-space:nowrap}
+.fp-btn-md:active{background:#e8eefb}
+.fp-btn-md svg{width:14px;height:14px;vertical-align:-2px;margin-right:4px}
+.fp-mesin-grid{display:flex;flex-direction:column;gap:10px}
+.fp-mesin-card{background:#fff;border:1px solid #dfe4ec;border-radius:8px;padding:16px 20px;text-align:left;color:#1155cc;font-weight:bold;cursor:pointer}
+.fp-mesin-card:hover{background:#1155cc;color:#fff}
+.fp-bulan{background:#1155cc;color:#fff;border-radius:6px;padding:9px 14px;font-weight:bold;margin:16px 0 10px}
+.fp-tgl-row{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid #dfe4ec;border-radius:8px;padding:16px;margin-bottom:10px;cursor:pointer}
+.fp-tgl-row:hover{background:#eef3fb}
+.fp-tgl-row .t{font-weight:bold;}
+.fp-tgl-row .tot{background:#e8eefb;color:#1155cc;border-radius:6px;padding:4px 10px;font-weight:bold;}
+.fp-tgl-row .chev{margin-left:auto;color:#1155cc}
+
+.fp-fab { position: fixed !important; right: 24px !important; bottom: 24px !important; width: 58px !important; height: 58px !important; border-radius: 50% !important; background: #1155cc !important; color: #fff !important; border: none !important; box-shadow: 0 4px 14px rgba(0,0,0,.35) !important; z-index: 9999 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; line-height: 1 !important; font-size: 32px !important; font-weight: normal !important; padding: 0 !important; outline: none !important; }
+.fp-fab:active { background: #0d3f92 !important; transform: scale(0.95) !important; }
+body.fp-nofab .fp-fab{display:none !important}
+
+.fp-frow{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.fp-frow label{width:150px;font-weight:bold;color:#222;letter-spacing:1px}
+.fp-frow input,.fp-frow select{flex:1;padding:12px;border:1px solid #cfd6e0;border-radius:6px;}
+.fp-frow input[readonly]{background:#eceff3;color:#555}
+.fp-addbtn{flex:0 0 54px;width:54px;height:46px;background:#e8eefb;color:#1155cc;border:1px dashed #1155cc;border-radius:8px;font-weight:bold;cursor:pointer;line-height:1}
+.fp-addbtn:hover{background:#1155cc;color:#fff}
+.fp-gap{flex:0 0 54px;width:54px}
+.fp-form-foot{display:flex;justify-content:space-between;align-items:center;background:#e5e9f0;padding:12px;border-radius:8px;margin-top:10px}
+.fp-table{width:100%;border-collapse:collapse;background:#fff;margin:14px 0}
+.fp-th{background:#1155cc;color:#fff;padding:9px;border:1px solid #0d3f92;text-align:center}
+.fp-td{padding:8px;border:1px solid #e3e7ee;text-align:center;vertical-align:top}
+.fp-merge{background:#f7f9fc;color:#1155cc;font-weight:bold;vertical-align:middle;text-align:center}
+.fp-edit{cursor:pointer;background:#fff}
+.fp-edit:hover{background:#e8eefb;outline:2px solid #1155cc33}
+.fp-cellin{width:90px;padding:4px 6px;border:1px solid #1155cc;border-radius:4px;text-align:center;background:#fff}
+.fp-det-head{display:flex;gap:10px;align-items:center;margin-bottom:12px}
+.fp-det-no{background:#1155cc;color:#fff;border-radius:16px;padding:7px 16px;font-weight:bold}
+.fp-icobtn{flex:0 0 auto;width:46px;height:42px;background:#fff;border:1px solid #dfe4ec;border-radius:8px;color:#1155cc;cursor:pointer;font-weight:bold;line-height:1;display:flex;align-items:center;justify-content:center}
+.fp-icobtn svg{width:20px;height:20px;fill:#1155cc}
+.fp-primary svg{width:16px;height:16px;fill:#fff;vertical-align:-3px;margin-right:6px}
+.fp-icobtn:active{background:#e8eefb}
+.fp-det-body{display:flex;gap:18px;flex-wrap:wrap}
+.fp-det-left{width:320px}
+.fp-qrrow{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.fp-qr{background:#fff;border:1px solid #e3e7ee;padding:6px;display:inline-block}
+.fp-kpc{font-weight:bold;margin:0}
+.fp-inf{margin-bottom:6px}
+.fp-inf b{display:inline-block;width:110px;color:#555;font-weight:bold}
+.fp-modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:100;display:flex;align-items:center;justify-content:center;padding:16px}
+.fp-modal-box{background:#fff;border-radius:10px;width:760px;max-width:100%;max-height:90vh;overflow:auto;padding:22px;position:relative}
+.fp-modal-box h3{color:#1155cc;margin:0 0 4px}
+.fp-modal-box p{color:#666;margin:0 0 12px}
+.fp-x{position:absolute;top:14px;right:14px;background:#eee;border:none;border-radius:50%;width:36px;height:36px;cursor:pointer;z-index:5}
+.fp-ckrow{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #e3e7ee;border-radius:6px;padding:12px 14px;margin-bottom:8px;font-weight:bold;cursor:pointer}
+.fp-ckrow input{width:22px;height:22px;accent-color:#1155cc}
+.fp-note{background:#f4f6f9;border:1px dashed #cfd6e0;border-radius:6px;padding:10px 12px;color:#666;margin-bottom:12px}
+.fp-print-foot{display:flex;justify-content:flex-end;gap:10px;margin-top:14px}
+.fp-errbar{position:fixed;left:0;right:0;bottom:0;background:#c00;color:#fff;padding:10px 14px;z-index:130;display:flex;gap:8px;align-items:center;font-weight:bold}
+.fp-errbar span{flex:1;}
+.fp-errbar button{background:#fff;color:#c00;border:none;border-radius:6px;padding:8px 12px;font-weight:bold;cursor:pointer}
+
+.fp-toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:120;padding:12px 20px;border-radius:8px;font-weight:bold;letter-spacing:.5px;box-shadow:0 6px 18px rgba(0,0,0,.18);max-width:92%;text-align:center}
+.fp-toast.hidden{display:none}
+.fp-toast-ok{background:#e8f5e9;color:#1b7e43;border:1px solid #1b7e43}
+.fp-toast-err{background:#fdecea;color:#b00020;border:1px solid #b00020}
+
+.fp-hint-retro{color:#0d47a1;background:#e3f2fd;border:1px solid #90caf9;border-radius:6px;padding:8px 12px;font-weight:normal!important;font-size:12px!important;margin-bottom:12px;line-height:1.4}
+
+.fp-skel{background:#fff;border:1px solid #e3e7ee;border-radius:8px;padding:14px;margin-bottom:14px}
+.fp-skel-line{height:14px;border-radius:4px;background:#eef1f6;margin:9px 0;animation:fpPulse 1.1s ease-in-out infinite}
+.fp-skel-line.w40{width:40%}.fp-skel-line.w60{width:60%}.fp-skel-line.w80{width:80%}
+.fp-skel-qr{flex:0 0 auto;width:86px;height:86px;border-radius:6px;background:#eef1f6;animation:fpPulse 1.1s ease-in-out infinite}
+@keyframes fpPulse{0%,100%{opacity:.45}50%{opacity:.9}}
+
+.fp-fs-modal{position:fixed;inset:0;background:#f4f6f9;z-index:9999;overflow:auto;display:none;padding:16px}
+.fp-fs-modal.show{display:block}
+.fp-fs-inner{max-width:900px;margin:0 auto;padding-bottom:40px}
+.fp-fs-close{position:fixed;top:12px;right:12px;background:#fff;border:1px solid #dfe4ec;border-radius:50%;width:44px;height:44px;color:#1155cc;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);z-index:10000;display:flex;align-items:center;justify-content:center}
+.fp-fs-close:active{background:#e8eefb}
+@media (max-width:700px){
+  .fp-frow{flex-wrap:nowrap;gap:10px}
+  .fp-frow label{width:110px;min-width:110px;margin-bottom:0;white-space:nowrap}
+  .fp-frow input,.fp-frow select{flex:1 1 auto;min-width:0;width:auto}
+  .fp-gap{flex:0 0 46px;width:46px;}
+  .fp-addbtn{flex:0 0 46px;width:46px;height:42px;}
+  .fp-det-left{width:100%}
+  .fp-modal-box{padding:14px}
+  .fp-table{display:block;overflow-x:auto;white-space:nowrap}
+  .fp-form-foot{gap:8px}
+  .fp-primary,.fp-outline{padding:12px 14px;}
+  .fp-print-foot button { font-size: 11px !important; padding: 6px 10px !important; }
+  #fp-view-form .fp-frow{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin-bottom:12px}
+  #fp-view-form .fp-frow > label{flex:0 0 100%;width:auto;min-width:0;white-space:normal;margin:0}
+  #fp-view-form .fp-frow > input,#fp-view-form .fp-frow > select{flex:1 1 auto;min-width:0;width:auto}
+  #fp-view-form .fp-frow > .fp-scanicon{flex:0 0 auto;margin-left:0}
+  .fp-crumb{gap:8px}
+  .fp-crumb button{padding:6px 10px;font-size:12px!important}
+  .fp-btn-md{padding:6px 10px;font-size:12px!important}
+  .fp-btn-md svg{width:12px;height:12px}
+  .fp-crumb.fp-2row .fp-crumb-row2{display:flex;flex:0 0 100%;align-items:center;gap:8px;}
+  .fp-crumb-date{display:none}
+  .fp-crumb span#fp-crumb-total{flex:0 0 auto;overflow:visible;}
+  .fp-tot-inline{display:none}
+  .fp-total-badge{display:inline-flex;align-items:center;background:#e8eefb;color:#1155cc;border-radius:6px;padding:6px 10px;font-size:12px!important;font-weight:bold;flex:0 0 auto;letter-spacing:.5px}
+}
+</style>
+
+<div id="fp-toast" class="fp-toast hidden"></div>
+
+<div class="fp-card fp-crumb">
+  <button onclick="fpBack()">&#9664;</button>
+  <span id="fp-crumb">PILIH MESIN</span>
+  <span class="fp-crumb-row2">
+    <span id="fp-crumb-total" class="fp-total-badge" style="display:none"></span>
+    <button id="fp-btn-pilih-tgl" class="fp-btn-md" style="display:none;position:relative;overflow:hidden">
+      <svg viewBox="0 0 24 24" fill="#1155cc"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg><span id="fp-cal-label">PILIH TANGGAL</span>
+      <input type="date" id="fp-cal-input" onclick="fpCalClick(event)" onchange="fpCalPick(this.value)"
+             style="position:absolute;left:0;top:0;width:100%;height:100%;opacity:0;border:0;padding:0;margin:0;cursor:pointer">
+    </button>
+    <button id="fp-btn-add" class="fp-btn-md" style="display:none" onclick="fpOpenForm()">+ADD</button>
+  </span>
+</div>
+
+<section id="fp-view-mesin"><div class="fp-mesin-grid" id="fp-mesin-grid"></div></section>
+
+<section id="fp-view-tanggal" class="hidden">
+  <div id="fp-tgl-list"></div>
+</section>
+
+<section id="fp-view-form" class="hidden">
+  <div class="fp-card">
+    <h3 style="color:#1155cc;border-bottom:2px solid #1155cc;padding-bottom:10px;margin-bottom:16px">INPUT BUKU PRODUKSI</h3>
+    <div class="fp-frow"><label>NO</label><input id="fp-no" readonly></div>
+    <div class="fp-frow"><label>TANGGAL</label><input id="fp-tgl" type="date" onchange="fpRefreshNo()"></div>
+    <div class="fp-frow"><label>OPERATOR</label><input id="fp-op" readonly></div>
+    <div class="fp-frow"><label>MESIN</label><input id="fp-mesin" readonly></div>
+    <div class="fp-frow"><label>PRODUK</label><select id="fp-produk"><option value="">Pilih Produk</option></select></div>
+    <div class="fp-frow">
+      <label>KPC</label>
+      <input id="fp-kpc" placeholder="Isi manual / scan QR">
+      <button type="button" class="fp-scanicon" onclick="fpOpenScan()" title="Scan QR KPC">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h8v8H3V3zm2 2v4h4V5H5z"/><path d="M13 3h8v8h-8V3zm2 2v4h4V5h-4z"/><path d="M3 13h8v8H3v-8zm2 2v4h4v-4H5z"/><path d="M13 13h3v3h-3z"/><path d="M18 13h3v3h-3z"/><path d="M13 18h3v3h-3z"/><path d="M18 18h3v3h-3z"/></svg>
+      </button>
+    </div>
+    <div class="fp-frow"><label>PANJANG COIL</label><input id="fp-coil" type="text" inputmode="numeric" oninput="fpSetNum1(this,'coil')" onchange="fpSetNum1(this,'coil')"></div>
+    <div id="fp-summary"></div>
+    <div class="fp-form-foot">
+      <button class="fp-outline" id="fp-sbm" onclick="fpSimpan()">SIMPAN</button>
+      <button class="fp-outline" onclick="fpOpenModal()">+ADD</button>
+    </div>
+  </div>
+</section>
+
+<section id="fp-view-detail" class="hidden">
+  <div id="fp-detail-box"></div>
+</section>
+
+<div id="fp-modal" class="fp-modal hidden">
+  <div class="fp-modal-box">
+    <button class="fp-x" onclick="fpCloseModal()">&#10005;</button>
+    <h3>INPUTAN PRODUKSI</h3>
+    <p>Input data produksi</p>
+    <div id="fp-modal-rows"></div>
+    <div style="height:12px"></div>
+    <button class="fp-outline fp-full" onclick="fpSimpanInputan()">SIMPAN INPUTAN</button>
+  </div>
+</div>
+
+<div id="fp-print-modal" class="fp-modal hidden">
+  <div class="fp-modal-box">
+    <button class="fp-x" onclick="fpClosePrint()">&#10005;</button>
+    <h3>PILIH KOLOM CETAK</h3>
+    <div class="fp-note">Wajib ikut cetak: QR, KPC, NO, Tanggal, Operator, Mesin, Nama Produk. Silakan centang kolom data di bawah ini:</div>
+    <div id="fp-print-list"></div>
+    <div id="fp-foto-info" class="fp-note hidden"></div>
+    <input type="file" id="fp-file" accept="image/*" style="display:none" onchange="fpOnFile(this)">
+    <input type="file" id="fp-file-cam" accept="image/*" capture="environment" style="display:none" onchange="fpOnFile(this)">
+    <div class="fp-print-foot">
+      <button class="fp-primary" id="fp-dlbtn" onclick="fpDoDownload()"><svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>DOWNLOAD</button>
+      <button class="fp-camera" onclick="fpCamera()">CAMERA</button>
+      <button class="fp-green" onclick="fpGaleri()">GALERI</button>
+      <button class="fp-gray" onclick="fpClosePrint()">BATAL</button>
+    </div>
+  </div>
+</div>
+
+<div id="fp-fs-modal" class="fp-fs-modal">
+  <button class="fp-fs-close" onclick="fpCloseFS()" title="Tutup">&#10005;</button>
+  <div id="fp-fs-inner" class="fp-fs-inner"></div>
+</div>
+
+<div id="fp-scan-modal" class="fp-modal hidden">
+  <div class="fp-modal-box" style="width:520px;padding:0;overflow:hidden">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:#fff;border-bottom:1px solid #e3e7ee">
+      <div style="font-weight:bold;color:#112233;letter-spacing:.5px">Add KPC</div>
+      <button style="background:#eee;border:none;border-radius:50%;width:36px;height:36px;cursor:pointer" onclick="fpCloseScan()">&#10005;</button>
+    </div>
+    <div style="padding:12px">
+      <div style="position:relative;background:#000;border-radius:8px;overflow:hidden">
+        <video id="fp-scan-video" playsinline autoplay muted style="width:100%;max-height:52vh;display:block;object-fit:cover"></video>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none">
+          <div style="position:relative;width:64%;max-width:300px;aspect-ratio:1/1;background:rgba(255,255,255,.06);box-shadow:0 0 0 9999px rgba(0,0,0,.35)">
+            <span style="position:absolute;width:34px;height:34px;border:0 solid #fff;top:0;left:0;border-top-width:5px;border-left-width:5px"></span>
+            <span style="position:absolute;width:34px;height:34px;border:0 solid #fff;top:0;right:0;border-top-width:5px;border-right-width:5px"></span>
+            <span style="position:absolute;width:34px;height:34px;border:0 solid #fff;bottom:0;left:0;border-bottom-width:5px;border-left-width:5px"></span>
+            <span style="position:absolute;width:34px;height:34px;border:0 solid #fff;bottom:0;right:0;border-bottom-width:5px;border-right-width:5px"></span>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:12px">
+        <input id="fp-scan-zoom" type="range" min="1" max="3" step="0.1" value="1" oninput="fpZoomChange(this)" style="flex:1">
+        <span id="fp-scan-zoomlbl" style="font-weight:bold;color:#333;white-space:nowrap">1x zoom</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap">
+        <span style="font-weight:bold;color:#333;white-space:nowrap">Select Camera (<span id="fp-scan-camcount">0</span>)</span>
+        <select id="fp-scan-cams" onchange="fpCamChange()" style="flex:1;min-width:140px;padding:8px;border:1px solid #cfd6e0;border-radius:6px;font-weight:bold"></select>
+        <button type="button" onclick="fpCloseScan()" style="background:none;border:none;color:#1155cc;font-weight:bold;cursor:pointer;white-space:nowrap">Stop Scanning</button>
+      </div>
+      <div style="display:flex;justify-content:flex-end;margin-top:10px">
+        <button type="button" onclick="fpToggleTorch()" title="Lampu senter" style="width:44px;height:44px;border-radius:10px;background:#2196f3;color:#fff;cursor:pointer">&#128294;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="fp-errbar" class="fp-errbar hidden">
+  <span id="fp-errtxt"></span>
+  <button onclick="fpRetry()">COBA LAGI</button>
+  <button onclick="fpBackup()">CADANGAN</button>
+  <button onclick="fpHideErr()" style="background:none;color:#fff;">&#10005;</button>
+</div>
+
+<script>
+var fpMESIN=null, fpKEY=null, fpROWS=[], fpSTRUCT=null, fpDATA={}, fpCOIL="";
+var fpCARDS=[], fpEDIT=null, fpPRINTCARD=null, fpPRINTCOLS={};
+var fpCACHE={}, fpLAST=null;
+var fpGEN=0;
+var fpDLCACHE={};
+var fpDLBusy=false;
+var FP_LS="EUP_FP_";
+var FP_API=(typeof API_URL!=="undefined"&&API_URL)?API_URL:"https://script.google.com/macros/s/AKfycbwcKOfb6y5USg7k5oh8oI9jE4T91R8TjBjv6wyuzarEQwk-l95j_RPp9uHsBaD2TbWnbw/exec";
+function fpIsGas(){ return !!(window.google && google.script && google.script.run); }
+function fpUserNama(){ return (typeof USER!=="undefined" && USER && USER.nama)? USER.nama : "-"; }
+function fpFmt(n){ return Number(n||0).toLocaleString("id-ID"); }
+function fpEl(id){ return document.getElementById(id); }
+function fpDispDate(key){ return String(key).split("-").reverse().join("/"); }
+function fpEsc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function fpToday(){ var d=new Date(); return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2); }
+function fpCrumbDetail(key, tot){
+  var base="DATA PRODUKSI "+fpEsc(fpMESIN)+" <span class=\"fp-crumb-date\">"+fpEsc(fpDispDate(key))+"</span>";
+  var has=(tot!==null && tot!==undefined);
+  fpEl("fp-crumb").innerHTML = base + (has?' <span class="fp-tot-inline">· '+fpFmt(tot)+'</span>':'');
+  var b=fpEl("fp-crumb-total");
+  if(b){ b.style.display=""; b.textContent=fpFmt(has?tot:0); }
+  fpUpdateCalLabel();
+}
+function fpHideTotalBadge(){ var b=fpEl("fp-crumb-total"); if(b){ b.style.display="none"; b.textContent=""; } }
+function fpUpdateCalLabel(){
+  var el=fpEl("fp-cal-label"); if(!el) return;
+  var inDetail=!fpEl("fp-view-detail").classList.contains("hidden");
+  el.textContent = inDetail ? fpDispDate(fpKEY||fpToday()) : "PILIH TANGGAL";
+}
+
+var fpToastTimer=null;
+function fpToast(msg,type){
+  var t=fpEl("fp-toast"); if(!t) return;
+  t.textContent=msg;
+  t.className="fp-toast "+(type==="err"?"fp-toast-err":"fp-toast-ok");
+  if(fpToastTimer){ clearTimeout(fpToastTimer); fpToastTimer=null; }
+  fpToastTimer=setTimeout(function(){ t.className="fp-toast hidden"; fpToastTimer=null; }, type==="err"?4000:2200);
+}
+
+function fpLsSet(k,v){ try{ localStorage.setItem(FP_LS+k, JSON.stringify({t:Date.now(),v:v})); }catch(e){} }
+function fpLsGet(k){ try{ var r=localStorage.getItem(FP_LS+k); if(!r) return null; var o=JSON.parse(r); return o?o.v:null; }catch(e){ return null; } }
+function fpLsClearMachine(m){
+  try{
+    var kill=[];
+    for(var i=0;i<localStorage.length;i++){ var key=localStorage.key(i); if(!key) continue;
+      if(key.indexOf(FP_LS+"tgl:"+m)===0 || key.indexOf(FP_LS+"det:"+m+":")===0) kill.push(key); }
+    for(var j=0;j<kill.length;j++){ try{ localStorage.removeItem(kill[j]); }catch(e2){} }
+  }catch(e){}
+}
+function fpCacheGet(k){
+  var c=fpCACHE[k];
+  if(c && (Date.now()-c.t)<=300000) return c.v;
+  var p=fpLsGet(k);
+  if(p){ fpCACHE[k]={t:Date.now(), v:p}; return p; }
+  if(c) delete fpCACHE[k];
+  return null;
+}
+function fpCacheIsFresh(k, maxAge){
+  maxAge = maxAge || 60000;
+  var c=fpCACHE[k];
+  if(!c || !c.t) return false;
+  return (Date.now() - c.t) < maxAge;
+}
+function fpCacheSet(k,v){ fpCACHE[k]={t:Date.now(),v:v}; fpLsSet(k,v); }
+function fpCacheClearMachine(m){
+  for(var k in fpCACHE){ if(k.indexOf("tgl:"+m)===0 || k.indexOf("det:"+m+":")===0){ delete fpCACHE[k]; } }
+  for(var dk in fpDLCACHE){ if(dk.indexOf(m+"|")===0) delete fpDLCACHE[dk]; }
+  fpLsClearMachine(m);
+}
+
+function fpShowErr(msg){ fpEl("fp-errtxt").textContent=msg; fpEl("fp-errbar").classList.remove("hidden"); }
+function fpHideErr(){ fpEl("fp-errbar").classList.add("hidden"); }
+function fpRetry(){ fpHideErr(); if(fpLAST){ fpRun(fpLAST.fn, fpLAST.arg, fpLAST.cb); } }
+function fpBackup(){ window.open(FP_API, "_blank"); }
+
+function fpRun(fn, arg, cb, _retry){
+  fpLAST={fn:fn,arg:arg,cb:cb};
+  if(fpIsGas()){
+    google.script.run.withSuccessHandler(cb).withFailureHandler(function(e){ fpShowErr("Gagal: "+e.message); })[fn].apply(null,arg);
+    return;
+  }
+  var params={action:fn};
+  if(fn==="getProduk"){ params.tipe=arg[0]; }
+  if(fn==="getNextNo"){ params.mesin=arg[0]; params.iso=arg[1]; }
+  if(fn==="getListTanggal"){ params.mesin=arg[0]; params.userNama=arg[1]; }
+  if(fn==="getDetail"){ params.mesin=arg[0]; params.key=arg[1]; params.userNama=arg[2]; }
+  if(fn==="simpanPaket"){ params.p=arg[0]; params.userNama=arg[1]; }
+  if(fn==="updatePaket"){ params.p=arg[0]; params.key=arg[1]; params.no=arg[2]; params.userNama=arg[3]; }
+  if(fn==="hapusPaket"){ params.mesin=arg[0]; params.key=arg[1]; params.no=arg[2]; params.userNama=arg[3]; }
+  fetch(FP_API,{method:"POST",body:JSON.stringify(params)})
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+      if(res && res.ok===false){ fpShowErr(res.msg||"Gagal memproses."); return; }
+      if(res && res.ok===true && res.data!==undefined){ cb(res.data); return; }
+      cb(res);
+    })
+    .catch(function(e){
+      if(!_retry){ setTimeout(function(){ fpRun(fn,arg,cb,true); },700); return; }
+      fpShowErr("Sambungan data terputus. Coba lagi atau buka cadangan.");
+    });
+}
+
+function fpMakeQr(text, px){
+  if(typeof qrcode==="undefined") return null;
+  try{
+    var qr=qrcode(0,"M"); qr.addData(text); qr.make();
+    var n=qr.getModuleCount(), quiet=2, total=n+quiet*2;
+    var scale=Math.max(1, Math.floor(px/total));
+    var cv=document.createElement("canvas"); cv.width=total*scale; cv.height=total*scale;
+    var x=cv.getContext("2d");
+    x.fillStyle="#fff"; x.fillRect(0,0,cv.width,cv.height);
+    x.fillStyle="#000";
+    for(var r=0;r<n;r++){ for(var c=0;c<n;c++){ if(qr.isDark(r,c)) x.fillRect((c+quiet)*scale,(r+quiet)*scale,scale,scale); } }
+    return cv;
+  }catch(e){ return null; }
+}
+function fpQrDrawable(c, px, cb){
+  if(c._qrcv){ cb(c._qrcv); return; }
+  var cv=fpMakeQr(c.kpc, px);
+  if(cv){ c._qrcv=cv; cb(cv); return; }
+  var im=new Image(); im.crossOrigin="anonymous";
+  im.onload=function(){ cb(im); }; im.onerror=function(){ cb(null); };
+  im.src="https://api.qrserver.com/v1/create-qr-code/?size="+px+"x"+px+"&data="+encodeURIComponent(c.kpc);
+}
+
+function fpShow(v){
+  ["fp-view-mesin","fp-view-tanggal","fp-view-form","fp-view-detail"].forEach(function(x){ fpEl(x).classList.add("hidden"); });
+  fpEl(v).classList.remove("hidden");
+  var showBtn=((v==="fp-view-detail"||v==="fp-view-tanggal") && fpMESIN);
+  var b1=fpEl("fp-btn-pilih-tgl"); if(b1) b1.style.display=showBtn?"":"none";
+  var b2=fpEl("fp-btn-add"); if(b2) b2.style.display=showBtn?"":"none";
+  var cb=document.querySelector(".fp-crumb");
+  if(cb){ if(showBtn) cb.classList.add("fp-2row"); else cb.classList.remove("fp-2row"); }
+  fpUpdateCalLabel();
+}
+function fpBack(){
+  if(!fpEl("fp-view-mesin").classList.contains("hidden")) return;
+  if(!fpEl("fp-view-detail").classList.contains("hidden")) fpGoMesin();
+  else if(!fpEl("fp-view-form").classList.contains("hidden")){ if(fpKEY) fpOpenDetail(fpKEY); else fpGoHariIni(); }
+  else if(!fpEl("fp-view-tanggal").classList.contains("hidden")) fpGoMesin();
+  else fpGoMesin();
+}
+window.init_formproduksi=function(){ fpGoMesin(); };
+window.init_FormProduksi=function(){ fpGoMesin(); };
+
+function fpSetNum(el,col,i){ el.value=el.value.replace(/[^0-9]/g,""); fpDATA[col][i]=el.value; }
+function fpSetNum1(el,k){ el.value=el.value.replace(/[^0-9]/g,""); if(k==="coil"){ fpCOIL=el.value; } else { fpDATA[k]=el.value; } }
+
+function fpGoMesin(){
+  var myGen=++fpGEN;
+  fpMESIN=null; fpEl("fp-crumb").textContent="PILIH MESIN"; fpHideTotalBadge(); fpShow("fp-view-mesin");
+  var c=fpCacheGet("mesin");
+  if(c) fpRenderMesin(c);
+  fpRun("getMesin",[],function(list){ fpCacheSet("mesin",list); if(myGen===fpGEN) fpRenderMesin(list); });
+}
+function fpRenderMesin(list){
+  if(!list || !list.length){ fpEl("fp-mesin-grid").innerHTML='<div class="fp-card">Master mesin kosong - isi sheet MASTER_MESIN.</div>'; return; }
+  fpEl("fp-mesin-grid").innerHTML=list.map(function(m){
+    return '<div class="fp-mesin-card" onclick="fpOpenMesin(\''+m+'\')">'+m+'</div>';
+  }).join("");
+}
+function fpOpenMesin(m){ 
+  fpMESIN=m; 
+  var todayKey="det:"+m+":"+fpToday();
+  if(!fpCacheGet(todayKey)){
+    fpRun("getDetail",[m,fpToday(),fpUserNama()],function(d){
+      fpCacheSet(todayKey,d);
+    });
+  }
+  fpGoHariIni(); 
+}
+
+function fpShowListInline(list, myGen){
+  if(myGen!==undefined && myGen!==fpGEN) return;
+  fpShow("fp-view-tanggal");
+  fpEl("fp-crumb").textContent="DATA PRODUKSI "+fpMESIN; fpHideTotalBadge();
+  fpRenderTanggal(list||[]);
+}
+function fpGoTanggal(){
+  var myGen=++fpGEN;
+  var ck="tgl:"+fpMESIN;
+  var c=fpCacheGet(ck);
+  if(c){ fpShowListInline(c, myGen); }
+  else { fpShow("fp-view-tanggal"); fpEl("fp-crumb").textContent="DATA PRODUKSI "+fpMESIN; fpHideTotalBadge(); fpEl("fp-tgl-list").innerHTML=""; }
+  fpRun("getListTanggal",[fpMESIN, fpUserNama()],function(list){
+    fpCacheSet(ck,list);
+    if(myGen===fpGEN) fpShowListInline(list, myGen);
+  });
+}
+function fpRenderTanggal(list){
+  var html="", bl="";
+  (list||[]).forEach(function(x){
+    if(x.bulan!==bl){ bl=x.bulan; html+='<div class="fp-bulan">'+bl+'</div>'; }
+    html+='<div class="fp-tgl-row" onclick="fpOpenDetail(\''+x.key+'\')"><span class="t">'+x.tgl+
+          '</span><span class="tot">Total: '+fpFmt(x.total)+'</span><span class="chev">&#10095;</span></div>';
+  });
+  fpEl("fp-tgl-list").innerHTML=html||'<div class="fp-card">Belum ada data produksi.</div>';
+  (list||[]).forEach(function(x){
+    var ck="det:"+fpMESIN+":"+x.key;
+    if(!fpCacheGet(ck)){
+      fpRun("getDetail",[fpMESIN,x.key,fpUserNama()],function(d){
+        fpCacheSet(ck,d);
+      });
+    }
+  });
+}
+
+function fpGoHariIni(){
+  var myGen=++fpGEN;
+  var today=fpToday();
+  var ckDet="det:"+fpMESIN+":"+today;
+  fpKEY=today;
+  fpShow("fp-view-detail");
+  fpCrumbDetail(today, null);
+  var cached=fpCACHE[ckDet];
+  if(cached && cached.v){
+    if(((cached.v.cards||[]).length>0)) fpRenderDetail(cached.v); else fpRenderEmptyToday();
+    if(fpCacheIsFresh(ckDet, 60000)) return;
+  } else {
+    fpRenderLoading();
+  }
+  fpRun("getDetail",[fpMESIN,today,fpUserNama()],function(d){
+    fpCacheSet(ckDet,d);
+    if(myGen!==fpGEN) return;
+    var cards=(d&&d.cards)||[];
+    if(cards.length===0){ fpRenderEmptyToday(); } else { fpRenderDetail(d); }
+  });
+}
+function fpRenderEmptyToday(){
+  fpKEY=fpToday(); fpCARDS=[];
+  fpShow("fp-view-detail");
+  fpCrumbDetail(fpKEY, 0);
+  fpEl("fp-detail-box").innerHTML='<div class="fp-card" style="text-align:center;color:#888;padding:30px">BELUM ADA DATA</div>';
+}
+function fpRenderLoading(){
+  var h="";
+  for(var i=0;i<2;i++){
+    h+='<div class="fp-skel"><div style="display:flex;gap:12px;align-items:center"><div class="fp-skel-qr"></div><div style="flex:1"><div class="fp-skel-line w40"></div><div class="fp-skel-line w60"></div></div></div><div class="fp-skel-line w80"></div><div class="fp-skel-line w60"></div><div class="fp-skel-line w40"></div></div>';
+  }
+  fpEl("fp-detail-box").innerHTML=h;
+}
+
+function fpCalClick(e){
+  var el=e.target;
+  try{ if(el && typeof el.showPicker==="function"){ el.showPicker(); } }catch(err){}
+}
+function fpCalPick(v){
+  if(!v) return;
+  fpOpenDetail(v);
+}
+
+function fpProdTipe(){ return (fpMESIN && String(fpMESIN).indexOf("RENG")>=0) ? "RENG" : "TRUSS"; }
+function fpRenderProduk(list, sel){
+  var el=fpEl("fp-produk"); if(!el) return;
+  var h='<option value="">Pilih Produk</option>';
+  (list||[]).forEach(function(p){
+    h+='<option'+(sel && String(p)===String(sel)?' selected':'')+'>'+fpEsc(p)+'</option>';
+  });
+  el.innerHTML=h;
+}
+function fpLoadProduk(sel){
+  var t=fpProdTipe(), ck="prod:"+t;
+  var c=fpCacheGet(ck);
+  if(c) fpRenderProduk(c, sel);
+  fpRun("getProduk",[t],function(list){ fpCacheSet(ck,list); fpRenderProduk(list, sel); });
+}
+
+function fpOpenForm(){
+  fpEDIT=null;
+  var _b=fpEl("fp-sbm"); if(_b){ _b.disabled=false; _b.textContent="SIMPAN"; }
+  fpEl("fp-crumb").textContent="DATA PRODUKSI "+fpMESIN; fpHideTotalBadge(); fpShow("fp-view-form");
+  fpResetForm();
+  fpEl("fp-op").value = fpUserNama();
+  fpEl("fp-mesin").value = fpMESIN;
+  fpLoadProduk();
+}
+function fpRefreshNo(){
+  fpRun("getNextNo",[fpMESIN,fpEl("fp-tgl").value],function(n){ fpEl("fp-no").value=n; });
+}
+
+function fpResetData(){
+  fpDATA={ inputan:"", nonPrime:"", prime:[""], rijekCoil:[""], rijekMesin:[""], scrap:[""] };
+  fpCOIL="";
+}
+function fpResetForm(){
+  fpROWS=[];
+  fpEDIT=null;
+  fpResetData();
+  fpEl("fp-summary").innerHTML="";
+  fpEl("fp-produk").innerHTML='<option value="">Pilih Produk</option>';
+  fpEl("fp-kpc").value="";
+  fpEl("fp-coil").value="";
+  var _dL=new Date(); fpEl("fp-tgl").value=_dL.getFullYear()+"-"+("0"+(_dL.getMonth()+1)).slice(-2)+"-"+("0"+_dL.getDate()).slice(-2);
+  fpRefreshNo();
+}
+
+function fpRenderModal(){
+  var multi=[["prime","PRIME"],["rijekCoil","RIJEK COIL"],["rijekMesin","RIJEK MESIN"],["scrap","SCRAP"]];
+  var h="";
+  h+='<div class="fp-frow"><label>INPUTAN</label><input type="text" inputmode="numeric" value="'+fpDATA.inputan+'" oninput="fpSetNum1(this,\'inputan\')" onchange="fpSetNum1(this,\'inputan\')"><span class="fp-gap"></span></div>';
+  multi.forEach(function(m){
+    var col=m[0];
+    fpDATA[col].forEach(function(v,i){
+      if(i===0){
+        h+='<div class="fp-frow"><label>'+m[1]+'</label><input type="text" inputmode="numeric" value="'+v+'" oninput="fpSetNum(this,\''+col+'\','+i+')" onchange="fpSetNum(this,\''+col+'\','+i+')"><button type="button" class="fp-addbtn" onclick="fpAddVal(\''+col+'\')">+</button></div>';
+      } else {
+        h+='<div class="fp-frow"><label></label><input type="text" inputmode="numeric" value="'+v+'" oninput="fpSetNum(this,\''+col+'\','+i+')" onchange="fpSetNum(this,\''+col+'\','+i+')"><span class="fp-gap"></span></div>';
+      }
+    });
+  });
+  h+='<div class="fp-frow"><label>NON PRIME</label><input type="text" inputmode="numeric" value="'+fpDATA.nonPrime+'" oninput="fpSetNum1(this,\'nonPrime\')" onchange="fpSetNum1(this,\'nonPrime\')"><span class="fp-gap"></span></div>';
+  fpEl("fp-modal-rows").innerHTML=h;
+}
+function fpAddVal(col){ fpDATA[col].push(""); fpRenderModal(); }
+function fpOpenModal(){ fpResetData(); fpEl("fp-modal").classList.remove("hidden"); fpRenderModal(); }
+function fpCloseModal(){ fpEl("fp-modal").classList.add("hidden"); }
+function fpSimpanInputan(){
+  var inp=Number(fpDATA.inputan)||0;
+  if(inp<=0){ fpToast("INPUTAN harus lebih dari 0","err"); return; }
+  var maxLen=Math.max(fpDATA.prime.length, fpDATA.rijekCoil.length, fpDATA.rijekMesin.length, fpDATA.scrap.length, 1);
+  var rows=[];
+  for(var i=0;i<maxLen;i++){
+    rows.push({
+      inputan:  (i===0)? inp : 0,
+      prime:    Number(fpDATA.prime[i])||0,
+      rijekCoil:Number(fpDATA.rijekCoil[i])||0,
+      rijekMesin:Number(fpDATA.rijekMesin[i])||0,
+      scrap:    Number(fpDATA.scrap[i])||0,
+      nonPrime: (i===0)? (Number(fpDATA.nonPrime)||0) : 0
+    });
+  }
+  fpROWS = fpROWS.concat(rows);
+  fpCloseModal(); fpRenderSummary();
+}
+
+var fpIKOLS=[{k:"inputan",l:"INPUTAN"},{k:"prime",l:"PRIME"},{k:"rijekCoil",l:"RIJEK COIL"},{k:"rijekMesin",l:"RIJEK MESIN"},{k:"scrap",l:"SCRAP"},{k:"nonPrime",l:"NON PRIME"}];
+function fpTotals(rows){
+  var t=0,tm=0,tp=0;
+  rows.forEach(function(r){
+    var i=Number(r.inputan)||0, np=Number(r.nonPrime)||0;
+    t+=i; tm+=i+np; tp+=(Number(r.prime)||0)+(Number(r.rijekCoil)||0)+(Number(r.rijekMesin)||0)+(Number(r.scrap)||0);
+  });
+  return {t:t,tm:tm,tp:tp};
+}
+
+function fpMergedTable(rows, editable){
+  var tot=fpTotals(rows);
+  var vis=fpIKOLS.filter(function(c){ return rows.some(function(r){ return Number(r[c.k])||0; }); });
+  var sessions=[];
+  rows.forEach(function(r,ri){
+    if(Number(r.inputan)>0 || sessions.length===0){ sessions.push([{ri:ri,r:r}]); }
+    else { sessions[sessions.length-1].push({ri:ri,r:r}); }
+  });
+  var phys=[];
+  sessions.forEach(function(sess,si){
+    sess.forEach(function(item,i){
+      if(i>0){
+        var adaIsi=vis.some(function(c){ return Number(item.r[c.k])||0; });
+        if(!adaIsi) return;
+      }
+      phys.push({ no:(i===0)? (si+1) : "", ri:item.ri, row:item.r });
+    });
+  });
+  var head='<tr><th class="fp-th">NO</th>'+vis.map(function(c){ return '<th class="fp-th">'+c.l+'</th>'; }).join("")+
+           '<th class="fp-th">TOTAL</th><th class="fp-th">TOTAL MAX</th><th class="fp-th">TOTAL POTONGAN</th>';
+  if(editable) head += '<th class="fp-th" style="width:40px;"></th>';
+  head += '</tr>';
+  var body="";
+  phys.forEach(function(p,idx){
+    body+='<tr><td class="fp-td">'+p.no+'</td>';
+    body+=vis.map(function(c){
+      var v=Number(p.row[c.k])||0;
+      if(editable){ return '<td class="fp-td fp-edit" onclick="fpEditCell(this,'+p.ri+',\''+c.k+'\')">'+(v? fpFmt(v) : '')+'</td>'; }
+      return '<td class="fp-td">'+(v? fpFmt(v) : '')+'</td>';
+    }).join("");
+    if(idx===0){
+      body+='<td class="fp-merge" rowspan="'+phys.length+'">'+fpFmt(tot.t)+'</td>'+
+            '<td class="fp-merge" rowspan="'+phys.length+'">'+fpFmt(tot.tm)+'</td>'+
+            '<td class="fp-merge" rowspan="'+phys.length+'">'+fpFmt(tot.tp)+'</td>';
+    }
+    if(editable){
+      body+='<td class="fp-td" style="text-align:center;"><button class="fp-delbtn" onclick="fpDelRow('+p.ri+')" title="Hapus Baris Ini"><svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></button></td>';
+    }
+    body+='</tr>';
+  });
+  if(!phys.length){
+    var colspan = vis.length + 4 + (editable ? 1 : 0);
+    body='<tr><td class="fp-td" colspan="'+colspan+'">Belum ada inputan</td></tr>';
+  }
+  return '<table class="fp-table">'+head+body+'</table>';
+}
+
+function fpDelRow(indexToRemove){
+  if(indexToRemove < 0 || indexToRemove >= fpROWS.length) return;
+  fpROWS.splice(indexToRemove, 1);
+  fpRenderSummary();
+}
+function fpRenderSummary(){ fpEl("fp-summary").innerHTML=fpMergedTable(fpROWS, true); }
+
+function fpEditCell(td, ri, col){
+  if(td.getElementsByTagName("input").length) return;
+  var cur=Number(fpROWS[ri][col])||0;
+  td.innerHTML='<input class="fp-cellin" type="text" inputmode="numeric" value="'+(cur? cur : "")+'">';
+  var inp=td.getElementsByTagName("input")[0];
+  inp.focus(); inp.select();
+  var selesai=function(){
+    var val=Number(inp.value.replace(/[^0-9]/g,""))||0;
+    fpROWS[ri][col]=val;
+    fpRenderSummary();
+  };
+  inp.onblur=selesai;
+  inp.onkeydown=function(ev){ if(ev.key==="Enter"){ inp.blur(); } };
+  inp.onclick=function(ev){ ev.stopPropagation(); };
+}
+
+function fpSimpan(){
+  var btn=fpEl("fp-sbm");
+  if(!fpEl("fp-produk").value){ fpToast("Pilih produk dulu","err"); return; }
+  if(!fpROWS.length){ fpToast("Klik +ADD untuk isi inputan","err"); return; }
+  fpCOIL=(fpEl("fp-coil").value||"").replace(/[^0-9]/g,"");
+  var p={ mesin:fpMESIN, tanggal:fpEl("fp-tgl").value, operator:fpUserNama(),
+          produk:fpEl("fp-produk").value, kpc:fpEl("fp-kpc").value,
+          panjangCoil:fpCOIL, rows:fpROWS };
+  if(btn){ btn.disabled=true; btn.textContent="MENYIMPAN..."; }
+  var lockOk=function(msg){ if(btn){ btn.disabled=true; btn.textContent="SIMPAN"; } fpToast(msg,"ok"); };
+  var lockErr=function(msg){ if(btn){ btn.disabled=false; btn.textContent="SIMPAN"; } fpToast(msg,"err"); };
+  if(fpEDIT){
+    var keyEd=fpEDIT.key, noEd=fpEDIT.no;
+    fpRun("updatePaket",[p,keyEd,noEd,fpUserNama()],function(r){
+      if(!r||!r.ok){ lockErr((r&&r.msg)||"Gagal memperbarui."); return; }
+      fpCacheClearMachine(fpMESIN);
+      lockOk("DATA TERSIMPAN");
+      setTimeout(function(){ fpResetForm(); fpOpenDetail(keyEd); },900);
+    });
+    return;
+  }
+  fpRun("simpanPaket",[p,fpUserNama()],function(r){
+    if(!r||!r.ok){ lockErr((r&&r.msg)||"Gagal menyimpan."); return; }
+    fpCacheClearMachine(fpMESIN);
+    lockOk("DATA TERSIMPAN");
+    setTimeout(function(){ fpResetForm(); fpGoHariIni(); },900);
+  });
+}
+
+function fpEditCard(idx){
+  var c=fpCARDS[idx]; if(!c) return;
+  fpEDIT={ key: fpKEY, no: c.no };
+  var _b=fpEl("fp-sbm"); if(_b){ _b.disabled=false; _b.textContent="SIMPAN"; }
+  fpShow("fp-view-form");
+  fpEl("fp-crumb").textContent="DATA PRODUKSI "+fpMESIN; fpHideTotalBadge();
+  fpEl("fp-op").value = fpUserNama();
+  fpEl("fp-mesin").value = fpMESIN;
+  fpEl("fp-tgl").value = fpKEY;
+  fpEl("fp-no").value = c.no;
+  fpEl("fp-kpc").value = c.kpc||"";
+  fpEl("fp-coil").value = c.panjangCoil||"";
+  fpCOIL = String(c.panjangCoil||"");
+  fpROWS = (c.inputs||[]).map(function(r){
+    return { inputan:r.inputan, prime:r.prime, rijekCoil:r.rijekCoil, rijekMesin:r.rijekMesin, scrap:r.scrap, nonPrime:r.nonPrime };
+  });
+  fpLoadProduk(c.produk);
+  fpRenderSummary();
+}
+
+var fpScanStream=null, fpScanTimer=null, fpScanSent=false, fpTorchOn=false, fpScanCv=null;
+var fpScanListenerAdded=false;
+function fpLoadJsQR(cb){
+  if(typeof jsQR!=="undefined"){ cb(); return; }
+  var s=document.createElement("script");
+  s.src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js";
+  s.onload=cb;
+  s.onerror=function(){ alert("Gagal memuat mesin QR. Cek internet."); };
+  document.head.appendChild(s);
+}
+function fpStopStream(){
+  if(fpScanTimer){ clearInterval(fpScanTimer); fpScanTimer=null; }
+  if(fpScanStream){ fpScanStream.getTracks().forEach(function(t){ t.stop(); }); fpScanStream=null; }
+  var v=fpEl("fp-scan-video"); if(v){ v.srcObject=null; }
+  fpTorchOn=false;
+}
+function fpAddScanListener(){
+  if(fpScanListenerAdded) return;
+  fpScanListenerAdded=true;
+  window.addEventListener("DMS_KPC_SCAN", function(ev){
+    if(ev && ev.detail && ev.detail.text){ fpApplyKpc(ev.detail.text); }
+  });
+}
+function fpOpenScan(){
+  if(window.__SCANNER__ && window.__SCANNER__.start){ fpAddScanListener(); window.__SCANNER__.start(); return; }
+  fpEl("fp-scan-modal").classList.remove("hidden");
+  fpLoadJsQR(function(){ fpStartLive(); });
+}
+function fpCloseScan(){ fpStopStream(); fpEl("fp-scan-modal").classList.add("hidden"); }
+function fpStartLive(deviceId){
+  fpStopStream(); fpScanSent=false;
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){ alert("Kamera tidak didukung."); return; }
+  var vid={width:{ideal:1920},height:{ideal:1080}};
+  if(deviceId){ vid.deviceId={exact:deviceId}; } else { vid.facingMode="environment"; }
+  navigator.mediaDevices.getUserMedia({video:vid,audio:false})
+    .then(function(stream){
+      fpScanStream=stream;
+      var v=fpEl("fp-scan-video"); v.srcObject=stream; v.play();
+      fpScanCv=document.createElement("canvas");
+      fpListCams(deviceId||null);
+      fpScanTimer=setInterval(fpScanTick,350);
+    })
+    .catch(function(e){ alert("Kamera tidak bisa dibuka: "+e.message); fpCloseScan(); });
+}
+function fpScanTick(){
+  if(fpScanSent||!fpScanStream||typeof jsQR==="undefined") return;
+  var v=fpEl("fp-scan-video");
+  if(!v||!v.videoWidth||v.readyState!==4) return;
+  fpScanCv.width=v.videoWidth; fpScanCv.height=v.videoHeight;
+  var cx=fpScanCv.getContext("2d"); cx.drawImage(v,0,0);
+  var img=cx.getImageData(0,0,fpScanCv.width,fpScanCv.height);
+  var code=null;
+  try{ code=jsQR(img.data,fpScanCv.width,fpScanCv.height,{inversionAttempts:"attemptBoth"}); }catch(e){}
+  if(code&&code.data){ fpScanSent=true; var txt=code.data; setTimeout(function(){ fpApplyKpc(txt); },120); }
+}
+function fpListCams(activeId){
+  if(!navigator.mediaDevices.enumerateDevices) return;
+  navigator.mediaDevices.enumerateDevices().then(function(devs){
+    var cams=devs.filter(function(d){ return d.kind==="videoinput"; });
+    var sel=fpEl("fp-scan-cams"), cnt=fpEl("fp-scan-camcount");
+    if(cnt) cnt.textContent=cams.length;
+    sel.innerHTML="";
+    cams.forEach(function(c,i){
+      var o=document.createElement("option"); o.value=c.deviceId;
+      o.textContent=(c.label||("camera "+(i+1)));
+      if(activeId&&c.deviceId===activeId) o.selected=true;
+      sel.appendChild(o);
+    });
+  }).catch(function(){});
+}
+function fpCamChange(){ fpStartLive(fpEl("fp-scan-cams").value); }
+function fpZoomChange(el){
+  var lbl=fpEl("fp-scan-zoomlbl");
+  if(lbl) lbl.textContent=Number(el.value).toFixed(1).replace(/\.0$/,"")+"x zoom";
+  if(!fpScanStream) return;
+  var t=fpScanStream.getVideoTracks()[0];
+  if(!t||!t.getCapabilities) return;
+  var cap=t.getCapabilities();
+  if(cap&&cap.zoom){
+    var z=Math.min(Math.max(Number(el.value),cap.zoom.min||1),cap.zoom.max||1);
+    try{ t.applyConstraints({advanced:[{zoom:z}]}); }catch(e){}
+  }
+}
+function fpToggleTorch(){
+  if(!fpScanStream) return;
+  var t=fpScanStream.getVideoTracks()[0];
+  if(!t||!t.getCapabilities) return;
+  var cap=t.getCapabilities();
+  if(!cap||!cap.torch){ alert("Lampu senter tidak didukung perangkat ini."); return; }
+  fpTorchOn=!fpTorchOn;
+  try{ t.applyConstraints({advanced:[{torch:fpTorchOn}]}); }catch(e){}
+}
+function fpApplyKpc(text){
+  fpCloseScan();
+  var el=fpEl("fp-kpc");
+  if(el){ el.value=String(text||"").trim(); }
+}
+
+function fpPrintItems(){ return fpIKOLS.filter(function(z){ return z.k!=="nonPrime"; }).concat([{k:"total",l:"TOTAL"}]); }
+function fpRenderPrintList(){
+  fpEl("fp-print-list").innerHTML=fpPrintItems().map(function(c){
+    return '<label class="fp-ckrow"><input type="checkbox" '+(fpPRINTCOLS[c.k]?'checked':'')+
+           ' onchange="fpPRINTCOLS[\''+c.k+'\']=this.checked"><span>'+c.l+'</span></label>';
+  }).join("");
+}
+function fpOpenPrint(idx){
+  fpPRINTCARD=fpCARDS[idx]; if(!fpPRINTCARD) return;
+  fpPRINTCOLS={}; fpPRINTCARD._fotoImg=null;
+  fpEl("fp-foto-info").classList.add("hidden"); fpEl("fp-foto-info").innerHTML="";
+  fpRenderPrintList();
+  fpEl("fp-print-modal").classList.remove("hidden");
+  document.body.classList.add("fp-nofab");
+}
+function fpClosePrint(){
+  fpEl("fp-print-modal").classList.add("hidden");
+  document.body.classList.remove("fp-nofab");
+}
+function fpGaleri(){ fpEl("fp-file").click(); }
+function fpCamera(){ fpEl("fp-file-cam").click(); }
+function fpOnFile(inp){
+  var f=inp.files && inp.files[0]; inp.value="";
+  if(!f || !fpPRINTCARD) return;
+  var rd=new FileReader();
+  rd.onload=function(){
+    var img=new Image();
+    img.onload=function(){
+      fpPRINTCARD._fotoImg=img; fpPRINTCARD._fotoSrc=rd.result;
+      fpEl("fp-foto-info").innerHTML=
+        '<img src="'+rd.result+'" style="width:64px;height:64px;object-fit:cover;border:1px solid #cfd6e0;border-radius:6px;vertical-align:middle;margin-right:10px">'+
+        '<span>Foto terpilih - akan dicetak HORIZONTAL di bawah tabel.</span>';
+      fpEl("fp-foto-info").classList.remove("hidden");
+    };
+    img.src=rd.result;
+  };
+  rd.readAsDataURL(f);
+}
+
+function fpDrawCanvas(c, cols, useTotal, phys, qr, foto){
+  var F=24; var S=2;
+  var names=["NOR"].concat(cols.map(function(z){ return z.l; })).concat(useTotal?["TOTAL"]:[]);
+  var nc=names.length;
+  var M=50; var W=1200; var CW=W-M*2;
+  var yTitle=50; var yLineBlue=75; var yNo=110; var yQrTop=140; var qrSize=160;
+  var yInfoStart=yQrTop+qrSize+40; var lineH=F+14; var infoLines=4;
+  var yTableHead=yInfoStart+(infoLines*lineH)+25; var headH=F+20; var rowH=F+20;
+  var tableBodyH = (phys.length * rowH); var tableTotalH = headH + tableBodyH;
+  var yTableBottom = yTableHead + tableTotalH;
+  var dw=0, dh=0;
+  if(foto){ dw=CW; dh=Math.round(CW*2/5); }
+  var H = yTableBottom + 30 + (foto ? (30+dh+30) : 0);
+  var cv=document.createElement("canvas"); cv.width=W*S; cv.height=H*S;
+  var x=cv.getContext("2d"); x.scale(S,S);
+  x.fillStyle="#f7fafc"; x.fillRect(0,0,W,H); x.textBaseline="middle";
+  x.fillStyle="#112233"; x.font="bold "+F+"px Arial, sans-serif"; x.textAlign="center";
+  x.fillText("DATA PRODUKSI EUP GUDANG TAIPA 2026", W/2, yTitle);
+  x.fillStyle="#1155cc"; x.fillRect(M, yLineBlue, CW, 8);
+  x.fillStyle="#112233"; x.font="bold "+F+"px Arial, sans-serif"; x.textAlign="center";
+  x.fillText("[NO "+c.no+"]", W/2, yNo);
+  if(qr){ try{ x.drawImage(qr, M, yQrTop, qrSize, qrSize); }catch(e){} }
+  x.textAlign="left"; x.fillStyle="#112233"; x.font="bold "+F+"px Arial, sans-serif";
+  x.fillText(c.kpc||"-", M+qrSize+25, yQrTop+qrSize/2);
+  var inf=[["Tanggal", c.tanggal],["Operator", c.operator],["Mesin", c.mesin],["Produk", c.produk]];
+  x.textAlign="left";
+  inf.forEach(function(row,i){
+    var yPos = yInfoStart + i*lineH + lineH/2;
+    x.fillStyle="#334455"; x.font="bold "+F+"px Arial, sans-serif"; x.fillText(row[0], M, yPos);
+    x.fillStyle="#112233"; x.font="bold "+F+"px Arial, sans-serif"; x.fillText(": "+row[1], M+250, yPos);
+  });
+  var rejTotal=0;
+  phys.forEach(function(p){ rejTotal += Number(p.row.rijekCoil)||0; });
+  var rejCx=W-M-250, rejCy=yQrTop+qrSize/2+20;
+  x.save();
+  x.translate(rejCx, rejCy);
+  x.rotate(-25*Math.PI/180);
+  x.font="bold 44px Arial, sans-serif";
+  x.textAlign="center"; x.textBaseline="middle";
+  x.shadowColor="rgba(0,0,0,0.6)"; x.shadowOffsetX=5; x.shadowOffsetY=5;
+  x.fillStyle="#e53935";
+  x.fillText("RIJECTED COIL", 0, -26);
+  x.fillText(fpFmt(rejTotal), 0, 26);
+  x.restore();
+  x.fillStyle="#1155cc"; x.fillRect(M, yTableHead, CW, headH);
+  x.fillStyle="#fff"; x.font="bold "+F+"px Arial, sans-serif"; x.textAlign="center";
+  var colW=CW/nc;
+  names.forEach(function(nm,i){ x.fillText(nm, M+colW*i+colW/2, yTableHead+headH/2); });
+  x.fillStyle="#fff"; x.fillRect(M, yTableHead+headH, CW, tableBodyH);
+  x.strokeStyle="#cfd6e0"; x.lineWidth=1;
+  var totalLeftX = M + colW*(nc-1);
+  for(var r=0;r<=phys.length;r++){
+    var yy=yTableHead+headH+(r*rowH);
+    var endX = (useTotal && r>0 && r<phys.length) ? totalLeftX : (M+CW);
+    x.beginPath(); x.moveTo(M, yy); x.lineTo(endX, yy); x.stroke();
+  }
+  for(var i2=0;i2<=nc;i2++){ var xx=M+colW*i2; x.beginPath(); x.moveTo(xx, yTableHead); x.lineTo(xx, yTableHead+headH+tableBodyH); x.stroke(); }
+  x.strokeRect(M, yTableHead, CW, tableTotalH);
+  x.fillStyle="#112233"; x.font="bold "+F+"px Arial, sans-serif"; x.textAlign="center";
+  phys.forEach(function(p,ri){
+    var cy = yTableHead + headH + (ri*rowH) + rowH/2;
+    x.fillText(String(p.no), M+colW/2, cy);
+    cols.forEach(function(z,ci){ var v=Number(p.row[z.k])||0; x.fillText(v? fpFmt(v) : "", M+colW*(ci+1)+colW/2, cy); });
+  });
+  if(useTotal){
+    var totalX = M+colW*(nc-1);
+    x.fillStyle="#1155cc"; x.font="bold "+(F+2)+"px Arial, sans-serif";
+    x.fillText(fpFmt(c.total), totalX+colW/2, yTableHead+headH+tableBodyH/2);
+  }
+  if(foto && dw>0 && dh>0){
+    var py=yTableBottom+30; var px=(W-dw)/2;
+    var fw=foto.naturalWidth||foto.width, fh=foto.naturalHeight||foto.height;
+    if(fw>0 && fh>0){
+      var rt=dw/dh, sx=0, sy=0, sw=fw, sh=fh;
+      if(fw/fh > rt){ sw=fh*rt; sx=(fw-sw)/2; } else { sh=fw/rt; sy=(fh-sh)/2; }
+      try{ x.drawImage(foto, sx, sy, sw, sh, px, py, dw, dh); x.strokeStyle="#cfd6e0"; x.strokeRect(px, py, dw, dh); }catch(e){}
+    }
+  }
+  return cv;
+}
+function fpBuildPrintPNG(cb){
+  var c=fpPRINTCARD; if(!c){ alert("Tidak ada data untuk dicetak"); return; }
+  var cols=fpIKOLS.filter(function(z){ return fpPRINTCOLS[z.k] && z.k!=="nonPrime"; });
+  var useTotal=!!fpPRINTCOLS["total"];
+  var sessions=[];
+  (c.inputs||[]).forEach(function(r){
+    if(Number(r.inputan)>0 || sessions.length===0){ sessions.push([r]); }
+    else { sessions[sessions.length-1].push(r); }
+  });
+  var phys=[];
+  sessions.forEach(function(ss2,si){ ss2.forEach(function(r,i){ phys.push({ no:(i===0)?(si+1):"", row:r }); }); });
+  if(!phys.length){ phys=[{no:1,row:{}}]; }
+  var foto=(c._fotoImg && c._fotoImg.complete && c._fotoImg.naturalWidth>0)? c._fotoImg : null;
+  if(c.kpc){ fpQrDrawable(c, 240, function(qr){ cb(fpDrawCanvas(c, cols, useTotal, phys, qr, foto)); }); }
+  else { cb(fpDrawCanvas(c, cols, useTotal, phys, null, foto)); }
+}
+function fpNamaFile(){ var c=fpPRINTCARD; return (fpMESIN||"DATA")+" ("+(c? c.no : "")+").png"; }
+function fpPrintSig(){
+  var c=fpPRINTCARD; if(!c) return "";
+  var cols=fpIKOLS.filter(function(z){ return fpPRINTCOLS[z.k] && z.k!=="nonPrime"; }).map(function(z){ return z.k; }).join(",");
+  var ut=fpPRINTCOLS["total"]?"T":"";
+  var foto=(c._fotoImg && c._fotoImg.complete && c._fotoImg.naturalWidth>0)?"F":"-";
+  return cols+"|"+ut+"|"+foto;
+}
+function fpTriggerDl(url,name){
+  try{
+    var a=document.createElement("a"); a.href=url; a.download=name; a.rel="noopener"; a.style.display="none";
+    document.body.appendChild(a);
+    setTimeout(function(){ try{ a.click(); }catch(e){} setTimeout(function(){ try{ a.remove(); }catch(e){} },2000); },60);
+  }catch(e){}
+}
+function fpDoDownload(){
+  var c=fpPRINTCARD; if(!c){ alert("Tidak ada data untuk dicetak"); return; }
+  var btn=fpEl("fp-dlbtn"); var orig=btn?btn.innerHTML:"";
+  var sig=fpPrintSig(); var key=fpMESIN+"|"+fpKEY+"|"+c.no+"|"+sig;
+  var cached=fpDLCACHE[key];
+  if(cached){
+    fpTriggerDl(cached, fpNamaFile());
+    document.body.classList.remove("fp-nofab");
+    if(btn){ btn.textContent="\u2713 TERSIMPAN"; setTimeout(function(){ if(btn){ btn.innerHTML=orig; } },1200); }
+    return;
+  }
+  if(fpDLBusy) return;
+  fpDLBusy=true;
+  if(btn){ btn.disabled=true; btn.textContent="MEMBUAT..."; }
+  fpBuildPrintPNG(function(cv){
+    var url; try{ url=cv.toDataURL("image/png"); }catch(e){ url=null; }
+    fpDLBusy=false;
+    if(!url){ if(btn){ btn.disabled=false; btn.innerHTML=orig; } alert("Gagal membuat gambar."); return; }
+    fpDLCACHE[key]=url; fpTriggerDl(url, fpNamaFile());
+    document.body.classList.remove("fp-nofab");
+    if(btn){ btn.textContent="\u2713 TERSIMPAN"; setTimeout(function(){ if(btn){ btn.disabled=false; btn.innerHTML=orig; } },1500); }
+  });
+}
+
+function fpOpenDetail(key){
+  var myGen=++fpGEN;
+  fpKEY=key; fpShow("fp-view-detail");
+  fpCrumbDetail(key, null);
+  var ck="det:"+fpMESIN+":"+key;
+  var cached=fpCACHE[ck];
+  if(cached && cached.v){
+    var cards0=(cached.v.cards)||[];
+    if(cards0.length===0 && key===fpToday()){ fpRenderEmptyToday(); }
+    else { fpRenderDetail(cached.v); }
+    if(fpCacheIsFresh(ck, 60000)) return;
+  } else {
+    fpRenderLoading();
+  }
+  fpRun("getDetail",[fpMESIN,key,fpUserNama()],function(d){
+    fpCacheSet(ck,d);
+    if(myGen!==fpGEN) return;
+    if(!fpEl("fp-view-detail").classList.contains("hidden")){
+      var cards=(d&&d.cards)||[];
+      if(cards.length===0 && key===fpToday()){ fpRenderEmptyToday(); }
+      else { fpRenderDetail(d); }
+    }
+  });
+}
+function fpRenderDetail(d){
+  fpSTRUCT=d.struct; fpCARDS=d.cards;
+  var sumTot=0; (d.cards||[]).forEach(function(c){ sumTot+=Number(c.total)||0; });
+  fpCrumbDetail(fpKEY, sumTot);
+  var html=(d.cards||[]).map(function(c, idx){
+    var qr=c.kpc? '<img class="fp-qr" width="86" height="86" data-qr="'+encodeURIComponent(c.kpc)+'" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">' : '<div class="fp-qr" style="width:86px;height:86px"></div>';
+    return '<div class="fp-card" data-fp-card="'+idx+'"><div class="fp-det-head"><span class="fp-det-no">NO '+c.no+'</span>'+
+      '<button class="fp-icobtn" title="Edit" onclick="fpEditCard('+idx+')">&#9998;</button>'+
+      '<button class="fp-icobtn" title="Download" onclick="fpOpenPrint('+idx+')"><svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></button>'+
+      '<button class="fp-icobtn" title="Full Screen" onclick="fpFullScreen('+idx+')"><svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg></button></div>'+
+      '<div class="fp-det-body"><div class="fp-det-left">'+
+      '<div class="fp-qrrow">'+qr+'<div class="fp-kpc">'+(c.kpc||"-")+'</div></div>'+
+      '<div class="fp-inf"><b>TANGGAL</b> '+c.tanggal+'</div><div class="fp-inf"><b>OPERATOR</b> '+c.operator+'</div>'+
+      '<div class="fp-inf"><b>MESIN</b> '+c.mesin+'</div><div class="fp-inf"><b>PRODUK</b> '+c.produk+'</div>'+
+      '<div class="fp-inf"><b>PANJANG COIL</b> '+fpFmt(c.panjangCoil)+'</div></div></div>'+
+      '<div style="height:12px"></div>'+fpMergedTable(c.inputs)+'</div>';
+  }).join("") || '<div class="fp-card">Tidak ada data.</div>';
+  fpEl("fp-detail-box").innerHTML=html;
+  var imgs=fpEl("fp-detail-box").querySelectorAll("img[data-qr]");
+  for(var i=0;i<imgs.length;i++){
+    (function(im){
+      var text=decodeURIComponent(im.getAttribute("data-qr"));
+      var cv=fpMakeQr(text, 172);
+      if(cv){ im.src=cv.toDataURL(); }
+      else{ im.src="https://api.qrserver.com/v1/create-qr-code/?size=86x86&data="+encodeURIComponent(text); }
+    })(imgs[i]);
+  }
+}
+function fpFullScreen(idx){
+  var card=document.querySelector('[data-fp-card="'+idx+'"]');
+  if(!card){ return; }
+  var clone=card.cloneNode(true); clone.removeAttribute("data-fp-card");
+  var inner=fpEl("fp-fs-inner"); inner.innerHTML=""; inner.appendChild(clone);
+  fpEl("fp-fs-modal").classList.add("show"); document.body.style.overflow="hidden";
+}
+function fpCloseFS(){
+  fpEl("fp-fs-modal").classList.remove("show");
+  fpEl("fp-fs-inner").innerHTML="";
+  document.body.style.overflow="";
+}
+</script>
+<!-- FP-CAM-FILE-END -->
+
+<script>
+/* Boot mandiri untuk standalone buku.html */
+if(window.init_FormProduksi) window.init_FormProduksi();
+</script>
+</body>
+</html>
