@@ -4,20 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>STICKER PACKING · EUP GUDANG TAIPA</title>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 <style>
   body{background:#f4f6f9;margin:0;padding-bottom:52px}
-  .app-hd{position:sticky;top:0;z-index:60;height:64px;box-sizing:border-box;background:#1155cc;color:#fff;
-    padding:0 14px;font-family:Arial,Helvetica,sans-serif;font-size:20px;font-weight:bold;letter-spacing:1px;
-    display:flex;align-items:center;gap:12px}
-  .app-burger{flex:0 0 auto;width:40px;height:40px;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;justify-content:center;gap:5px;padding:0 6px}
-  .app-burger span{display:block;height:3px;background:#fff;border-radius:2px}
-  .app-title{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:inherit}
-  .app-hd .u{flex:0 0 auto;background:#0d3f92;border-radius:16px;padding:6px 14px;font-size:13px;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
-  .app-hd .u svg{width:14px;height:14px;fill:#fff}
+  /* HEADER persis index/buku/dimensi */
+  .app-header{position:sticky;top:0;z-index:60;background:#1155cc;color:#fff;display:flex;align-items:center;gap:14px;padding:12px 16px;height:60px;box-sizing:border-box}
+  .menu-btn{font-size:28px !important;line-height:1;color:#fff;padding:0 8px;background:none;border:none;cursor:pointer}
+  .header-title{font-weight:bold;font-size:18px !important;letter-spacing:1px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .user-badge{background:#0d3f92;border-radius:20px;padding:6px 15px;font-weight:bold;font-size:14px !important;white-space:nowrap}
   @media (max-width:700px){
-    .app-hd{font-size:18px;height:60px;gap:10px}
-    .app-burger{width:38px;height:38px;gap:4px}
-    .app-burger span{height:3px}
+    .header-title{font-size:14px !important;letter-spacing:0.5px !important;line-height:1.2 !important;margin-top:2px}
+    .menu-btn{font-size:20px !important;padding:0 4px !important;line-height:1 !important}
   }
   .app-ft{position:fixed;left:0;right:0;bottom:0;z-index:40;background:#f4f6f9;border-top:1px solid #e3e7ee;color:#888;text-align:center;padding:11px 10px;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;letter-spacing:1px}
   .lp-side{position:fixed;left:0;top:0;bottom:0;width:230px;background:#fff;z-index:9990;transform:translateX(-105%);transition:transform .25s ease;box-shadow:2px 0 12px rgba(0,0,0,.15);display:flex;flex-direction:column}
@@ -36,26 +33,43 @@
   .lp-field svg{flex:0 0 auto;width:18px;height:18px;fill:#6d6d6d}
   .lp-field input{flex:1;min-width:0;background:transparent !important;border:none;outline:none;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;color:#333 !important;padding:6px 0;box-shadow:none !important}
   .lp-field input::placeholder{color:#8a8a8a;font-weight:normal}
-  .lp-field input:-webkit-autofill,
-  .lp-field input:-webkit-autofill:hover,
-  .lp-field input:-webkit-autofill:focus{
-    -webkit-box-shadow:0 0 0 1000px rgba(0,0,0,0) inset;
-    box-shadow:0 0 0 1000px rgba(0,0,0,0) inset;
-    -webkit-text-fill-color:#333;caret-color:#333;background-color:transparent !important;
-    transition:background-color 99999s ease-in-out 0s;
-  }
+  .lp-field input:-webkit-autofill,.lp-field input:-webkit-autofill:hover,.lp-field input:-webkit-autofill:focus{
+    -webkit-box-shadow:0 0 0 1000px rgba(0,0,0,0) inset;box-shadow:0 0 0 1000px rgba(0,0,0,0) inset;
+    -webkit-text-fill-color:#333;caret-color:#333;background-color:transparent !important;transition:background-color 99999s ease-in-out 0s}
   .lp-btn{display:block;margin:6px auto 0;background:#3b3b3b;color:#fff;border:none;border-radius:6px;padding:13px 46px;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;letter-spacing:2px;cursor:pointer}
   .lp-btn:active{background:#222}
   .lp-err{margin-top:14px;color:#8e1b1b;font-family:Arial,sans-serif;font-size:12px;font-weight:bold;min-height:14px}
+  /* SCANNER v5.1 persis index/buku/dimensi */
+  .sc-modal{position:fixed;inset:0;background:rgba(15,23,42,.6);z-index:10000;display:none;align-items:center;justify-content:center;padding:16px}
+  .sc-modal.show{display:flex}
+  .sc-box{background:#fff;border-radius:0;width:min(92vw,440px);max-width:100%;max-height:94vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+  .sc-header{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:#fff;border-bottom:1px solid #e3e7ee;flex:0 0 auto}
+  .sc-title{font-weight:bold;color:#0f172a;font-size:16px !important;line-height:1.2}
+  .sc-close{background:none;border:none;color:#94a3b8;font-size:22px !important;cursor:pointer;line-height:1;padding:2px 6px;border-radius:0}
+  .sc-close:hover{color:#334155}
+  .sc-body{flex:0 0 auto;padding:0;background:#000}
+  .sc-video-wrap{position:relative;width:100%;background:#000;overflow:hidden;border-radius:0;aspect-ratio:2/3;max-height:70vh}
+  .sc-video{width:100%;height:100%;display:block;object-fit:cover}
+  .sc-ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+  .sc-box-inner{position:relative;width:46%;max-width:240px;aspect-ratio:1/1;border:none}
+  .sc-frost{position:absolute;inset:0;background:rgba(255,255,255,.06);backdrop-filter:blur(1px);-webkit-backdrop-filter:blur(1px);border-radius:0}
+  .sc-corner{position:absolute;width:34px;height:34px;border:0 solid #fff;border-radius:0;z-index:5}
+  .sc-tl{top:0;left:0;border-top-width:5px;border-left-width:5px}
+  .sc-tr{top:0;right:0;border-top-width:5px;border-right-width:5px}
+  .sc-bl{bottom:0;left:0;border-bottom-width:5px;border-left-width:5px}
+  .sc-br{bottom:0;right:0;border-bottom-width:5px;border-right-width:5px}
+  .sc-pagefoot{flex:0 0 auto;background:#fff;border-top:1px solid #e3e7ee;text-align:center;padding:10px 14px;color:#1155cc;font-size:12px !important;letter-spacing:2px;font-weight:bold}
+  @media (orientation:landscape){ .sc-box{width:min(92vw,640px)} .sc-video-wrap{aspect-ratio:16/9;max-height:78vh} .sc-box-inner{width:33%;max-width:220px} }
+  @media (orientation:portrait){ .sc-box{width:min(92vw,440px)} .sc-video-wrap{aspect-ratio:2/3;max-height:70vh} .sc-box-inner{width:46%;max-width:240px} }
   .hidden{display:none !important}
 </style>
 </head>
 <body>
 
-<header class="app-hd">
-  <button class="app-burger" onclick="lpToggleSide()" title="Menu"><span></span><span></span><span></span></button>
-  <div class="app-title">EUP GUDANG TAIPA</div>
-  <span class="u"><svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg><span id="uname-tx">-</span></span>
+<header class="app-header">
+  <button class="menu-btn" onclick="lpToggleSide()">&#9776;</button>
+  <div class="header-title">EUP GUDANG TAIPA</div>
+  <div class="user-badge">&#128100; <span id="uname-tx">-</span></div>
 </header>
 
 <aside id="lp-side" class="lp-side">
@@ -80,6 +94,28 @@
     </div>
     <button class="lp-btn" onclick="spLogin()">LOGIN</button>
     <div id="sp-lerr" class="lp-err"></div>
+  </div>
+</div>
+
+<div id="sc-modal" class="sc-modal">
+  <div class="sc-box">
+    <div class="sc-header">
+      <div class="sc-title">ADD KPC</div>
+      <button class="sc-close" onclick="stopScanner()">&#10005;</button>
+    </div>
+    <div class="sc-body">
+      <div class="sc-video-wrap">
+        <video id="sc-video" playsinline autoplay muted class="sc-video"></video>
+        <div class="sc-ov">
+          <div class="sc-box-inner">
+            <div class="sc-frost"></div>
+            <span class="sc-corner sc-tl"></span><span class="sc-corner sc-tr"></span>
+            <span class="sc-corner sc-bl"></span><span class="sc-corner sc-br"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sc-pagefoot">EUP GUDANG TAIPA</div>
   </div>
 </div>
 
@@ -129,18 +165,52 @@ function spStartMenu(){ if(window.init_StickerPaking) window.init_StickerPaking(
   if(logged && n){ spSetUser(n); document.getElementById("sp-login").classList.add("hidden"); window.__SP_AUTO_START=true; }
   else { window.__SP_AUTO_START=false; }
 })();
+
+/* SCANNER GLOBAL v5.1 (persis index/buku/dimensi) */
+var scanStream=null, scanTimer=null, scanSent=false, scanCv=null;
+var SCAN_OUT=700, SCAN_CROP=0.74, SCAN_MS=250;
+function scEl(id){ return document.getElementById(id); }
+function startScanner(deviceId){
+  stopScanner(true); scanSent=false;
+  if(!navigator.mediaDevices){ alert("Kamera tidak didukung."); return; }
+  var vid={width:{ideal:1280},height:{ideal:720}};
+  if(deviceId) vid.deviceId={exact:deviceId}; else vid.facingMode="environment";
+  navigator.mediaDevices.getUserMedia({video:vid,audio:false}).then(function(stream){
+    scanStream=stream; var v=scEl("sc-video"); v.srcObject=stream; v.play();
+    if(!scanCv) scanCv=document.createElement("canvas");
+    scEl("sc-modal").classList.add("show");
+    scanTimer=setInterval(scanTick,SCAN_MS);
+  }).catch(function(e){ alert("Gagal buka kamera: "+e.message); });
+}
+function stopScanner(keepModal){
+  if(scanTimer){ clearInterval(scanTimer); scanTimer=null; }
+  if(scanStream){ scanStream.getTracks().forEach(function(t){ t.stop(); }); scanStream=null; }
+  var v=scEl("sc-video"); if(v) v.srcObject=null;
+  if(!keepModal) scEl("sc-modal").classList.remove("show");
+}
+function scanTick(){
+  if(scanSent||!scanStream||typeof jsQR==="undefined") return;
+  var v=scEl("sc-video"); if(!v.videoWidth||v.readyState<2) return;
+  var side=Math.floor(Math.min(v.videoWidth,v.videoHeight)*SCAN_CROP);
+  var ox=Math.floor((v.videoWidth-side)/2), oy=Math.floor((v.videoHeight-side)/2);
+  scanCv.width=SCAN_OUT; scanCv.height=SCAN_OUT;
+  var cx=scanCv.getContext("2d",{willReadFrequently:true});
+  cx.drawImage(v, ox,oy,side,side, 0,0,SCAN_OUT,SCAN_OUT);
+  var code=jsQR(cx.getImageData(0,0,SCAN_OUT,SCAN_OUT).data,SCAN_OUT,SCAN_OUT);
+  if(code&&code.data){ scanSent=true; window.dispatchEvent(new CustomEvent("DMS_KPC_SCAN",{detail:{text:code.data}})); setTimeout(stopScanner,300); }
+}
+window.__SCANNER__={ start:startScanner, stop:stopScanner };
 </script>
 
-<!-- SP-STICKER-START :: v10.34 (standalone sticker.html) -->
+<!-- SP-STICKER-START :: v10.34 (standalone sticker.html; sticky hd/crumb disesuaikan header 60px) -->
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Arial',Helvetica,sans-serif!important;font-size:14px!important;font-weight:bold!important;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 body{background:#f4f6f9;min-height:100vh}
 .sp-wrap{padding:16px 16px 60px}
-/* sticky disesuaikan tinggi header shell baru (64 desktop / 60 hp) */
-.hd{text-align:center;color:#1155cc;font-size:18px;padding:10px 14px;border-bottom:2px solid #1155cc;margin-bottom:8px;height:40px;box-sizing:border-box;position:sticky;top:64px;z-index:32;background:#f4f6f9}
-.sp-crumb{display:flex;align-items:center;gap:10px;margin-bottom:14px;position:sticky;top:112px;z-index:30;background:#f4f6f9;padding:6px 0;flex-wrap:wrap}
+.hd{text-align:center;color:#1155cc;font-size:18px;padding:10px 14px;border-bottom:2px solid #1155cc;margin-bottom:8px;height:40px;box-sizing:border-box;position:sticky;top:60px;z-index:32;background:#f4f6f9}
+.sp-crumb{display:flex;align-items:center;gap:10px;margin-bottom:14px;position:sticky;top:108px;z-index:30;background:#f4f6f9;padding:6px 0;flex-wrap:wrap}
 .sp-crumb button{background:#fff;border:1px solid #dfe4ec;border-radius:8px;padding:8px 14px;color:#1155cc;cursor:pointer}
 .sp-crumb .ttl{color:#1155cc;letter-spacing:1px;text-transform:uppercase;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sp-crumb-row2{display:contents}
@@ -239,11 +309,10 @@ body{background:#f4f6f9;min-height:100vh}
 #sp-view-form .sp-scan-tbl td{font-size:15px!important;padding:11px 8px}
 #sp-view-form .sp-buf-hd span{font-size:14px!important}
 @media (max-width:700px){
-  .hd{top:60px}
-  .sp-crumb{top:108px;gap:8px}
   .sp-frow label{flex:0 0 100%;width:auto;min-width:0;margin:0 0 2px}
   .sp-frow input,.sp-frow select{flex:1 1 auto}
   #sp-view-form .sp-frow label{flex:0 0 100%}
+  .sp-crumb{gap:8px}
   .sp-crumb .sp-btn-md{min-width:0;padding:8px 12px;font-size:12px!important;letter-spacing:.3px}
   .sp-crumb .sp-btn-md svg{width:12px;height:12px}
   .sp-crumb .sp-crumb-row2{display:flex;flex:0 0 100%;align-items:center;gap:8px;}
@@ -305,6 +374,7 @@ body{background:#f4f6f9;min-height:100vh}
 
 <div id="sp-toast" class="sp-toast hidden"></div>
 
+<!-- scanner internal fragment DORMANT (tidak muncul) karena __SCANNER__ global aktif -->
 <div id="sp-sc" class="sp-sc">
   <div class="sp-sc-box">
     <div class="sp-sc-hd"><div style="font-weight:bold;color:#112233">Scan KPC Batang</div><button style="background:#eee;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer" onclick="spScClose()">&#10005;</button></div>
