@@ -30,6 +30,7 @@ a{text-decoration:none;color:inherit;}
 .user-badge{background:#0d3f92;border-radius:20px;padding:6px 15px;font-weight:bold;font-size:14px !important;white-space:nowrap;}
 .sidebar{position:fixed;left:-170px;top:0;bottom:0;width:150px;background:#ffffff;z-index:100;transition:.25s ease-in-out;overflow-y:auto;padding-top:70px;display:flex;flex-direction:column;border-right:1px solid #e3e7ee;box-shadow:2px 0 10px rgba(0,0,0,0.05);}
 .sidebar.open{left:0;}
+.sidebar-hd{position:absolute;top:0;left:0;right:0;background:#1155cc;color:#fff;padding:16px 10px;font-family:Arial,sans-serif;font-weight:bold;letter-spacing:1px;font-size:16px !important;box-sizing:border-box;z-index:2;}
 .sidebar a{display:block;color:#333333;padding:18px 6px;border-bottom:1px solid #f0f0f0;font-size:14px !important;cursor:pointer;text-decoration:none;font-weight:bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .sidebar a:hover{background:#f5f5f5;color:#1155cc;} 
 .logout-link{margin-top:auto;color:#c00 !important;font-weight:bold;border-top:1px solid #eee;padding:18px 6px;white-space:nowrap;}
@@ -130,6 +131,7 @@ a{text-decoration:none;color:inherit;}
   </header>
   <div style="position:relative;">
     <nav id="sidebar" class="sidebar">
+      <div class="sidebar-hd">MENU</div>
       <a onclick="loadPage('Dashboard')">Dashboard</a>
       <a onclick="loadPage('Statistik')">Statistik Produksi</a>
       <a onclick="loadPage('LaporanProduksi')">Laporan Produksi</a>
