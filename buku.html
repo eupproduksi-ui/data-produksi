@@ -220,6 +220,9 @@ window.__SCANNER__={ start:startScanner, stop:stopScanner };
 .fp-crumb{display:flex;align-items:center;gap:12px;margin-bottom:14px;position:sticky;top:60px;z-index:30;flex-wrap:wrap}
 .fp-crumb button{background:#fff;border:1px solid #dfe4ec;border-radius:8px;padding:8px 14px;color:#1155cc;cursor:pointer}
 .fp-crumb span{color:#1155cc;letter-spacing:1px;text-transform:uppercase;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fp-crumb.fp-home{justify-content:center}
+.fp-crumb.fp-home>button:first-child{display:none !important}
+.fp-crumb.fp-home span#fp-crumb{flex:0 1 auto;text-align:center}
 .fp-tot-inline{display:inline}
 .fp-total-badge{display:none}
 .fp-crumb-row2{display:contents}
@@ -326,7 +329,7 @@ body.fp-nofab .fp-fab{display:none !important}
 
 <div class="fp-card fp-crumb">
   <button onclick="fpBack()">&#9664;</button>
-  <span id="fp-crumb">PILIH MESIN</span>
+  <span id="fp-crumb">BUKU PRODUKSI</span>
   <span class="fp-crumb-row2">
     <span id="fp-crumb-total" class="fp-total-badge" style="display:none"></span>
     <button id="fp-btn-pilih-tgl" class="fp-btn-md" style="display:none;position:relative;overflow:hidden">
@@ -568,7 +571,10 @@ function fpShow(v){
   var b1=fpEl("fp-btn-pilih-tgl"); if(b1) b1.style.display=showBtn?"":"none";
   var b2=fpEl("fp-btn-add"); if(b2) b2.style.display=showBtn?"":"none";
   var cb=document.querySelector(".fp-crumb");
-  if(cb){ if(showBtn) cb.classList.add("fp-2row"); else cb.classList.remove("fp-2row"); }
+  if(cb){
+    if(showBtn) cb.classList.add("fp-2row"); else cb.classList.remove("fp-2row");
+    if(v==="fp-view-mesin") cb.classList.add("fp-home"); else cb.classList.remove("fp-home");
+  }
   fpUpdateCalLabel();
 }
 function fpBack(){
@@ -593,7 +599,7 @@ function fpWarmToday(list){
 }
 function fpGoMesin(){
   var myGen=++fpGEN;
-  fpMESIN=null; fpEl("fp-crumb").textContent="PILIH MESIN"; fpHideTotalBadge(); fpShow("fp-view-mesin");
+  fpMESIN=null; fpEl("fp-crumb").textContent="BUKU PRODUKSI"; fpHideTotalBadge(); fpShow("fp-view-mesin");
   var c=fpCacheGet("mesin");
   if(c){ fpRenderMesin(c); fpWarmToday(c); }
   fpRun("getMesin",[],function(list){ fpCacheSet("mesin",list); if(myGen===fpGEN){ fpRenderMesin(list); fpWarmToday(list); } });
