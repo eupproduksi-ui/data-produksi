@@ -4,11 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>BUKU PRODUKSI · EUP GUDANG TAIPA</title>
-<!-- << dari index: jsQR untuk scanner global -->
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 <style>
   body{background:#f4f6f9;margin:0;padding-bottom:52px}
-  /* << HEADER diambil persis index: tinggi 60px, ☰ 28px (HP 20px), judul 18px (HP 14px), badge 14px */
   .app-header{position:sticky;top:0;z-index:60;background:#1155cc;color:#fff;display:flex;align-items:center;gap:14px;padding:12px 16px;height:60px;box-sizing:border-box}
   .menu-btn{font-size:28px !important;line-height:1;color:#fff;padding:0 8px;background:none;border:none;cursor:pointer}
   .header-title{font-weight:bold;font-size:18px !important;letter-spacing:1px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -18,14 +16,14 @@
     .menu-btn{font-size:20px !important;padding:0 4px !important;line-height:1 !important}
   }
   .app-ft{position:fixed;left:0;right:0;bottom:0;z-index:40;background:#f4f6f9;border-top:1px solid #e3e7ee;color:#888;text-align:center;padding:11px 10px;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;letter-spacing:1px}
-  .lp-side{position:fixed;left:0;top:0;bottom:0;width:230px;background:#fff;z-index:9990;transform:translateX(-105%);transition:transform .25s ease;box-shadow:2px 0 12px rgba(0,0,0,.15);display:flex;flex-direction:column}
-  .lp-side.open{transform:translateX(0)}
-  .lp-side-hd{background:#1155cc;color:#fff;padding:18px;font-family:Arial,sans-serif;font-weight:bold;letter-spacing:1px;font-size:16px}
-  .lp-side-item{display:flex;align-items:center;gap:10px;background:none;border:none;padding:14px 18px;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;color:#333;cursor:pointer;text-align:left}
-  .lp-side-item svg{width:18px;height:18px;fill:#d32f2f}
-  .lp-side-item:active{background:#f2f6fc}
-  .lp-side-item.logout{margin-top:auto;border-top:1px solid #e3e7ee;background:#fafafa}
-  .lp-side-mask{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:9989;display:none}
+  /* << SIDEBAR ikut index: lebar 150px, left -170/0, padding-top 70, item 18px 6px, logout nempel bawah */
+  .lp-side{position:fixed;left:-170px;top:0;bottom:0;width:150px;background:#fff;z-index:9990;transition:.25s ease-in-out;overflow-y:auto;padding-top:70px;display:flex;flex-direction:column;border-right:1px solid #e3e7ee;box-shadow:2px 0 10px rgba(0,0,0,.05)}
+  .lp-side.open{left:0}
+  .lp-side-item{display:block;width:100%;text-align:left;color:#333;padding:18px 6px;border:none;border-bottom:1px solid #f0f0f0;font-size:14px !important;cursor:pointer;font-weight:bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:none;font-family:Arial,sans-serif}
+  .lp-side-item:active{background:#f5f5f5;color:#1155cc}
+  .lp-side-item.logout{margin-top:auto;color:#c00 !important;border-top:1px solid #eee;border-bottom:none;padding:18px 6px;white-space:nowrap}
+  .lp-side-item.logout:active{background:#ffebee}
+  .lp-side-mask{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9989;display:none}
   .lp-login{position:fixed;inset:0;background:#9b9b9b;z-index:10000;display:flex;align-items:center;justify-content:center;padding:16px}
   .lp-login.hidden{display:none}
   .lp-box{background:linear-gradient(180deg,#dcdcdc,#c6c6c6);border-radius:14px;padding:34px 30px 30px;width:400px;max-width:100%;text-align:center;box-shadow:0 14px 40px rgba(0,0,0,.35)}
@@ -40,8 +38,6 @@
   .lp-btn{display:block;margin:6px auto 0;background:#3b3b3b;color:#fff;border:none;border-radius:6px;padding:13px 46px;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;letter-spacing:2px;cursor:pointer}
   .lp-btn:active{background:#222}
   .lp-err{margin-top:14px;color:#8e1b1b;font-family:Arial,sans-serif;font-size:12px;font-weight:bold;min-height:14px}
-
-  /* << SCANNER v5.1 diambil persis index (kartu tengah, portrait 2/3, landscape 16/9, strip bawah) */
   .sc-modal{position:fixed;inset:0;background:rgba(15,23,42,.6);z-index:10000;display:none;align-items:center;justify-content:center;padding:16px}
   .sc-modal.show{display:flex}
   .sc-box{background:#fff;border-radius:0;width:min(92vw,440px);max-width:100%;max-height:94vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.35)}
@@ -63,7 +59,6 @@
   .sc-pagefoot{flex:0 0 auto;background:#fff;border-top:1px solid #e3e7ee;text-align:center;padding:10px 14px;color:#1155cc;font-size:12px !important;letter-spacing:2px;font-weight:bold}
   @media (orientation:landscape){ .sc-box{width:min(92vw,640px)} .sc-video-wrap{aspect-ratio:16/9;max-height:78vh} .sc-box-inner{width:33%;max-width:220px} }
   @media (orientation:portrait){ .sc-box{width:min(92vw,440px)} .sc-video-wrap{aspect-ratio:2/3;max-height:70vh} .sc-box-inner{width:46%;max-width:240px} }
-
   .hidden{display:none !important}
 </style>
 </head>
@@ -76,8 +71,7 @@
 </header>
 
 <aside id="lp-side" class="lp-side">
-  <div class="lp-side-hd">MENU</div>
-  <button class="lp-side-item logout" onclick="lpLogout()"><svg viewBox="0 0 24 24"><path d="M10 17v-2h5V9h-5V7l-4 4 4 4zm6-14H8c-1.1 0-2 .9-2 2v4h2V5h8v14H8v-4H6v4c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>LOGOUT</button>
+  <button class="lp-side-item logout" onclick="lpLogout()">LOGOUT</button>
 </aside>
 <div id="lp-side-mask" class="lp-side-mask" onclick="lpToggleSide()"></div>
 
@@ -100,7 +94,6 @@
   </div>
 </div>
 
-<!-- << SCANNER v5.1 (dari index) -->
 <div id="sc-modal" class="sc-modal">
   <div class="sc-box">
     <div class="sc-header">
@@ -170,8 +163,6 @@ function fpStartMenu(){ if(window.init_FormProduksi) window.init_FormProduksi();
   else { window.__RP_AUTO_START=false; }
 })();
 
-/* << SCANNER GLOBAL v5.1 (logika persis index): pakai window.__SCANNER__ + event DMS_KPC_SCAN,
-   sehingga fpOpenScan di fragment otomatis memakai scanner kartu-tengah ini. */
 var scanStream=null, scanTimer=null, scanSent=false, scanCv=null;
 var SCAN_OUT=700, SCAN_CROP=0.74, SCAN_MS=250;
 function scEl(id){ return document.getElementById(id); }
@@ -207,7 +198,7 @@ function scanTick(){
 window.__SCANNER__={ start:startScanner, stop:stopScanner };
 </script>
 
-<!-- FP-CAM-FILE-START :: vFP-23 (standalone buku.html; crumb sticky disesuaikan header 60px) -->
+<!-- FP-CAM-FILE-START :: vFP-24 (standalone buku.html; sidebar 150px index + data cepat) -->
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
 <style>
 * { 
@@ -436,7 +427,6 @@ body.fp-nofab .fp-fab{display:none !important}
   <div id="fp-fs-inner" class="fp-fs-inner"></div>
 </div>
 
-<!-- scanner internal fragment dibiarkan DORMANT (tidak pernah muncul) karena __SCANNER__ global aktif -->
 <div id="fp-scan-modal" class="fp-modal hidden">
   <div class="fp-modal-box" style="width:520px;padding:0;overflow:hidden">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:#fff;border-bottom:1px solid #e3e7ee">
@@ -627,12 +617,22 @@ window.init_FormProduksi=function(){ fpGoMesin(); };
 function fpSetNum(el,col,i){ el.value=el.value.replace(/[^0-9]/g,""); fpDATA[col][i]=el.value; }
 function fpSetNum1(el,k){ el.value=el.value.replace(/[^0-9]/g,""); if(k==="coil"){ fpCOIL=el.value; } else { fpDATA[k]=el.value; } }
 
+/* << vFP-24: warm-cache detail hari-ini semua mesin saat boot (paralel, background) -> klik mesin instan. */
+function fpWarmToday(list){
+  var today=fpToday();
+  (list||[]).forEach(function(m){
+    var ck="det:"+m+":"+today;
+    if(!fpCacheGet(ck)){
+      fpRun("getDetail",[m,today,fpUserNama()],function(d){ fpCacheSet(ck,d); });
+    }
+  });
+}
 function fpGoMesin(){
   var myGen=++fpGEN;
   fpMESIN=null; fpEl("fp-crumb").textContent="PILIH MESIN"; fpHideTotalBadge(); fpShow("fp-view-mesin");
   var c=fpCacheGet("mesin");
-  if(c) fpRenderMesin(c);
-  fpRun("getMesin",[],function(list){ fpCacheSet("mesin",list); if(myGen===fpGEN) fpRenderMesin(list); });
+  if(c){ fpRenderMesin(c); fpWarmToday(c); }
+  fpRun("getMesin",[],function(list){ fpCacheSet("mesin",list); if(myGen===fpGEN){ fpRenderMesin(list); fpWarmToday(list); } });
 }
 function fpRenderMesin(list){
   if(!list || !list.length){ fpEl("fp-mesin-grid").innerHTML='<div class="fp-card">Master mesin kosong - isi sheet MASTER_MESIN.</div>'; return; }
@@ -640,16 +640,8 @@ function fpRenderMesin(list){
     return '<div class="fp-mesin-card" onclick="fpOpenMesin(\''+m+'\')">'+m+'</div>';
   }).join("");
 }
-function fpOpenMesin(m){ 
-  fpMESIN=m; 
-  var todayKey="det:"+m+":"+fpToday();
-  if(!fpCacheGet(todayKey)){
-    fpRun("getDetail",[m,fpToday(),fpUserNama()],function(d){
-      fpCacheSet(todayKey,d);
-    });
-  }
-  fpGoHariIni(); 
-}
+/* << vFP-24: HAPUS fetch getDetail duplikat; cukup fpGoHariIni (1 round-trip, atau instan dari warm-cache). */
+function fpOpenMesin(m){ fpMESIN=m; fpGoHariIni(); }
 
 function fpShowListInline(list, myGen){
   if(myGen!==undefined && myGen!==fpGEN) return;
