@@ -206,6 +206,9 @@ window.__SCANNER__={ start:startScanner, stop:stopScanner };
 .dm-crumb button{background:#fff;border:1px solid #dfe4ec;border-radius:8px;padding:8px 14px;color:#1155cc;cursor:pointer}
 .dm-crumb span{color:#1155cc;letter-spacing:1px;text-transform:uppercase;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .dm-crumb button span{flex:0 0 auto;color:inherit;text-transform:none;letter-spacing:.5px;overflow:visible;min-width:0}
+.dm-crumb.dm-home{justify-content:center}
+.dm-crumb.dm-home>button:first-child{display:none !important}
+.dm-crumb.dm-home span#dm-crumb{flex:0 1 auto;text-align:center}
 .dm-btn-md{padding:8px 14px;font-size:13px!important;border-radius:8px;font-weight:bold;letter-spacing:.5px;cursor:pointer;border:1px solid #1155cc;background:#fff;color:#1155cc;flex:0 0 auto;white-space:nowrap}
 .dm-btn-md:active{background:#e8eefb}
 .dm-btn-md svg{width:14px;height:14px;vertical-align:-2px;margin-right:4px}
@@ -304,7 +307,7 @@ table.dm-ftbl{border-collapse:collapse;width:100%;min-width:430px}
 
 <div class="dm-card dm-crumb">
   <button onclick="dmBack()">&#9664;</button>
-  <span id="dm-crumb">PILIH MESIN</span>
+  <span id="dm-crumb">DIMENSI</span>
   <button id="dm-btn-pilih-tgl" class="dm-btn-md" style="display:none;position:relative;overflow:hidden">
     <svg viewBox="0 0 24 24" fill="#1155cc"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg><span id="dm-cal-label">PILIH TANGGAL</span>
     <input type="date" id="dm-cal-input" onclick="dmCalClick(event)" onchange="dmCalPick(this.value)" style="position:absolute;left:0;top:0;width:100%;height:100%;opacity:0;border:0;padding:0;margin:0;cursor:pointer">
@@ -489,6 +492,8 @@ function dmShow(v){
   dmEl(v).classList.remove("hidden");
   var btn=dmEl("dm-btn-pilih-tgl");
   if(btn) btn.style.display = (v==="dm-view-detail" && dmMESIN) ? "" : "none";
+  var cr=document.querySelector(".dm-crumb");
+  if(cr){ if(v==="dm-view-mesin") cr.classList.add("dm-home"); else cr.classList.remove("dm-home"); }
   dmUpdateCalLabel();
   dmPlaceFab();
 }
@@ -564,7 +569,7 @@ function dmRenderMesin(list){
   }).join("");
 }
 function dmGoMesin(){
-  dmMESIN=null; dmEl("dm-crumb").textContent="PILIH MESIN"; dmShow("dm-view-mesin");
+  dmMESIN=null; dmEl("dm-crumb").textContent="DIMENSI"; dmShow("dm-view-mesin");
   var c=dmCacheGet("mesin");
   if(c){ dmRenderMesin(c); dmWarmAll(c); }
   dmRun("getMesin",[],function(list){ dmCacheSet("mesin",list); dmRenderMesin(list); dmWarmAll(list); });
