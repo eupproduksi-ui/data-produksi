@@ -16,8 +16,9 @@
     .menu-btn{font-size:20px !important;padding:0 4px !important;line-height:1 !important}
   }
   .app-ft{position:fixed;left:0;right:0;bottom:0;z-index:40;background:#f4f6f9;border-top:1px solid #e3e7ee;color:#888;text-align:center;padding:11px 10px;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;letter-spacing:1px}
-  .lp-side{position:fixed;left:-170px;top:0;bottom:0;width:150px;background:#fff;z-index:9990;transition:.25s ease-in-out;overflow-y:auto;padding-top:70px;display:flex;flex-direction:column;border-right:1px solid #e3e7ee;box-shadow:2px 0 10px rgba(0,0,0,.05)}
+  .lp-side{position:fixed;left:-170px;top:0;bottom:0;width:150px;background:#fff;z-index:9990;transition:.25s ease-in-out;overflow-y:auto;display:flex;flex-direction:column;border-right:1px solid #e3e7ee;box-shadow:2px 0 10px rgba(0,0,0,.05)}
   .lp-side.open{left:0}
+  .lp-side-hd{flex:0 0 auto;background:#1155cc;color:#fff;padding:16px 10px;font-family:Arial,sans-serif;font-weight:bold;letter-spacing:1px;font-size:16px !important}
   .lp-side-item{display:block;width:100%;text-align:left;color:#333;padding:18px 6px;border:none;border-bottom:1px solid #f0f0f0;font-size:14px !important;cursor:pointer;font-weight:bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:none;font-family:Arial,sans-serif}
   .lp-side-item:active{background:#f5f5f5;color:#1155cc}
   .lp-side-item.logout{margin-top:auto;color:#c00 !important;border-top:1px solid #eee;border-bottom:none;padding:18px 6px;white-space:nowrap}
@@ -70,6 +71,7 @@
 </header>
 
 <aside id="lp-side" class="lp-side">
+  <div class="lp-side-hd">MENU</div>
   <button class="lp-side-item logout" onclick="lpLogout()">LOGOUT</button>
 </aside>
 <div id="lp-side-mask" class="lp-side-mask" onclick="lpToggleSide()"></div>
@@ -85,8 +87,7 @@
     </div>
     <div class="lp-field">
       <svg viewBox="0 0 24 24"><path d="M17 9V7c0-2.8-2.2-5-5-5S7 4.2 7 7v2c-1.1 0-2 .9-2 2v9c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2v-9c0-1.1-.9-2-2-2zM9 7c0-1.7 1.3-3 3-3s3 1.3 3 3v2H9V7z"/></svg>
-      <input id="dm-login-pass" type="password" placeholder="Password" autocomplete="current-password"
-             onkeydown="if(event.key==='Enter')dmLogin()">
+      <input id="dm-login-pass" type="password" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')dmLogin()">
     </div>
     <button class="lp-btn" onclick="dmLogin()">LOGIN</button>
     <div id="dm-lerr" class="lp-err"></div>
@@ -197,21 +198,9 @@ function scanTick(){
 window.__SCANNER__={ start:startScanner, stop:stopScanner };
 </script>
 
-<!-- DM-LB-FILE-START :: v3.9 (standalone dimensi.html; sidebar 150px index + warm-cache cepat) -->
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
 <style>
-* { 
-  box-sizing:border-box; 
-  margin:0; 
-  padding:0; 
-  font-family: 'Arial', Helvetica, sans-serif !important; 
-  font-size: 14px !important; 
-  font-weight: bold !important; 
-  -webkit-font-smoothing: antialiased; 
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-}
-
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Arial',Helvetica,sans-serif !important;font-size:14px !important;font-weight:bold !important;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
 .dm-card{background:#fff;border:1px solid #e3e7ee;border-radius:10px;padding:16px;margin-bottom:14px}
 .dm-crumb{display:flex;align-items:center;gap:12px;margin-bottom:14px;position:sticky;top:60px;z-index:30;flex-wrap:wrap}
 .dm-crumb button{background:#fff;border:1px solid #dfe4ec;border-radius:8px;padding:8px 14px;color:#1155cc;cursor:pointer}
@@ -226,37 +215,14 @@ window.__SCANNER__={ start:startScanner, stop:stopScanner };
 .dm-bulan{background:#1155cc;color:#fff;border-radius:6px;padding:9px 14px;font-weight:bold;margin:16px 0 10px}
 .dm-tgl-row{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid #dfe4ec;border-radius:10px;padding:16px;margin-bottom:10px;cursor:pointer}
 .dm-tgl-row:hover{background:#eef3fb}
-.dm-tgl-row .t{font-weight:bold;}
-.dm-tgl-row .tot{background:#e8eefb;color:#1155cc;border-radius:6px;padding:4px 10px;font-weight:bold;}
+.dm-tgl-row .t{font-weight:bold}
+.dm-tgl-row .tot{background:#e8eefb;color:#1155cc;border-radius:6px;padding:4px 10px;font-weight:bold}
 .dm-tgl-row .chev{margin-left:auto;color:#1155cc}
-
-.dm-fab {
-  position: fixed !important;
-  right: 16px;
-  bottom: 72px;
-  width: 46px !important;
-  height: 46px !important;
-  border-radius: 50% !important;
-  background: #fff !important;
-  color: #16A34A !important;
-  border: 1px solid #dfe4ec !important;
-  box-shadow: 0 4px 14px rgba(0,0,0,.18) !important;
-  z-index: 9999 !important;
-  cursor: pointer !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  line-height: 1 !important;
-  font-size: 18px !important;
-  font-weight: bold !important;
-  padding: 0 !important;
-  outline: none !important;
-}
-.dm-fab:active { background: #e8eefb !important; transform: scale(0.95) !important; }
-
+.dm-fab{position:fixed !important;right:16px;bottom:72px;width:46px !important;height:46px !important;border-radius:50% !important;background:#fff !important;color:#16A34A !important;border:1px solid #dfe4ec !important;box-shadow:0 4px 14px rgba(0,0,0,.18) !important;z-index:9999 !important;cursor:pointer !important;display:flex !important;align-items:center !important;justify-content:center !important;line-height:1 !important;font-size:18px !important;font-weight:bold !important;padding:0 !important;outline:none !important}
+.dm-fab:active{background:#e8eefb !important;transform:scale(0.95) !important}
 .dm-frow{display:flex;align-items:center;gap:14px;margin-bottom:14px}
 .dm-frow label{width:170px;min-width:150px;color:#222;letter-spacing:.5px;white-space:nowrap}
-.dm-frow input,.dm-frow select{flex:1;min-width:0;padding:12px 14px;border:1px solid #dfe4ec;border-radius:8px;}
+.dm-frow input,.dm-frow select{flex:1;min-width:0;padding:12px 14px;border:1px solid #dfe4ec;border-radius:8px}
 .dm-frow input[readonly]{background:#eceff3;color:#555}
 .dm-bwrap>label{display:block;color:#222;font-weight:bold !important;margin-bottom:7px;letter-spacing:.5px}
 .dm-badge{flex:0 0 auto;min-width:100px;height:20px;background:#16A34A;color:#fff;font-weight:bold;padding:0 10px;margin:2px 4px;border-radius:4px;white-space:nowrap;letter-spacing:0;display:flex;align-items:center;justify-content:center;box-sizing:border-box;text-align:center}
@@ -272,11 +238,11 @@ window.__SCANNER__={ start:startScanner, stop:stopScanner };
 .dm-primary.dm-busy{background:#1155cc;cursor:wait;opacity:.75}
 .dm-table{width:100%;border-collapse:collapse;background:#fff;margin:12px 0}
 .dm-th{background:#1155cc;color:#fff;padding:9px;border:1px solid #0d3f92;text-align:center}
-.dm-td{padding:9px;border:1px solid #e3e7ee;text-align:center;}
+.dm-td{padding:9px;border:1px solid #e3e7ee;text-align:center}
 .dm-th2{background:#fff;color:#555;letter-spacing:.5px;padding:6px 4px;border:1px solid #e3e7ee;text-align:center}
 .dm-td2{padding:8px;border:1px solid #e3e7ee;text-align:center;color:#112233}
 .dm-infol{margin:10px 0}
-.dm-infol div{display:flex;margin-bottom:6px;}
+.dm-infol div{display:flex;margin-bottom:6px}
 .dm-infol b{flex:0 0 150px;color:#555}
 .dm-infol span{flex:1;color:#112233}
 .dm-det-head{display:flex;gap:10px;align-items:center;margin-bottom:12px}
@@ -294,27 +260,22 @@ window.__SCANNER__={ start:startScanner, stop:stopScanner };
 .dm-modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:100;display:flex;align-items:center;justify-content:center;padding:16px}
 .dm-modal-box{background:#fff;border-radius:10px;width:520px;max-width:100%;max-height:90vh;overflow:auto;padding:0;position:relative}
 .dm-errbar{position:fixed;left:0;right:0;bottom:0;background:#c00;color:#fff;padding:10px 14px;z-index:130;display:flex;gap:8px;align-items:center;font-weight:bold}
-.dm-errbar span{flex:1;}
+.dm-errbar span{flex:1}
 .dm-errbar button{background:#fff;color:#c00;border:none;border-radius:6px;padding:8px 12px;font-weight:bold;cursor:pointer}
-
 .dm-toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:120;padding:12px 20px;border-radius:8px;font-weight:bold;letter-spacing:.5px;box-shadow:0 6px 18px rgba(0,0,0,.18);max-width:92%;text-align:center}
 .dm-toast.hidden{display:none}
 .dm-toast-ok{background:#e8f5e9;color:#1b7e43;border:1px solid #1b7e43}
 .dm-toast-err{background:#fdecea;color:#b00020;border:1px solid #b00020}
-
 .dm-hint-retro{color:#0d47a1;background:#e3f2fd;border:1px solid #90caf9;border-radius:6px;padding:8px 12px;font-weight:normal!important;font-size:12px!important;margin-bottom:12px;line-height:1.4}
-
 .dm-fs-modal{position:fixed;inset:0;background:#f4f6f9;z-index:999999;overflow:auto;display:none;padding:16px}
 .dm-fs-modal.show{display:block}
 .dm-fs-inner{max-width:900px;margin:0 auto;padding-bottom:40px}
 .dm-fs-tutup{display:block;width:100%;max-width:900px;margin:0 auto 12px;background:#1155cc;color:#fff;border:none;border-radius:8px;padding:12px;font-weight:bold;letter-spacing:1px;cursor:pointer}
-
 .dm-ftbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 0 12px;border:1px solid #e3e7ee;border-radius:8px;background:#fff}
 table.dm-ftbl{border-collapse:collapse;width:100%;min-width:430px}
 .dm-ftbl th{background:#1155cc;color:#fff;padding:7px 6px;border:1px solid #0d3f92;text-align:center;font-size:12px !important;font-weight:bold;white-space:nowrap}
 .dm-ftbl td{padding:4px;border:1px solid #e3e7ee;text-align:center}
 .dm-ftbl td input{width:100%;min-width:62px;padding:9px 6px;border:1px solid #dfe4ec;border-radius:6px;text-align:center;font-weight:bold;color:#112233;background:#fff}
-
 @media (max-width:700px){
   .dm-crumb{gap:8px}
   .dm-crumb button{padding:6px 10px;font-size:12px!important}
@@ -346,8 +307,7 @@ table.dm-ftbl{border-collapse:collapse;width:100%;min-width:430px}
   <span id="dm-crumb">PILIH MESIN</span>
   <button id="dm-btn-pilih-tgl" class="dm-btn-md" style="display:none;position:relative;overflow:hidden">
     <svg viewBox="0 0 24 24" fill="#1155cc"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg><span id="dm-cal-label">PILIH TANGGAL</span>
-    <input type="date" id="dm-cal-input" onclick="dmCalClick(event)" onchange="dmCalPick(this.value)"
-           style="position:absolute;left:0;top:0;width:100%;height:100%;opacity:0;border:0;padding:0;margin:0;cursor:pointer">
+    <input type="date" id="dm-cal-input" onclick="dmCalClick(event)" onchange="dmCalPick(this.value)" style="position:absolute;left:0;top:0;width:100%;height:100%;opacity:0;border:0;padding:0;margin:0;cursor:pointer">
   </button>
 </div>
 
@@ -367,15 +327,11 @@ table.dm-ftbl{border-collapse:collapse;width:100%;min-width:430px}
     <div class="dm-frow"><label>MESIN</label><input id="dm-mesin" readonly></div>
     <div class="dm-frow"><label>NAMA PRODUK</label><select id="dm-produk" onchange="dmCheck()"><option value="">Pilih Produk</option></select></div>
     <div class="dm-frow"><label>KPC PRODUK</label><input id="dm-kpc" placeholder="Isi manual atau scan QR..." oninput="dmCheck()"><button type="button" class="dm-scanicon" onclick="dmOpenScan()" title="Scan QR KPC"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M3 3h8v8H3V3zm2 2v4h4V5H5z"/><path d="M13 3h8v8h-8V3zm2 2v4h4V5h-4z"/><path d="M3 13h8v8H3v-8zm2 2v4h4v-4H5z"/><path d="M13 13h3v3h-3z"/><path d="M18 13h3v3h-3z"/><path d="M13 18h3v3h-3z"/><path d="M18 18h3v3h-3z"/></svg></button></div>
-
     <div class="dm-bwrap"><label>PANJANG PRODUK (mm)</label>
       <div class="dm-bline"><span class="dm-badge">+10/-5</span><input id="dm-panjang" inputmode="numeric" oninput="dmNumOnly(this);dmCheck()" onblur="dmNumOnly(this);dmCheck()"></div>
     </div>
-
     <div id="dm-badges"></div>
-
     <div class="dm-ftbl-wrap"><table class="dm-ftbl"><tr><th>L.B</th><th>BOW</th><th>CEMBER</th><th>TWIST</th><th>BERAT</th></tr><tr><td><input id="dm-lb" inputmode="numeric" oninput="dmNumOnly(this)" onblur="dmBlurPlain(this);dmCheck()"></td><td><input id="dm-bow" inputmode="numeric" oninput="dmNumOnly(this);dmCheck()"></td><td><input id="dm-cember" inputmode="numeric" oninput="dmNumOnly(this);dmCheck()"></td><td><input id="dm-twist" inputmode="numeric" oninput="dmNumOnly(this);dmCheck()"></td><td><input id="dm-berat" inputmode="decimal" oninput="dmNumOnly(this);dmCheck()"></td></tr></table></div>
-
     <div style="height:6px"></div>
     <button id="dm-simpan" class="dm-primary" onclick="dmSimpan()">SIMPAN</button>
   </div>
@@ -452,7 +408,6 @@ function dmUpdateCalLabel(){
   var inDetail=!dmEl("dm-view-detail").classList.contains("hidden");
   el.textContent = inDetail ? dmFmtD(dmKEY||dmToday()) : "PILIH TANGGAL";
 }
-
 var DM_LS="EUP_DM_";
 function dmLsSet(k,v){ try{ localStorage.setItem(DM_LS+k, JSON.stringify({t:Date.now(),v:v})); }catch(e){} }
 function dmLsGet(k){ try{ var r=localStorage.getItem(DM_LS+k); if(!r) return null; var o=JSON.parse(r); return o?o.v:null; }catch(e){ return null; } }
@@ -483,7 +438,6 @@ function dmCacheClearMachine(m){
     for(var j=0;j<kill.length;j++){ try{ localStorage.removeItem(kill[j]); }catch(e2){} }
   }catch(e){}
 }
-
 var dmToastTimer=null;
 function dmToast(msg,type){
   var t=dmEl("dm-toast"); if(!t) return;
@@ -492,7 +446,6 @@ function dmToast(msg,type){
   if(dmToastTimer){ clearTimeout(dmToastTimer); dmToastTimer=null; }
   dmToastTimer=setTimeout(function(){ t.className="dm-toast hidden"; dmToastTimer=null; }, type==="err"?4000:2200);
 }
-
 function dmShowErr(m){
   dmEl("dm-errtxt").textContent=m; dmEl("dm-errbar").classList.remove("hidden");
   if(dmSAVING){ dmResetSaveBtn(); dmCheck(); }
@@ -500,7 +453,6 @@ function dmShowErr(m){
 function dmHideErr(){ dmEl("dm-errbar").classList.add("hidden"); }
 function dmRetry(){ dmHideErr(); if(dmLAST){ dmRun(dmLAST.fn,dmLAST.arg,dmLAST.cb); } }
 function dmBackup(){ window.open(DM_API,"_blank"); }
-
 function dmHandle(res, cb){
   if(res && res.ok===false){ dmShowErr(res.msg||"Gagal memproses."); return; }
   if(res && res.ok===true && res.data!==undefined){ cb(res.data); return; }
@@ -532,7 +484,6 @@ function dmRun(fn, arg, cb, _retry){
       dmShowErr("Sambungan data terputus. Coba lagi atau buka cadangan.");
     });
 }
-
 function dmShow(v){
   ["dm-view-mesin","dm-view-tanggal","dm-view-form","dm-view-detail"].forEach(function(x){ dmEl(x).classList.add("hidden"); });
   dmEl(v).classList.remove("hidden");
@@ -554,7 +505,6 @@ function dmBack(){
 }
 window.init_Dimensi=function(){ dmGoMesin(); dmPlaceFab(); setTimeout(dmPlaceFab,200); };
 window.init_dimensi=function(){ dmGoMesin(); dmPlaceFab(); setTimeout(dmPlaceFab,200); };
-
 function dmShellFooterHeight(){
   var tags=["div","footer","span","p","header"];
   for(var t=0;t<tags.length;t++){
@@ -596,9 +546,6 @@ function dmPlaceFab(){
 }
 window.addEventListener("resize", dmPlaceFab);
 window.addEventListener("orientationchange", dmPlaceFab);
-
-/* << v3.9: warm-cache paralel saat boot (struct + list tanggal + detail hari-ini per mesin)
-   sehingga klik mesin / tanggal langsung instan dari cache, bukan rantai 3 fetch berurutan. */
 function dmWarmAll(list){
   var today=dmToday();
   (list||[]).forEach(function(m){
@@ -622,9 +569,7 @@ function dmGoMesin(){
   if(c){ dmRenderMesin(c); dmWarmAll(c); }
   dmRun("getMesin",[],function(list){ dmCacheSet("mesin",list); dmRenderMesin(list); dmWarmAll(list); });
 }
-/* << v3.9: hapus prefetch list duplikat; cukup dmGoHariIni (instan bila warm-cache sudah isi). */
 function dmOpenMesin(m){ dmMESIN=m; dmGoHariIni(); }
-
 function dmRenderTanggal(list){
   var arr=(list||[]).slice().sort(function(a,b){ return a.key>b.key?-1:(a.key<b.key?1:0); });
   var html="", bl="";
@@ -648,7 +593,6 @@ function dmGoTanggal(){
   if(c){ dmRenderTanggal(c); if(dmCacheIsFresh(ck,60000)) return; }
   dmRun("dimGetListTanggal",[dmMESIN, dmUserNama()],function(list){ dmCacheSet(ck,list); dmRenderTanggal(list); });
 }
-
 function dmGoHariIni(){
   var ck="tgl:"+dmMESIN;
   var go=function(list){
@@ -667,22 +611,16 @@ function dmRenderEmptyToday(){
   dmEl("dm-crumb").textContent="DATA DIMENSI "+dmMESIN+" · "+dmFmtD(dmToday());
   dmEl("dm-detail-box").innerHTML='<div class="dm-card" style="text-align:center;color:#888;padding:30px">BELUM ADA DATA</div>';
 }
-
 function dmCalClick(e){
   var el=e.target;
   try{ if(el && typeof el.showPicker==="function"){ el.showPicker(); } }catch(err){}
 }
-function dmCalPick(v){
-  if(!v) return;
-  dmOpenDetail(v);
-}
-
+function dmCalPick(v){ if(!v) return; dmOpenDetail(v); }
 function dmLabels(count){
   if(count===6) return ["Tinggi Profil","Lebar Atas","Lebar Sayap","Lebar Sayap","Lips","Lips"];
   if(count===5) return ["Tinggi Profil","Lebar Atas","Lebar Sayap","Lebar Sayap","Lips"];
   var out=[]; for(var i=0;i<count;i++){ out.push("Ukuran "+(i+1)); } return out;
 }
-
 function dmProdTipe(){ return (dmMESIN && String(dmMESIN).indexOf("RENG")>=0) ? "RENG" : "TRUSS"; }
 function dmRenderProduk(list, sel){
   var el=dmEl("dm-produk"); if(!el) return;
@@ -704,7 +642,6 @@ function dmEnsureStruct(cb){
   if(c){ dmSTRUCT=c; dmBuildBadges(); if(cb) cb(); return; }
   dmRun("dimGetStruct",[dmMESIN],function(st){ dmSTRUCT=st; dmCacheSet(ck,st); dmBuildBadges(); if(cb) cb(); });
 }
-
 function dmOpenForm(){
   dmEDIT=null; dmResetSaveBtn();
   var fromTanggal = !dmEl("dm-view-tanggal").classList.contains("hidden");
@@ -742,7 +679,6 @@ function dmBuildBadges(){
 function dmRefreshNo(){
   dmRun("dimGetNextNo",[dmMESIN,dmEl("dm-tgl").value],function(n){ dmEl("dm-no").value=("00"+n).slice(-3); });
 }
-
 function dmBlurBadge(el,g,i){
   var raw=el.value.trim();
   if(raw===""){ dmG[g][i]=""; dmCheck(); return; }
@@ -774,7 +710,6 @@ function dmCheck(){
   var b=dmEl("dm-simpan");
   if(ok){ b.classList.add("dm-on"); b.disabled=false; } else { b.classList.remove("dm-on"); b.disabled=true; }
 }
-
 function dmSimpan(){
   if(dmEl("dm-simpan").disabled || dmSAVING) return;
   dmSAVING=true;
@@ -802,7 +737,6 @@ function dmSimpan(){
     setTimeout(function(){ dmResetSaveBtn(); if(dmBACK_VIEW==="tanggal") dmGoTanggal(); else dmGoHariIni(); },900);
   });
 }
-
 function dmOpenDetail(key){
   dmKEY=key; dmShow("dm-view-detail");
   dmEl("dm-crumb").textContent="DATA DIMENSI "+dmMESIN+" "+key.split("-").reverse().join("/");
@@ -870,7 +804,6 @@ function dmApprove(idx){
     dmOpenDetail(dmKEY);
   });
 }
-
 function dmFullScreen(idx){
   var card=document.querySelector('[data-dm-card="'+String(idx)+'"]');
   if(!card){ return; }
@@ -894,7 +827,6 @@ function dmCloseFS(){
   document.body.style.overflow="";
   document.removeEventListener("keydown", dmFsEsc);
 }
-
 function dmEditCard(idx){
   var c=dmCARDS[idx]; if(!c) return;
   dmEDIT={key:dmKEY,no:c.no};
@@ -926,7 +858,6 @@ function dmEditCard(idx){
     dmCheck();
   });
 }
-
 function dmMakeQr(text,px){
   if(typeof qrcode==="undefined") return null;
   try{
@@ -946,7 +877,6 @@ function dmQrData(text,px){
   if(cv) return cv.toDataURL();
   return "https://api.qrserver.com/v1/create-qr-code/?size=86x86&data="+encodeURIComponent(text);
 }
-
 var dmScanStream=null, dmScanTimer=null, dmScanSent=false, dmTorchOn=false, dmScanCv=null;
 var dmScanListenerAdded=false;
 function dmLoadJsQR(cb){
@@ -1059,7 +989,6 @@ function dmToggleTorch(){
   try{ t.applyConstraints({advanced:[{torch:dmTorchOn}]}); }catch(e){}
 }
 function dmApplyKpc(t){ dmCloseScan(); dmEl("dm-kpc").value=String(t||"").trim(); dmCheck(); }
-
 var dmDLCACHE={};
 var dmDLBusy=false;
 function dmDlKey(c){ return dmMESIN+"|"+dmKEY+"|"+c.no; }
@@ -1131,24 +1060,20 @@ function dmBuildDlCard(c){
   x.scale(S,S);
   x.fillStyle="#f7fafc"; x.fillRect(0,0,W,H);
   x.textBaseline="middle";
-  x.fillStyle="#112233"; 
-  x.font="bold "+F+"px Arial, sans-serif"; 
+  x.fillStyle="#112233";
+  x.font="bold "+F+"px Arial, sans-serif";
   x.textAlign="center";
   x.fillText("DATA DIMENSI "+String(c.mesin).toUpperCase(), W/2, yTitle);
-  x.fillStyle="#1155cc"; 
+  x.fillStyle="#1155cc";
   x.fillRect(M, yLineBlue, CW, Math.round(8*k));
-  x.fillStyle="#112233"; 
-  x.font="bold "+F+"px Arial, sans-serif"; 
+  x.fillStyle="#112233";
+  x.font="bold "+F+"px Arial, sans-serif";
   x.textAlign="center";
   x.fillText("[NO "+c.no+"]", W/2, yNo);
-  var q=dmMakeQr(c.kpc||"-", qrSize*2); 
-  if(q){ 
-    try{ 
-      x.drawImage(q, M, yQrTop, qrSize, qrSize); 
-    }catch(e){} 
-  }
-  x.textAlign="left"; 
-  x.fillStyle="#112233"; 
+  var q=dmMakeQr(c.kpc||"-", qrSize*2);
+  if(q){ try{ x.drawImage(q, M, yQrTop, qrSize, qrSize); }catch(e){} }
+  x.textAlign="left";
+  x.fillStyle="#112233";
   x.font="bold "+F+"px Arial, sans-serif";
   x.fillText(c.kpc||"-", M+qrSize+Math.round(25*k), yQrTop+qrSize/2);
   var inf=[
@@ -1161,25 +1086,23 @@ function dmBuildDlCard(c){
   x.textAlign="left";
   inf.forEach(function(row,i){
     var yPos = yInfoStart + i*lineH + lineH/2;
-    x.fillStyle="#334455"; 
+    x.fillStyle="#334455";
     x.font="bold "+F+"px Arial, sans-serif";
     x.fillText(row[0], M, yPos);
-    x.fillStyle="#112233"; 
+    x.fillStyle="#112233";
     x.font="bold "+F+"px Arial, sans-serif";
-    x.fillText(": "+row[1], M+Math.round(250*k), yPos); 
+    x.fillText(": "+row[1], M+Math.round(250*k), yPos);
   });
-  x.fillStyle="#1155cc"; 
+  x.fillStyle="#1155cc";
   x.fillRect(M, yTableHead, CW, headH);
-  x.fillStyle="#fff"; 
-  x.font="bold "+F+"px Arial, sans-serif"; 
+  x.fillStyle="#fff";
+  x.font="bold "+F+"px Arial, sans-serif";
   x.textAlign="center";
   var colW=CW/count;
-  dmSTRUCT.ukur.forEach(function(u,i){ 
-    x.fillText(u.name+" \u00B1 1", M+colW*i+colW/2, yTableHead+headH/2); 
-  });
-  x.fillStyle="#fff"; 
+  dmSTRUCT.ukur.forEach(function(u,i){ x.fillText(u.name+" \u00B1 1", M+colW*i+colW/2, yTableHead+headH/2); });
+  x.fillStyle="#fff";
   x.fillRect(M, yTableHead+headH, CW, tableBodyH + tableFootH);
-  x.strokeStyle="#cfd6e0"; 
+  x.strokeStyle="#cfd6e0";
   x.lineWidth=1;
   var ys=[
     yTableHead,
@@ -1190,57 +1113,39 @@ function dmBuildDlCard(c){
     yTableHead+headH+3*rowH+labH,
     yTableHead+headH+3*rowH+labH+valH
   ];
-  for(var r=0;r<ys.length;r++){ 
-    x.beginPath(); 
-    x.moveTo(M, ys[r]); 
-    x.lineTo(M+CW, ys[r]); 
-    x.stroke(); 
-  }
-  for(var i2=0;i2<=count;i2++){ 
-    var xx=M+colW*i2; 
-    x.beginPath(); 
-    x.moveTo(xx, yTableHead); 
-    x.lineTo(xx, ys[ys.length-1]); 
-    x.stroke(); 
-  }
+  for(var r=0;r<ys.length;r++){ x.beginPath(); x.moveTo(M, ys[r]); x.lineTo(M+CW, ys[r]); x.stroke(); }
+  for(var i2=0;i2<=count;i2++){ var xx=M+colW*i2; x.beginPath(); x.moveTo(xx, yTableHead); x.lineTo(xx, ys[ys.length-1]); x.stroke(); }
   x.strokeRect(M, yTableHead, CW, tableTotalH);
-  x.fillStyle="#112233"; 
-  x.font="bold "+F+"px Arial, sans-serif"; 
+  x.fillStyle="#112233";
+  x.font="bold "+F+"px Arial, sans-serif";
   x.textAlign="center";
   for(var g=0;g<3;g++){
     var row2=c.groups[g]||[];
     var cy = yTableHead + headH + (g*rowH) + rowH/2;
-    for(var u2=0;u2<count;u2++){ 
-      x.fillText(dmF2(row2[u2])||"", M+colW*u2+colW/2, cy);
-    }
+    for(var u2=0;u2<count;u2++){ x.fillText(dmF2(row2[u2])||"", M+colW*u2+colW/2, cy); }
   }
   var labs2=["L.B","BOW","CEMBER","TWIST","BERAT"];
   var vals2=[c.lb,c.bow,c.cember,c.twist,c.berat];
   while(labs2.length<count){ labs2.push(""); }
   while(vals2.length<count){ vals2.push(""); }
-  x.fillStyle="#555555"; 
+  x.fillStyle="#555555";
   x.font="bold "+F+"px Arial, sans-serif";
-  labs2.forEach(function(l,i){ 
-    if(l) x.fillText(l, M+colW*i+colW/2, yTableHead+headH+3*rowH+labH/2); 
-  });
-  x.fillStyle="#112233"; 
+  labs2.forEach(function(l,i){ if(l) x.fillText(l, M+colW*i+colW/2, yTableHead+headH+3*rowH+labH/2); });
+  x.fillStyle="#112233";
   x.font="bold "+F+"px Arial, sans-serif";
-  vals2.forEach(function(v,i){ 
-    if(v!=="") x.fillText(dmFootFmt(i,v), M+colW*i+colW/2, yTableHead+headH+3*rowH+labH+valH/2);
-  });
-  x.strokeStyle="#99aabb"; 
-  x.beginPath(); 
-  x.moveTo(M, yFooterLine); 
-  x.lineTo(W-M, yFooterLine); 
+  vals2.forEach(function(v,i){ if(v!=="") x.fillText(dmFootFmt(i,v), M+colW*i+colW/2, yTableHead+headH+3*rowH+labH+valH/2); });
+  x.strokeStyle="#99aabb";
+  x.beginPath();
+  x.moveTo(M, yFooterLine);
+  x.lineTo(W-M, yFooterLine);
   x.stroke();
-  x.fillStyle="#334455"; 
+  x.fillStyle="#334455";
   x.font="italic bold "+F+"px Arial, sans-serif";
   x.textAlign="center";
   x.fillText("\u00A9 2026 EUP GUDANG TAIPA - Sistem Manajemen Produksi", W/2, yFooterLine+Math.round(25*k));
   return cv.toDataURL("image/png");
 }
 </script>
-<!-- DM-LB-FILE-END -->
 
 <script>
 if(window.__DM_AUTO_START){ dmStartMenu(); }
