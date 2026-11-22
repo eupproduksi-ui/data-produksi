@@ -214,6 +214,10 @@ window.__SCANNER__={ start:startScanner, stop:stopScanner };
 .fp-delbtn:hover{background:#ffcdd2;transform:scale(1.1)}
 .fp-delbtn:active{transform:scale(0.95)}
 .fp-delbtn svg{width:18px;height:18px;fill:#d32f2f}
+.fp-editbtn{background:#e8eefb;border:none;border-radius:6px;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s}
+.fp-editbtn:hover{background:#dce7f8;transform:scale(1.1)}
+.fp-editbtn:active{transform:scale(0.95)}
+.fp-editbtn svg{width:18px;height:18px;fill:#1155cc}
 .fp-scanicon{flex:0 0 auto;width:46px;height:46px;padding:0;border:1px solid #d9dee8;border-radius:8px;background:#fff;color:#1155cc;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;margin-left:8px}
 .fp-scanicon:active{transform:scale(.95);background:#e8eefb}
 .fp-scanicon svg{width:24px;height:24px;fill:currentColor}
@@ -376,7 +380,7 @@ body.fp-nofab .fp-fab{display:none !important}
 <div id="fp-modal" class="fp-modal hidden">
   <div class="fp-modal-box">
     <button class="fp-x" onclick="fpCloseModal()">&#10005;</button>
-    <h3>INPUTAN PRODUKSI</h3>
+    <h3 id="fp-modal-title">INPUTAN PRODUKSI</h3>
     <p>Input data produksi</p>
     <div id="fp-modal-rows"></div>
     <div style="height:12px"></div>
@@ -449,12 +453,17 @@ body.fp-nofab .fp-fab{display:none !important}
 </div>
 
 <script>
+/* << EDITNOR-V32-GH = tombol EDIT per-NOR untuk GitHub (BUKU PRODUKSI).
+     Logika sama dengan Apps Script v32: kolom AKSI berisi [✏ EDIT per NOR] + [🗑 HAPUS per baris] di FORM,
+     dan [✏ EDIT per NOR] saja di DETAIL. Data TIDAK hilang sebelum SIMPAN (draft autosave + splice memori).
+     Server TIDAK diubah. Semua fitur GitHub dipertahankan: fpIsMob, fpWarmToday, fp-home, dll. */
 var fpMESIN=null, fpKEY=null, fpROWS=[], fpSTRUCT=null, fpDATA={}, fpCOIL="";
 var fpCARDS=[], fpEDIT=null, fpPRINTCARD=null, fpPRINTCOLS={};
 var fpCACHE={}, fpLAST=null;
 var fpGEN=0;
 var fpDLCACHE={};
 var fpDLBusy=false;
+var fpSESSIONEDIT=null;
 var FP_LS="EUP_FP_";
 var fpLOADING_TOAST=false;
 var fpRESIZE_BOUND=false;
@@ -645,8 +654,9 @@ function fpBack(){
   else if(!fpEl("fp-view-tanggal").classList.contains("hidden")) fpGoMesin();
   else fpGoMesin();
 }
-window.init_formproduksi=function(){ fpBindResize(); fpGoMesin(); };
-window.init_FormProduksi=function(){ fpBindResize(); fpGoMesin(); };
+/* EDITNOR-V32-GH: penanda versi */
+window.init_formproduksi=function(){ console.log("[FP-GH] EDITNOR-V32 active"); fpBindResize(); fpGoMesin(); };
+window.init_FormProduksi=function(){ console.log("[FP-GH] EDITNOR-V32 active"); fpBindResize(); fpGoMesin(); };
 function fpSetNum(el,col,i){ el.value=el.value.replace(/[^0-9]/g,""); fpDATA[col][i]=el.value; }
 function fpSetNum1(el,k){
   el.value=el.value.replace(/[^0-9]/g,"");
@@ -822,8 +832,52 @@ function fpRenderModal(){
   fpEl("fp-modal-rows").innerHTML=h;
 }
 function fpAddVal(col){ fpDATA[col].push(""); fpRenderModal(); }
-function fpOpenModal(){ fpResetData(); fpEl("fp-modal").classList.remove("hidden"); fpRenderModal(); }
-function fpCloseModal(){ fpEl("fp-modal").classList.add("hidden"); }
+/* EDITNOR-V32-GH: +ADD selalu mode tambah NOR baru */
+function fpOpenModal(){
+  fpSESSIONEDIT=null;
+  var t=fpEl("fp-modal-title"); if(t) t.textContent="INPUTAN PRODUKSI";
+  fpResetData();
+  fpEl("fp-modal").classList.remove("hidden");
+  fpRenderModal();
+}
+/* EDITNOR-V32-GH: pemetaan NOR -> daftar index baris */
+function fpSessions(rows){
+  var sessions=[];
+  (rows||[]).forEach(function(r,ri){
+    if(Number(r.inputan)>0 || sessions.length===0){ sessions.push([ri]); }
+    else { sessions[sessions.length-1].push(ri); }
+  });
+  return sessions;
+}
+/* EDITNOR-V32-GH: klik ✏ di FORM -> modal terisi semua baris NOR itu */
+function fpOpenNorEdit(si){
+  var sess=fpSessions(fpROWS)[si];
+  if(!sess || !sess.length) return;
+  fpSESSIONEDIT={start:sess[0], count:sess.length};
+  var cols=["prime","rijekCoil","rijekMesin","scrap"];
+  fpDATA={
+    inputan:String(fpROWS[sess[0]].inputan||""),
+    nonPrime:String(fpROWS[sess[0]].nonPrime||""),
+    prime:[], rijekCoil:[], rijekMesin:[], scrap:[]
+  };
+  sess.forEach(function(ri){
+    cols.forEach(function(c){ fpDATA[c].push(String(fpROWS[ri][c]||"")); });
+  });
+  var t=fpEl("fp-modal-title"); if(t) t.textContent="UBAH INPUTAN · NOR "+(si+1);
+  fpEl("fp-modal").classList.remove("hidden");
+  fpRenderModal();
+}
+/* EDITNOR-V32-GH: klik ✏ di DETAIL -> masuk form edit kartu + langsung buka modal NOR tsb */
+function fpEditNorDetail(cardIdx, si){
+  fpEditCard(cardIdx);
+  fpOpenNorEdit(si);
+}
+function fpCloseModal(){
+  fpEl("fp-modal").classList.add("hidden");
+  fpSESSIONEDIT=null;
+  var t=fpEl("fp-modal-title"); if(t) t.textContent="INPUTAN PRODUKSI";
+}
+/* EDITNOR-V32-GH: mode edit NOR -> baris lama NOR DIGANTI (splice); mode +ADD -> concat */
 function fpSimpanInputan(){
   var inp=Number(fpDATA.inputan)||0;
   if(inp<=0){ fpToast("INPUTAN harus lebih dari 0","err"); return; }
@@ -839,7 +893,13 @@ function fpSimpanInputan(){
       nonPrime: (i===0)? (Number(fpDATA.nonPrime)||0) : 0
     });
   }
-  fpROWS = fpROWS.concat(rows);
+  if(fpSESSIONEDIT && fpSESSIONEDIT.start<fpROWS.length){
+    var args=[fpSESSIONEDIT.start, fpSESSIONEDIT.count].concat(rows);
+    Array.prototype.splice.apply(fpROWS,args);
+    fpSESSIONEDIT=null;
+  } else {
+    fpROWS = fpROWS.concat(rows);
+  }
   fpCloseModal(); fpRenderSummary();
   fpDraftSave();
 }
@@ -855,7 +915,10 @@ function fpTotals(rows){
 function fpRowPotongan(r){
   return (Number(r.prime)||0)+(Number(r.rijekCoil)||0)+(Number(r.rijekMesin)||0)+(Number(r.scrap)||0);
 }
-function fpMergedTable(rows, editable){
+/* EDITNOR-V32-GH: kolom AKSI di FORM = [✏ per NOR (rowspan)] + [🗑 per baris];
+   di DETAIL = [✏ per NOR] saja. Layout mobile/desktop (POTONGAN sub-row) tetap dipertahankan. */
+function fpMergedTable(rows, editable, norCard){
+  var hasNor=(typeof norCard==="number");
   var tot=fpTotals(rows);
   var vis=fpIKOLS.filter(function(c){ return rows.some(function(r){ return Number(r[c.k])||0; }); });
   var sessions=[];
@@ -884,11 +947,12 @@ function fpMergedTable(rows, editable){
   var head='<tr><th class="fp-th">NO</th>'+vis.map(function(c){ return '<th class="fp-th">'+c.l+'</th>'; }).join("");
   if(mob) head+='<th class="fp-th">POTONGAN</th>';
   head+='<th class="fp-th">TOTAL</th><th class="fp-th">TOTAL MAX</th><th class="fp-th">TOTAL POTONGAN</th>';
-  if(editable) head += '<th class="fp-th" style="width:40px;"></th>';
+  if(editable) head += '<th class="fp-th" colspan="2" style="width:86px;">AKSI</th>';
+  else if(hasNor) head += '<th class="fp-th" style="width:46px;">AKSI</th>';
   head += '</tr>';
   var body="";
   var mergedPlaced=false;
-  sessData.forEach(function(sd){
+  sessData.forEach(function(sd,si){
     sd.phys.forEach(function(p,idx){
       body+='<tr><td class="fp-td">'+p.no+'</td>';
       body+=vis.map(function(c){
@@ -904,18 +968,38 @@ function fpMergedTable(rows, editable){
               '<td class="fp-merge" rowspan="'+span+'">'+fpFmt(tot.tp)+'</td>';
       }
       if(editable){
-        body+='<td class="fp-td" style="text-align:center;"><button class="fp-delbtn" onclick="fpDelRow('+p.ri+')" title="Hapus Baris Ini"><svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></button></td>';
+        if(idx===0){
+          body+='<td class="fp-td" rowspan="'+sd.phys.length+'" style="text-align:center;vertical-align:middle;">'+
+            '<button type="button" onclick="fpOpenNorEdit('+si+')" title="Edit NOR ini (modal inputan)" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border:none;border-radius:6px;background:#e8eefb;cursor:pointer;vertical-align:middle;">'+
+              '<svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#1155cc;"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>'+
+            '</button>'+
+          '</td>';
+        }
+        body+='<td class="fp-td" style="text-align:center;white-space:nowrap;">'+
+          '<button type="button" onclick="fpDelRow('+p.ri+')" title="Hapus Baris Ini" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border:none;border-radius:6px;background:#ffebee;cursor:pointer;vertical-align:middle;">'+
+            '<svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#d32f2f;"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>'+
+          '</button>'+
+        '</td>';
+      } else if(hasNor){
+        if(idx===0){
+          body+='<td class="fp-td" rowspan="'+sd.phys.length+'" style="text-align:center;vertical-align:middle;">'+
+            '<button type="button" onclick="fpEditNorDetail('+norCard+','+si+')" title="Edit NOR ini" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border:none;border-radius:6px;background:#e8eefb;cursor:pointer;vertical-align:middle;">'+
+              '<svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#1155cc;"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>'+
+            '</button>'+
+          '</td>';
+        }
       }
       body+='</tr>';
     });
     if(!mob){
       body+='<tr><td class="fp-td fp-pot-sub" colspan="'+(1+vis.length)+'">POTONGAN BARIS : '+fpFmt(sd.pot)+'</td>';
       if(editable){ body+='<td class="fp-td fp-pot-sub"></td>'; }
+      else if(hasNor){ body+='<td class="fp-td fp-pot-sub"></td>'; }
       body+='</tr>';
     }
   });
   if(!physCount){
-    var colspan = vis.length + 4 + (mob?1:0) + (editable ? 1 : 0);
+    var colspan = vis.length + 4 + (mob?1:0) + (editable ? 2 : 0) + (hasNor && !editable ? 1 : 0);
     body='<tr><td class="fp-td" colspan="'+colspan+'">Belum ada inputan</td></tr>';
   }
   return '<table class="fp-table">'+head+body+'</table>';
@@ -1022,7 +1106,7 @@ function fpLoadJsQR(cb){
 function fpStopStream(){
   if(fpScanTimer){ clearInterval(fpScanTimer); fpScanTimer=null; }
   if(fpScanStream){ fpScanStream.getTracks().forEach(function(t){ t.stop(); }); fpScanStream=null; }
-  var v=fpEl("fp-scan-video"); if(v){ v.srcObject=null; }
+  var v=fpEl("fp-scan-video"); if(v) v.srcObject=null; }
   fpTorchOn=false;
 }
 function fpAddScanListener(){
@@ -1303,6 +1387,7 @@ function fpOpenDetail(key){
     }
   });
 }
+/* EDITNOR-V32-GH: render detail memanggil fpMergedTable(c.inputs, false, idx) -> ✏ EDIT per NOR tampil di detail */
 function fpRenderDetail(d){
   fpSTRUCT=d.struct; fpCARDS=d.cards;
   fpLoadingToast(false);
@@ -1319,7 +1404,7 @@ function fpRenderDetail(d){
       '<div class="fp-inf"><b>TANGGAL</b> '+c.tanggal+'</div><div class="fp-inf"><b>OPERATOR</b> '+c.operator+'</div>'+
       '<div class="fp-inf"><b>MESIN</b> '+c.mesin+'</div><div class="fp-inf"><b>PRODUK</b> '+c.produk+'</div>'+
       '<div class="fp-inf"><b>PANJANG COIL</b> '+fpFmt(c.panjangCoil)+'</div></div></div>'+
-      '<div style="height:12px"></div>'+fpMergedTable(c.inputs)+'</div>';
+      '<div style="height:12px"></div>'+fpMergedTable(c.inputs, false, idx)+'</div>';
   }).join("") || '<div class="fp-card">Tidak ada data.</div>';
   fpEl("fp-detail-box").innerHTML=html;
   var imgs=fpEl("fp-detail-box").querySelectorAll("img[data-qr]");
