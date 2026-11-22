@@ -119,6 +119,8 @@
 <script>
 var USER={nama:"-"};
 var LP_LOCAL_USERS={};
+/* << DM-GH: API deployment baru */
+var API_URL="https://script.google.com/macros/s/AKfycbwzk6T_YFrgmHOp2N2JGG-s9YL0_Fkhf7z8zkwNU9HwSsLT0V_nM3paaAP1PRfn1LIlnw/exec";
 function dmSetUser(n){ USER={nama:n}; var t=document.getElementById("uname-tx"); if(t) t.textContent=n; }
 function lpLocalOk(u,p){ return LP_LOCAL_USERS && Object.prototype.hasOwnProperty.call(LP_LOCAL_USERS,u) && LP_LOCAL_USERS[u]===p; }
 function lpSuccess(nama){
@@ -134,7 +136,7 @@ function dmLogin(){
   var err=document.getElementById("dm-lerr"); err.textContent="";
   if(!u||!p){ err.textContent="Isi username dan password."; return; }
   if(lpLocalOk(u,p)){ lpSuccess(u); return; }
-  fetch(DM_API,{method:"POST",body:JSON.stringify({action:"login",user:u,pass:p})})
+  fetch(API_URL,{method:"POST",body:JSON.stringify({action:"login",user:u,pass:p})})
     .then(function(r){ return r.json(); })
     .then(function(res){
       if(res && res.ok===true){
@@ -391,10 +393,15 @@ table.dm-ftbl{border-collapse:collapse;width:100%;min-width:430px}
 </div>
 
 <script>
+/* << DM-GH-DRAFT: Dimensi dengan draft autosave.
+   Data TIDAK hilang sebelum SIMPAN — setiap kali field diubah, otomatis tersimpan ke localStorage.
+   Draft dihapus hanya setelah SIMPAN sukses. Mode EDIT kartu tidak menyimpan draft baru.
+   Server TIDAK diubah. */
 var dmMESIN=null, dmKEY=null, dmSTRUCT=null, dmG=[[],[],[]], dmEDIT=null, dmCARDS=[], dmLAST=null, dmSAVING=false, dmCACHE={};
 var dmBACK_VIEW="detail";
 var dmSCAN_Y=0;
-var DM_API=(typeof API_URL!=="undefined"&&API_URL)?API_URL:"https://script.google.com/macros/s/AKfycbwcKOfb6y5USg7k5oh8oI9jE4T91R8TjBjv6wyuzarEQwk-l95j_RPp9uHsBaD2TbWnbw/exec";
+var DM_LS="EUP_DM_";
+var DM_API=(typeof API_URL!=="undefined"&&API_URL)?API_URL:"https://script.google.com/macros/s/AKfycbwzk6T_YFrgmHOp2N2JGG-s9YL0_Fkhf7z8zkwNU9HwSsLT0V_nM3paaAP1PRfn1LIlnw/exec";
 function dmIsGas(){ return !!(window.google && google.script && google.script.run); }
 function dmUserNama(){ return (typeof USER!=="undefined" && USER && USER.nama)? USER.nama : "-"; }
 function dmEl(id){ return document.getElementById(id); }
@@ -411,7 +418,55 @@ function dmUpdateCalLabel(){
   var inDetail=!dmEl("dm-view-detail").classList.contains("hidden");
   el.textContent = inDetail ? dmFmtD(dmKEY||dmToday()) : "PILIH TANGGAL";
 }
-var DM_LS="EUP_DM_";
+
+/* << DM-GH-DRAFT: fungsi draft autosave */
+function dmDraftKey(){ return DM_LS+"draft:"+dmUserNama()+":"+(dmMESIN||""); }
+function dmDraftSave(){
+  if(dmEDIT) return;
+  if(dmSAVING) return;
+  try{
+    var groups=[];
+    for(var g=0;g<3;g++){
+      var row=[];
+      if(dmSTRUCT && dmSTRUCT.count){
+        for(var i=0;i<dmSTRUCT.count;i++){
+          var el=dmEl("dm-b-"+g+"-"+i);
+          row.push(el?el.value:"");
+        }
+      } else {
+        row = (dmG[g]||[]).slice();
+      }
+      groups.push(row);
+    }
+    var o={ t:Date.now(), v:{
+      mesin:dmMESIN,
+      tgl:dmEl("dm-tgl").value,
+      produk:dmEl("dm-produk").value,
+      kpc:dmEl("dm-kpc").value,
+      panjang:dmEl("dm-panjang").value,
+      groups:groups,
+      lb:dmEl("dm-lb").value,
+      bow:dmEl("dm-bow").value,
+      cember:dmEl("dm-cember").value,
+      twist:dmEl("dm-twist").value,
+      berat:dmEl("dm-berat").value,
+      structCount:(dmSTRUCT && dmSTRUCT.count)?dmSTRUCT.count:0
+    }};
+    localStorage.setItem(dmDraftKey(), JSON.stringify(o));
+  }catch(e){}
+}
+function dmDraftPeek(){
+  try{
+    var r=localStorage.getItem(dmDraftKey());
+    if(!r) return null;
+    var o=JSON.parse(r);
+    return (o && o.v && o.v.mesin===dmMESIN)? o.v : null;
+  }catch(e){ return null; }
+}
+function dmDraftClear(){
+  try{ localStorage.removeItem(dmDraftKey()); }catch(e){}
+}
+
 function dmLsSet(k,v){ try{ localStorage.setItem(DM_LS+k, JSON.stringify({t:Date.now(),v:v})); }catch(e){} }
 function dmLsGet(k){ try{ var r=localStorage.getItem(DM_LS+k); if(!r) return null; var o=JSON.parse(r); return o?o.v:null; }catch(e){ return null; } }
 function dmLsDel(k){ try{ localStorage.removeItem(DM_LS+k); }catch(e){} }
@@ -655,12 +710,44 @@ function dmOpenForm(){
   dmShow("dm-view-form");
   dmEl("dm-op").value=dmUserNama();
   dmEl("dm-mesin").value=dmMESIN;
-  dmEl("dm-tgl").value=dmToday();
   dmEl("dm-produk").innerHTML='<option value="">Pilih Produk</option>';
-  dmEl("dm-kpc").value=""; dmEl("dm-panjang").value="";
-  dmEl("dm-lb").value=""; dmEl("dm-bow").value=""; dmEl("dm-cember").value=""; dmEl("dm-twist").value=""; dmEl("dm-berat").value="";
   dmG=[[],[],[]];
   dmEl("dm-badges").innerHTML="";
+
+  /* << DM-GH-DRAFT: coba load draft dulu */
+  var draft=dmDraftPeek();
+  if(draft){
+    dmEl("dm-tgl").value=draft.tgl||dmToday();
+    dmEl("dm-kpc").value=draft.kpc||"";
+    dmEl("dm-panjang").value=draft.panjang||"";
+    dmEl("dm-lb").value=draft.lb||"";
+    dmEl("dm-bow").value=draft.bow||"";
+    dmEl("dm-cember").value=draft.cember||"";
+    dmEl("dm-twist").value=draft.twist||"";
+    dmEl("dm-berat").value=draft.berat||"";
+    dmLoadProduk(draft.produk||null);
+    dmEnsureStruct(function(){
+      /* restore grup dari draft */
+      if(draft.groups && dmSTRUCT && dmSTRUCT.count){
+        for(var g=0;g<3;g++){
+          var row=draft.groups[g]||[];
+          for(var i=0;i<dmSTRUCT.count;i++){
+            dmG[g][i]=row[i]||"";
+            var el=dmEl("dm-b-"+g+"-"+i);
+            if(el) el.value=row[i]||"";
+          }
+        }
+      }
+      dmRefreshNo();
+      dmCheck();
+    });
+    return;
+  }
+
+  /* tidak ada draft — kosong seperti biasa */
+  dmEl("dm-tgl").value=dmToday();
+  dmEl("dm-kpc").value=""; dmEl("dm-panjang").value="";
+  dmEl("dm-lb").value=""; dmEl("dm-bow").value=""; dmEl("dm-cember").value=""; dmEl("dm-twist").value=""; dmEl("dm-berat").value="";
   dmLoadProduk(null);
   dmEnsureStruct(function(){ dmCheck(); });
   dmRefreshNo();
@@ -714,6 +801,8 @@ function dmCheck(){
   if(ok){ ["dm-lb","dm-bow","dm-cember","dm-twist","dm-berat"].forEach(function(id){ if(dmEl(id).value.trim()==="") ok=false; }); }
   var b=dmEl("dm-simpan");
   if(ok){ b.classList.add("dm-on"); b.disabled=false; } else { b.classList.remove("dm-on"); b.disabled=true; }
+  /* << DM-GH-DRAFT: simpan draft setiap kali field dicek (kecuali mode edit) */
+  dmDraftSave();
 }
 function dmSimpan(){
   if(dmEl("dm-simpan").disabled || dmSAVING) return;
@@ -731,6 +820,7 @@ function dmSimpan(){
     var keyEd=dmEDIT.key, noEd=dmEDIT.no;
     dmRun("dimUpdatePaket",[p,keyEd,noEd,dmUserNama()],function(){
       dmCacheClearMachine(dmMESIN);
+      dmDraftClear();
       dmToast("DATA DIPERBARUI","ok");
       setTimeout(function(){ dmResetSaveBtn(); dmOpenDetail(keyEd); },900);
     });
@@ -738,6 +828,7 @@ function dmSimpan(){
   }
   dmRun("dimSimpanPaket",[p,dmUserNama()],function(){
     dmCacheClearMachine(dmMESIN);
+    dmDraftClear();
     dmToast("DATA TERSIMPAN","ok");
     setTimeout(function(){ dmResetSaveBtn(); if(dmBACK_VIEW==="tanggal") dmGoTanggal(); else dmGoHariIni(); },900);
   });
