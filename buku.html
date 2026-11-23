@@ -6,60 +6,55 @@
 <title>BUKU PRODUKSI · EUP GUDANG TAIPA</title>
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 <style>
-  body{background:#f4f6f9;margin:0;padding-bottom:52px}
-  .app-header{position:sticky;top:0;z-index:60;background:#1155cc;color:#fff;display:flex;align-items:center;gap:14px;padding:12px 16px;height:60px;box-sizing:border-box}
-  .menu-btn{font-size:28px !important;line-height:1;color:#fff;padding:0 8px;background:none;border:none;cursor:pointer}
-  .header-title{font-weight:bold;font-size:18px !important;letter-spacing:1px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .user-badge{background:#0d3f92;border-radius:20px;padding:6px 15px;font-weight:bold;font-size:14px !important;white-space:nowrap}
-  @media (max-width:700px){
-    .header-title{font-size:14px !important;letter-spacing:0.5px !important;line-height:1.2 !important;margin-top:2px}
-    .menu-btn{font-size:20px !important;padding:0 4px !important;line-height:1 !important}
-  }
-  .app-ft{position:fixed;left:0;right:0;bottom:0;z-index:40;background:#f4f6f9;border-top:1px solid #e3e7ee;color:#888;text-align:center;padding:11px 10px;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;letter-spacing:1px}
-  .lp-side{position:fixed;left:-170px;top:0;bottom:0;width:150px;background:#fff;z-index:9990;transition:.25s ease-in-out;overflow-y:auto;display:flex;flex-direction:column;border-right:1px solid #e3e7ee;box-shadow:2px 0 10px rgba(0,0,0,.05)}
-  .lp-side.open{left:0}
-  .lp-side-hd{flex:0 0 auto;background:#1155cc;color:#fff;padding:16px 10px;font-family:Arial,sans-serif;font-weight:bold;letter-spacing:1px;font-size:16px !important}
-  .lp-side-item{display:block;width:100%;text-align:left;color:#333;padding:18px 6px;border:none;border-bottom:1px solid #f0f0f0;font-size:14px !important;cursor:pointer;font-weight:bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:none;font-family:Arial,sans-serif}
-  .lp-side-item:active{background:#f5f5f5;color:#1155cc}
-  .lp-side-item.logout{margin-top:auto;color:#c00 !important;border-top:1px solid #eee;border-bottom:none;padding:18px 6px;white-space:nowrap}
-  .lp-side-item.logout:active{background:#ffebee}
-  .lp-side-mask{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9989;display:none}
-  .lp-login{position:fixed;inset:0;background:#9b9b9b;z-index:10000;display:flex;align-items:center;justify-content:center;padding:16px}
-  .lp-login.hidden{display:none}
-  .lp-box{background:linear-gradient(180deg,#dcdcdc,#c6c6c6);border-radius:14px;padding:34px 30px 30px;width:400px;max-width:100%;text-align:center;box-shadow:0 14px 40px rgba(0,0,0,.35)}
-  .lp-title{color:#555;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;letter-spacing:3px;margin-bottom:26px}
-  .lp-field{display:flex;align-items:center;gap:10px;border-bottom:1px solid #8f8f8f;margin-bottom:22px;padding:6px 2px;background:transparent}
-  .lp-field svg{flex:0 0 auto;width:18px;height:18px;fill:#6d6d6d}
-  .lp-field input{flex:1;min-width:0;background:transparent !important;border:none;outline:none;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;color:#333 !important;padding:6px 0;box-shadow:none !important}
-  .lp-field input::placeholder{color:#8a8a8a;font-weight:normal}
-  .lp-field input:-webkit-autofill,.lp-field input:-webkit-autofill:hover,.lp-field input:-webkit-autofill:focus{
-    -webkit-box-shadow:0 0 0 1000px rgba(0,0,0,0) inset;box-shadow:0 0 0 1000px rgba(0,0,0,0) inset;
-    -webkit-text-fill-color:#333;caret-color:#333;background-color:transparent !important;transition:background-color 99999s ease-in-out 0s}
-  .lp-btn{display:block;margin:6px auto 0;background:#3b3b3b;color:#fff;border:none;border-radius:6px;padding:13px 46px;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;letter-spacing:2px;cursor:pointer}
-  .lp-btn:active{background:#222}
-  .lp-err{margin-top:14px;color:#8e1b1b;font-family:Arial,sans-serif;font-size:12px;font-weight:bold;min-height:14px}
-  .sc-modal{position:fixed;inset:0;background:rgba(15,23,42,.6);z-index:10000;display:none;align-items:center;justify-content:center;padding:16px}
-  .sc-modal.show{display:flex}
-  .sc-box{background:#fff;border-radius:0;width:min(92vw,440px);max-width:100%;max-height:94vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.35)}
-  .sc-header{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:#fff;border-bottom:1px solid #e3e7ee;flex:0 0 auto}
-  .sc-title{font-weight:bold;color:#0f172a;font-size:16px !important;line-height:1.2}
-  .sc-close{background:none;border:none;color:#94a3b8;font-size:22px !important;cursor:pointer;line-height:1;padding:2px 6px;border-radius:0}
-  .sc-close:hover{color:#334155}
-  .sc-body{flex:0 0 auto;padding:0;background:#000}
-  .sc-video-wrap{position:relative;width:100%;background:#000;overflow:hidden;border-radius:0;aspect-ratio:2/3;max-height:70vh}
-  .sc-video{width:100%;height:100%;display:block;object-fit:cover}
-  .sc-ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
-  .sc-box-inner{position:relative;width:46%;max-width:240px;aspect-ratio:1/1;border:none}
-  .sc-frost{position:absolute;inset:0;background:rgba(255,255,255,.06);backdrop-filter:blur(1px);-webkit-backdrop-filter:blur(1px);border-radius:0}
-  .sc-corner{position:absolute;width:34px;height:34px;border:0 solid #fff;border-radius:0;z-index:5}
-  .sc-tl{top:0;left:0;border-top-width:5px;border-left-width:5px}
-  .sc-tr{top:0;right:0;border-top-width:5px;border-right-width:5px}
-  .sc-bl{bottom:0;left:0;border-bottom-width:5px;border-left-width:5px}
-  .sc-br{bottom:0;right:0;border-bottom-width:5px;border-right-width:5px}
-  .sc-pagefoot{flex:0 0 auto;background:#fff;border-top:1px solid #e3e7ee;text-align:center;padding:10px 14px;color:#1155cc;font-size:12px !important;letter-spacing:2px;font-weight:bold}
-  @media (orientation:landscape){ .sc-box{width:min(92vw,640px)} .sc-video-wrap{aspect-ratio:16/9;max-height:78vh} .sc-box-inner{width:33%;max-width:220px} }
-  @media (orientation:portrait){ .sc-box{width:min(92vw,440px)} .sc-video-wrap{aspect-ratio:2/3;max-height:70vh} .sc-box-inner{width:46%;max-width:240px} }
-  .hidden{display:none !important}
+body{background:#f4f6f9;margin:0;padding-bottom:52px}
+.app-header{position:sticky;top:0;z-index:60;background:#1155cc;color:#fff;display:flex;align-items:center;gap:14px;padding:12px 16px;height:60px;box-sizing:border-box}
+.menu-btn{font-size:28px !important;line-height:1;color:#fff;padding:0 8px;background:none;border:none;cursor:pointer}
+.header-title{font-weight:bold;font-size:18px !important;letter-spacing:1px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-badge{background:#0d3f92;border-radius:20px;padding:6px 15px;font-weight:bold;font-size:14px !important;white-space:nowrap}
+@media (max-width:700px){.header-title{font-size:14px !important;letter-spacing:0.5px !important;line-height:1.2 !important;margin-top:2px}.menu-btn{font-size:20px !important;padding:0 4px !important;line-height:1 !important}}
+.app-ft{position:fixed;left:0;right:0;bottom:0;z-index:40;background:#f4f6f9;border-top:1px solid #e3e7ee;color:#888;text-align:center;padding:11px 10px;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;letter-spacing:1px}
+.lp-side{position:fixed;left:-170px;top:0;bottom:0;width:150px;background:#fff;z-index:9990;transition:.25s ease-in-out;overflow-y:auto;display:flex;flex-direction:column;border-right:1px solid #e3e7ee;box-shadow:2px 0 10px rgba(0,0,0,.05)}
+.lp-side.open{left:0}
+.lp-side-hd{flex:0 0 auto;background:#1155cc;color:#fff;padding:16px 10px;font-family:Arial,sans-serif;font-weight:bold;letter-spacing:1px;font-size:16px !important}
+.lp-side-item{display:block;width:100%;text-align:left;color:#333;padding:18px 6px;border:none;border-bottom:1px solid #f0f0f0;font-size:14px !important;cursor:pointer;font-weight:bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:none;font-family:Arial,sans-serif}
+.lp-side-item:active{background:#f5f5f5;color:#1155cc}
+.lp-side-item.logout{margin-top:auto;color:#c00 !important;border-top:1px solid #eee;border-bottom:none;padding:18px 6px;white-space:nowrap}
+.lp-side-item.logout:active{background:#ffebee}
+.lp-side-mask{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9989;display:none}
+.lp-login{position:fixed;inset:0;background:#9b9b9b;z-index:10000;display:flex;align-items:center;justify-content:center;padding:16px}
+.lp-login.hidden{display:none}
+.lp-box{background:linear-gradient(180deg,#dcdcdc,#c6c6c6);border-radius:14px;padding:34px 30px 30px;width:400px;max-width:100%;text-align:center;box-shadow:0 14px 40px rgba(0,0,0,.35)}
+.lp-title{color:#555;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;letter-spacing:3px;margin-bottom:26px}
+.lp-field{display:flex;align-items:center;gap:10px;border-bottom:1px solid #8f8f8f;margin-bottom:22px;padding:6px 2px;background:transparent}
+.lp-field svg{flex:0 0 auto;width:18px;height:18px;fill:#6d6d6d}
+.lp-field input{flex:1;min-width:0;background:transparent !important;border:none;outline:none;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;color:#333 !important;padding:6px 0;box-shadow:none !important}
+.lp-field input::placeholder{color:#8a8a8a;font-weight:normal}
+.lp-field input:-webkit-autofill,.lp-field input:-webkit-autofill:hover,.lp-field input:-webkit-autofill:focus{-webkit-box-shadow:0 0 0 1000px rgba(0,0,0,0) inset;box-shadow:0 0 0 1000px rgba(0,0,0,0) inset;-webkit-text-fill-color:#333;caret-color:#333;background-color:transparent !important;transition:background-color 99999s ease-in-out 0s}
+.lp-btn{display:block;margin:6px auto 0;background:#3b3b3b;color:#fff;border:none;border-radius:6px;padding:13px 46px;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;letter-spacing:2px;cursor:pointer}
+.lp-btn:active{background:#222}
+.lp-err{margin-top:14px;color:#8e1b1b;font-family:Arial,sans-serif;font-size:12px;font-weight:bold;min-height:14px}
+.sc-modal{position:fixed;inset:0;background:rgba(15,23,42,.6);z-index:10000;display:none;align-items:center;justify-content:center;padding:16px}
+.sc-modal.show{display:flex}
+.sc-box{background:#fff;border-radius:0;width:min(92vw,440px);max-width:100%;max-height:94vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.sc-header{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:#fff;border-bottom:1px solid #e3e7ee;flex:0 0 auto}
+.sc-title{font-weight:bold;color:#0f172a;font-size:16px !important;line-height:1.2}
+.sc-close{background:none;border:none;color:#94a3b8;font-size:22px !important;cursor:pointer;line-height:1;padding:2px 6px;border-radius:0}
+.sc-close:hover{color:#334155}
+.sc-body{flex:0 0 auto;padding:0;background:#000}
+.sc-video-wrap{position:relative;width:100%;background:#000;overflow:hidden;border-radius:0;aspect-ratio:2/3;max-height:70vh}
+.sc-video{width:100%;height:100%;display:block;object-fit:cover}
+.sc-ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.sc-box-inner{position:relative;width:46%;max-width:240px;aspect-ratio:1/1;border:none}
+.sc-frost{position:absolute;inset:0;background:rgba(255,255,255,.06);backdrop-filter:blur(1px);-webkit-backdrop-filter:blur(1px);border-radius:0}
+.sc-corner{position:absolute;width:34px;height:34px;border:0 solid #fff;border-radius:0;z-index:5}
+.sc-tl{top:0;left:0;border-top-width:5px;border-left-width:5px}
+.sc-tr{top:0;right:0;border-top-width:5px;border-right-width:5px}
+.sc-bl{bottom:0;left:0;border-bottom-width:5px;border-left-width:5px}
+.sc-br{bottom:0;right:0;border-bottom-width:5px;border-right-width:5px}
+.sc-pagefoot{flex:0 0 auto;background:#fff;border-top:1px solid #e3e7ee;text-align:center;padding:10px 14px;color:#1155cc;font-size:12px !important;letter-spacing:2px;font-weight:bold}
+@media (orientation:landscape){.sc-box{width:min(92vw,640px)}.sc-video-wrap{aspect-ratio:16/9;max-height:78vh}.sc-box-inner{width:33%;max-width:220px}}
+@media (orientation:portrait){.sc-box{width:min(92vw,440px)}.sc-video-wrap{aspect-ratio:2/3;max-height:70vh}.sc-box-inner{width:46%;max-width:240px}}
+.hidden{display:none !important}
 </style>
 </head>
 <body>
@@ -117,7 +112,6 @@
 </div>
 
 <script>
-/* << GitHub Shell: login + scanner global */
 var USER={nama:"-"};
 var LP_LOCAL_USERS={};
 var API_URL="https://script.google.com/macros/s/AKfycbwzk6T_YFrgmHOp2N2JGG-s9YL0_Fkhf7z8zkwNU9HwSsLT0V_nM3paaAP1PRfn1LIlnw/exec";
@@ -200,7 +194,6 @@ function scanTick(){
 window.__SCANNER__={ start:startScanner, stop:stopScanner };
 </script>
 
-<!-- FP-CAM-FILE-START :: vFP-27.2 = vFP-27.1 (edit-baris) + tombol ↻ REFRESH + auto-refresh tab. -->
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Arial',Helvetica,sans-serif !important;font-size:14px !important;font-weight:bold !important;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
@@ -291,7 +284,6 @@ body.fp-nofab .fp-fab{display:none !important}
 .fp-toast.hidden{display:none}
 .fp-toast-ok{background:#e8f5e9;color:#1b7e43;border:1px solid #1b7e43}
 .fp-toast-err{background:#fdecea;color:#b00020;border:1px solid #b00020}
-.fp-hint-retro{color:#0d47a1;background:#e3f2fd;border:1px solid #90caf9;border-radius:6px;padding:8px 12px;font-weight:normal!important;font-size:12px!important;margin-bottom:12px;line-height:1.4}
 .fp-skel{background:#fff;border:1px solid #e3e7ee;border-radius:8px;padding:14px;margin-bottom:14px}
 .fp-skel-line{height:14px;border-radius:4px;background:#eef1f6;margin:9px 0;animation:fpPulse 1.1s ease-in-out infinite}
 .fp-skel-line.w40{width:40%}.fp-skel-line.w60{width:60%}.fp-skel-line.w80{width:80%}
@@ -503,12 +495,8 @@ function fpDraftSave(){
   if(fpEDIT) return;
   try{
     var o={ t:Date.now(), v:{
-      mesin:fpMESIN,
-      tgl:fpEl("fp-tgl").value,
-      produk:fpEl("fp-produk").value,
-      kpc:fpEl("fp-kpc").value,
-      coil:fpEl("fp-coil").value,
-      rows:fpROWS
+      mesin:fpMESIN, tgl:fpEl("fp-tgl").value, produk:fpEl("fp-produk").value,
+      kpc:fpEl("fp-kpc").value, coil:fpEl("fp-coil").value, rows:fpROWS
     }};
     localStorage.setItem(fpDraftKey(), JSON.stringify(o));
   }catch(e){}
@@ -521,9 +509,7 @@ function fpDraftPeek(){
     return (o && o.v && o.v.mesin===fpMESIN)? o.v : null;
   }catch(e){ return null; }
 }
-function fpDraftClear(){
-  try{ localStorage.removeItem(fpDraftKey()); }catch(e){}
-}
+function fpDraftClear(){ try{ localStorage.removeItem(fpDraftKey()); }catch(e){} }
 function fpUpdateEstimasi(){
   var el=fpEl("fp-estimasi"); if(!el) return;
   var raw=(fpEl("fp-coil").value||"").replace(/[^0-9]/g,"");
@@ -568,10 +554,7 @@ function fpCacheIsFresh(k, maxAge){
   return (Date.now() - c.t) < maxAge;
 }
 function fpCacheSet(k,v){ fpCACHE[k]={t:Date.now(),v:v}; fpLsSet(k,v); }
-function fpCacheDel(k){
-  delete fpCACHE[k];
-  try{ localStorage.removeItem(FP_LS+k); }catch(e){}
-}
+function fpCacheDel(k){ delete fpCACHE[k]; try{ localStorage.removeItem(FP_LS+k); }catch(e){} }
 function fpCacheClearMachine(m){
   for(var k in fpCACHE){ if(k.indexOf("tgl:"+m)===0 || k.indexOf("det:"+m+":")===0){ delete fpCACHE[k]; } }
   for(var dk in fpDLCACHE){ if(dk.indexOf(m+"|")===0) delete fpDLCACHE[dk]; }
@@ -666,8 +649,7 @@ function fpBindAutoRefresh(){
       fpCacheDel("det:"+fpMESIN+":"+fpKEY);
       fpLoadingToast(true);
       fpOpenDetail(fpKEY);
-    }
-    else if(!fpEl("fp-view-tanggal").classList.contains("hidden")){
+    } else if(!fpEl("fp-view-tanggal").classList.contains("hidden")){
       fpCacheDel("tgl:"+fpMESIN);
       fpLoadingToast(true);
       fpGoTanggal();
@@ -1052,4 +1034,389 @@ function fpSimpan(){
           }
         }
         delete fpCACHE["det:"+fpMESIN+":"+keyEd];
-        try{ localStorage.remove
+        try{ localStorage.removeItem(FP_LS+"det:"+fpMESIN+":"+keyEd); }catch(e){}
+        fpDraftClear();
+        lockOk("DATA TERSIMPAN");
+        setTimeout(function(){
+          fpResetForm();
+          fpKEY=keyEd;
+          fpShow("fp-view-detail");
+          fpRenderDetail({struct:fpSTRUCT,cards:fpCARDS});
+        },300);
+      } catch(err) {
+        lockErr("Error tidak terduga: "+(err.message||""));
+      }
+    });
+    return;
+  }
+  fpRun("simpanPaket",[p,fpUserNama()],function(r){
+    if(!r||!r.ok){ lockErr((r&&r.msg)||"Gagal menyimpan."); return; }
+    fpCacheClearMachine(fpMESIN);
+    fpDraftClear();
+    lockOk("DATA TERSIMPAN");
+    setTimeout(function(){ fpResetForm(); fpGoHariIni(); },400);
+  });
+}
+function fpEditCard(idx){
+  var c=fpCARDS[idx]; if(!c) return;
+  fpEDIT={ key: fpKEY, no: c.no };
+  fpDraftClear();
+  var _b=fpEl("fp-sbm"); if(_b){ _b.disabled=false; _b.textContent="SIMPAN"; }
+  fpShow("fp-view-form");
+  fpEl("fp-crumb").textContent="DATA PRODUKSI "+fpMESIN; fpHideTotalBadge();
+  fpEl("fp-op").value = fpUserNama();
+  fpEl("fp-mesin").value = fpMESIN;
+  fpEl("fp-tgl").value = fpKEY;
+  fpEl("fp-no").value = c.no;
+  fpEl("fp-kpc").value = c.kpc||"";
+  fpEl("fp-coil").value = c.panjangCoil||"";
+  fpCOIL = String(c.panjangCoil||"");
+  fpROWS = (c.inputs||[]).map(function(r){
+    return { inputan:r.inputan, prime:r.prime, rijekCoil:r.rijekCoil, rijekMesin:r.rijekMesin, scrap:r.scrap, nonPrime:r.nonPrime };
+  });
+  fpLoadProduk(c.produk);
+  fpRenderSummary();
+  fpUpdateEstimasi();
+}
+var fpScanStream=null, fpScanTimer=null, fpScanSent=false, fpTorchOn=false, fpScanCv=null;
+var fpScanListenerAdded=false;
+function fpLoadJsQR(cb){
+  if(typeof jsQR!=="undefined"){ cb(); return; }
+  var s=document.createElement("script");
+  s.src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js";
+  s.onload=cb;
+  s.onerror=function(){ alert("Gagal memuat mesin QR. Cek internet."); };
+  document.head.appendChild(s);
+}
+function fpStopStream(){
+  if(fpScanTimer){ clearInterval(fpScanTimer); fpScanTimer=null; }
+  if(fpScanStream){ fpScanStream.getTracks().forEach(function(t){ t.stop(); }); fpScanStream=null; }
+  var v=fpEl("fp-scan-video"); if(v) v.srcObject=null;
+  fpTorchOn=false;
+}
+function fpAddScanListener(){
+  if(fpScanListenerAdded) return;
+  fpScanListenerAdded=true;
+  window.addEventListener("DMS_KPC_SCAN", function(ev){
+    if(ev && ev.detail && ev.detail.text){ fpApplyKpc(ev.detail.text); }
+  });
+}
+function fpOpenScan(){
+  if(window.__SCANNER__ && window.__SCANNER__.start){ fpAddScanListener(); window.__SCANNER__.start(); return; }
+  fpEl("fp-scan-modal").classList.remove("hidden");
+  fpLoadJsQR(function(){ fpStartLive(); });
+}
+function fpCloseScan(){ fpStopStream(); fpEl("fp-scan-modal").classList.add("hidden"); }
+function fpStartLive(deviceId){
+  fpStopStream(); fpScanSent=false;
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){ alert("Kamera tidak didukung."); return; }
+  var vid={width:{ideal:1920},height:{ideal:1080}};
+  if(deviceId){ vid.deviceId={exact:deviceId}; } else { vid.facingMode="environment"; }
+  navigator.mediaDevices.getUserMedia({video:vid,audio:false})
+    .then(function(stream){
+      fpScanStream=stream;
+      var v=fpEl("fp-scan-video"); v.srcObject=stream; v.play();
+      fpScanCv=document.createElement("canvas");
+      fpListCams(deviceId||null);
+      fpScanTimer=setInterval(fpScanTick,350);
+    })
+    .catch(function(e){ alert("Kamera tidak bisa dibuka: "+e.message); fpCloseScan(); });
+}
+function fpScanTick(){
+  if(fpScanSent||!fpScanStream||typeof jsQR==="undefined") return;
+  var v=fpEl("fp-scan-video");
+  if(!v||!v.videoWidth||v.readyState!==4) return;
+  fpScanCv.width=v.videoWidth; fpScanCv.height=v.videoHeight;
+  var cx=fpScanCv.getContext("2d"); cx.drawImage(v,0,0);
+  var img=cx.getImageData(0,0,fpScanCv.width,fpScanCv.height);
+  var code=null;
+  try{ code=jsQR(img.data,fpScanCv.width,fpScanCv.height,{inversionAttempts:"attemptBoth"}); }catch(e){}
+  if(code&&code.data){ fpScanSent=true; var txt=code.data; setTimeout(function(){ fpApplyKpc(txt); },120); }
+}
+function fpListCams(activeId){
+  if(!navigator.mediaDevices.enumerateDevices) return;
+  navigator.mediaDevices.enumerateDevices().then(function(devs){
+    var cams=devs.filter(function(d){ return d.kind==="videoinput"; });
+    var sel=fpEl("fp-scan-cams"), cnt=fpEl("fp-scan-camcount");
+    if(cnt) cnt.textContent=cams.length;
+    sel.innerHTML="";
+    cams.forEach(function(c,i){
+      var o=document.createElement("option"); o.value=c.deviceId;
+      o.textContent=(c.label||("camera "+(i+1)));
+      if(activeId&&c.deviceId===activeId) o.selected=true;
+      sel.appendChild(o);
+    });
+  }).catch(function(){});
+}
+function fpCamChange(){ fpStartLive(fpEl("fp-scan-cams").value); }
+function fpZoomChange(el){
+  var lbl=fpEl("fp-scan-zoomlbl");
+  if(lbl) lbl.textContent=Number(el.value).toFixed(1).replace(/\.0$/,"")+"x zoom";
+  if(!fpScanStream) return;
+  var t=fpScanStream.getVideoTracks()[0];
+  if(!t||!t.getCapabilities) return;
+  var cap=t.getCapabilities();
+  if(cap&&cap.zoom){
+    var z=Math.min(Math.max(Number(el.value),cap.zoom.min||1),cap.zoom.max||1);
+    try{ t.applyConstraints({advanced:[{zoom:z}]}); }catch(e){}
+  }
+}
+function fpToggleTorch(){
+  if(!fpScanStream) return;
+  var t=fpScanStream.getVideoTracks()[0];
+  if(!t||!t.getCapabilities) return;
+  var cap=t.getCapabilities();
+  if(!cap||!cap.torch){ alert("Lampu senter tidak didukung perangkat ini."); return; }
+  fpTorchOn=!fpTorchOn;
+  try{ t.applyConstraints({advanced:[{torch:fpTorchOn}]}); }catch(e){}
+}
+function fpApplyKpc(text){
+  fpCloseScan();
+  var el=fpEl("fp-kpc");
+  if(el){ el.value=String(text||"").trim(); fpDraftSave(); }
+}
+function fpPrintItems(){ return fpIKOLS.filter(function(z){ return z.k!=="nonPrime"; }).concat([{k:"total",l:"TOTAL"}]); }
+function fpRenderPrintList(){
+  fpEl("fp-print-list").innerHTML=fpPrintItems().map(function(c){
+    return '<label class="fp-ckrow"><input type="checkbox" '+(fpPRINTCOLS[c.k]?'checked':'')+
+           ' onchange="fpPRINTCOLS[\''+c.k+'\']=this.checked"><span>'+c.l+'</span></label>';
+  }).join("");
+}
+function fpOpenPrint(idx){
+  fpPRINTCARD=fpCARDS[idx]; if(!fpPRINTCARD) return;
+  fpPRINTCOLS={}; fpPRINTCARD._fotoImg=null;
+  fpEl("fp-foto-info").classList.add("hidden"); fpEl("fp-foto-info").innerHTML="";
+  fpRenderPrintList();
+  fpEl("fp-print-modal").classList.remove("hidden");
+  document.body.classList.add("fp-nofab");
+}
+function fpClosePrint(){
+  fpEl("fp-print-modal").classList.add("hidden");
+  document.body.classList.remove("fp-nofab");
+}
+function fpGaleri(){ fpEl("fp-file").click(); }
+function fpCamera(){ fpEl("fp-file-cam").click(); }
+function fpOnFile(inp){
+  var f=inp.files && inp.files[0]; inp.value="";
+  if(!f || !fpPRINTCARD) return;
+  var rd=new FileReader();
+  rd.onload=function(){
+    var img=new Image();
+    img.onload=function(){
+      fpPRINTCARD._fotoImg=img; fpPRINTCARD._fotoSrc=rd.result;
+      fpEl("fp-foto-info").innerHTML=
+        '<img src="'+rd.result+'" style="width:64px;height:64px;object-fit:cover;border:1px solid #cfd6e0;border-radius:6px;vertical-align:middle;margin-right:10px">'+
+        '<span>Foto terpilih - akan dicetak HORIZONTAL di bawah tabel.</span>';
+      fpEl("fp-foto-info").classList.remove("hidden");
+    };
+    img.src=rd.result;
+  };
+  rd.readAsDataURL(f);
+}
+function fpDrawCanvas(c, cols, useTotal, phys, qr, foto){
+  var F=24; var S=2;
+  var names=["NOR"].concat(cols.map(function(z){ return z.l; })).concat(useTotal?["TOTAL"]:[]);
+  var nc=names.length;
+  var M=50; var W=1200; var CW=W-M*2;
+  var yTitle=50; var yLineBlue=75; var yNo=110; var yQrTop=140; var qrSize=160;
+  var yInfoStart=yQrTop+qrSize+40; var lineH=F+14; var infoLines=4;
+  var yTableHead=yInfoStart+(infoLines*lineH)+25; var headH=F+20; var rowH=F+20;
+  var tableBodyH = (phys.length * rowH); var tableTotalH = headH + tableBodyH;
+  var yTableBottom = yTableHead + tableTotalH;
+  var dw=0, dh=0;
+  if(foto){ dw=CW; dh=Math.round(CW*2/5); }
+  var H = yTableBottom + 30 + (foto ? (30+dh+30) : 0);
+  var cv=document.createElement("canvas"); cv.width=W*S; cv.height=H*S;
+  var x=cv.getContext("2d"); x.scale(S,S);
+  x.fillStyle="#f7fafc"; x.fillRect(0,0,W,H); x.textBaseline="middle";
+  x.fillStyle="#112233"; x.font="bold "+F+"px Arial, sans-serif"; x.textAlign="center";
+  x.fillText("DATA PRODUKSI EUP GUDANG TAIPA 2026", W/2, yTitle);
+  x.fillStyle="#1155cc"; x.fillRect(M, yLineBlue, CW, 8);
+  x.fillStyle="#112233"; x.font="bold "+F+"px Arial, sans-serif"; x.textAlign="center";
+  x.fillText("[NO "+c.no+"]", W/2, yNo);
+  if(qr){ try{ x.drawImage(qr, M, yQrTop, qrSize, qrSize); }catch(e){} }
+  x.textAlign="left"; x.fillStyle="#112233"; x.font="bold "+F+"px Arial, sans-serif";
+  x.fillText(c.kpc||"-", M+qrSize+25, yQrTop+qrSize/2);
+  var inf=[["Tanggal", c.tanggal],["Operator", c.operator],["Mesin", c.mesin],["Produk", c.produk]];
+  x.textAlign="left";
+  inf.forEach(function(row,i){
+    var yPos = yInfoStart + i*lineH + lineH/2;
+    x.fillStyle="#334455"; x.font="bold "+F+"px Arial, sans-serif"; x.fillText(row[0], M, yPos);
+    x.fillStyle="#112233"; x.font="bold "+F+"px Arial, sans-serif"; x.fillText(": "+row[1], M+250, yPos);
+  });
+  var rejTotal=0;
+  phys.forEach(function(p){ rejTotal += Number(p.row.rijekCoil)||0; });
+  var rejCx=W-M-250, rejCy=yQrTop+qrSize/2+20;
+  x.save();
+  x.translate(rejCx, rejCy);
+  x.rotate(-25*Math.PI/180);
+  x.font="bold 44px Arial, sans-serif";
+  x.textAlign="center"; x.textBaseline="middle";
+  x.shadowColor="rgba(0,0,0,0.6)"; x.shadowOffsetX=5; x.shadowOffsetY=5;
+  x.fillStyle="#e53935";
+  x.fillText("RIJECTED COIL", 0, -26);
+  x.fillText(fpFmt(rejTotal), 0, 26);
+  x.restore();
+  x.fillStyle="#1155cc"; x.fillRect(M, yTableHead, CW, headH);
+  x.fillStyle="#fff"; x.font="bold "+F+"px Arial, sans-serif"; x.textAlign="center";
+  var colW=CW/nc;
+  names.forEach(function(nm,i){ x.fillText(nm, M+colW*i+colW/2, yTableHead+headH/2); });
+  x.fillStyle="#fff"; x.fillRect(M, yTableHead+headH, CW, tableBodyH);
+  x.strokeStyle="#cfd6e0"; x.lineWidth=1;
+  var totalLeftX = M + colW*(nc-1);
+  for(var r=0;r<=phys.length;r++){
+    var yy=yTableHead+headH+(r*rowH);
+    var endX = (useTotal && r>0 && r<phys.length) ? totalLeftX : (M+CW);
+    x.beginPath(); x.moveTo(M, yy); x.lineTo(endX, yy); x.stroke();
+  }
+  for(var i2=0;i2<=nc;i2++){ var xx=M+colW*i2; x.beginPath(); x.moveTo(xx, yTableHead); x.lineTo(xx, yTableHead+headH+tableBodyH); x.stroke(); }
+  x.strokeRect(M, yTableHead, CW, tableTotalH);
+  x.fillStyle="#112233"; x.font="bold "+F+"px Arial, sans-serif"; x.textAlign="center";
+  phys.forEach(function(p,ri){
+    var cy = yTableHead + headH + (ri*rowH) + rowH/2;
+    x.fillText(String(p.no), M+colW/2, cy);
+    cols.forEach(function(z,ci){ var v=Number(p.row[z.k])||0; x.fillText(v? fpFmt(v) : "", M+colW*(ci+1)+colW/2, cy); });
+  });
+  if(useTotal){
+    var totalX = M+colW*(nc-1);
+    x.fillStyle="#1155cc"; x.font="bold "+(F+2)+"px Arial, sans-serif";
+    x.fillText(fpFmt(c.total), totalX+colW/2, yTableHead+headH+tableBodyH/2);
+  }
+  if(foto && dw>0 && dh>0){
+    var py=yTableBottom+30; var px=(W-dw)/2;
+    var fw=foto.naturalWidth||foto.width, fh=foto.naturalHeight||foto.height;
+    if(fw>0 && fh>0){
+      var rt=dw/dh, sx=0, sy=0, sw=fw, sh=fh;
+      if(fw/fh > rt){ sw=fh*rt; sx=(fw-sw)/2; } else { sh=fw/rt; sy=(fh-sh)/2; }
+      try{ x.drawImage(foto, sx, sy, sw, sh, px, py, dw, dh); x.strokeStyle="#cfd6e0"; x.strokeRect(px, py, dw, dh); }catch(e){}
+    }
+  }
+  return cv;
+}
+function fpBuildPrintPNG(cb){
+  var c=fpPRINTCARD; if(!c){ alert("Tidak ada data untuk dicetak"); return; }
+  var cols=fpIKOLS.filter(function(z){ return fpPRINTCOLS[z.k] && z.k!=="nonPrime"; });
+  var useTotal=!!fpPRINTCOLS["total"];
+  var sessions=[];
+  (c.inputs||[]).forEach(function(r){
+    if(Number(r.inputan)>0 || sessions.length===0){ sessions.push([r]); }
+    else { sessions[sessions.length-1].push(r); }
+  });
+  var phys=[];
+  sessions.forEach(function(ss2,si){ ss2.forEach(function(r,i){ phys.push({ no:(i===0)?(si+1):"", row:r }); }); });
+  if(!phys.length){ phys=[{no:1,row:{}}]; }
+  var foto=(c._fotoImg && c._fotoImg.complete && c._fotoImg.naturalWidth>0)? c._fotoImg : null;
+  if(c.kpc){ fpQrDrawable(c, 240, function(qr){ cb(fpDrawCanvas(c, cols, useTotal, phys, qr, foto)); }); }
+  else { cb(fpDrawCanvas(c, cols, useTotal, phys, null, foto)); }
+}
+function fpNamaFile(){ var c=fpPRINTCARD; return (fpMESIN||"DATA")+" ("+(c? c.no : "")+").png"; }
+function fpPrintSig(){
+  var c=fpPRINTCARD; if(!c) return "";
+  var cols=fpIKOLS.filter(function(z){ return fpPRINTCOLS[z.k] && z.k!=="nonPrime"; }).map(function(z){ return z.k; }).join(",");
+  var ut=fpPRINTCOLS["total"]?"T":"";
+  var foto=(c._fotoImg && c._fotoImg.complete && c._fotoImg.naturalWidth>0)?"F":"-";
+  return cols+"|"+ut+"|"+foto;
+}
+function fpTriggerDl(url,name){
+  try{
+    var a=document.createElement("a"); a.href=url; a.download=name; a.rel="noopener"; a.style.display="none";
+    document.body.appendChild(a);
+    setTimeout(function(){ try{ a.click(); }catch(e){} setTimeout(function(){ try{ a.remove(); }catch(e){} },2000); },60);
+  }catch(e){}
+}
+function fpDoDownload(){
+  var c=fpPRINTCARD; if(!c){ alert("Tidak ada data untuk dicetak"); return; }
+  var btn=fpEl("fp-dlbtn"); var orig=btn?btn.innerHTML:"";
+  var sig=fpPrintSig(); var key=fpMESIN+"|"+fpKEY+"|"+c.no+"|"+sig;
+  var cached=fpDLCACHE[key];
+  if(cached){
+    fpTriggerDl(cached, fpNamaFile());
+    document.body.classList.remove("fp-nofab");
+    if(btn){ btn.textContent="\u2713 TERSIMPAN"; setTimeout(function(){ if(btn){ btn.innerHTML=orig; } },1200); }
+    return;
+  }
+  if(fpDLBusy) return;
+  fpDLBusy=true;
+  if(btn){ btn.disabled=true; btn.textContent="MEMBUAT..."; }
+  fpBuildPrintPNG(function(cv){
+    var url; try{ url=cv.toDataURL("image/png"); }catch(e){ url=null; }
+    fpDLBusy=false;
+    if(!url){ if(btn){ btn.disabled=false; btn.innerHTML=orig; } alert("Gagal membuat gambar."); return; }
+    fpDLCACHE[key]=url; fpTriggerDl(url, fpNamaFile());
+    document.body.classList.remove("fp-nofab");
+    if(btn){ btn.textContent="\u2713 TERSIMPAN"; setTimeout(function(){ if(btn){ btn.disabled=false; btn.innerHTML=orig; } },1500); }
+  });
+}
+function fpOpenDetail(key){
+  var myGen=++fpGEN;
+  fpKEY=key; fpShow("fp-view-detail");
+  fpCrumbDetail(key, null);
+  var ck="det:"+fpMESIN+":"+key;
+  var cached=fpCACHE[ck];
+  if(cached && cached.v){
+    var cards0=(cached.v.cards)||[];
+    if(cards0.length===0 && key===fpToday()){ fpRenderEmptyToday(); }
+    else { fpRenderDetail(cached.v); }
+    if(fpCacheIsFresh(ck, 60000)) return;
+  } else {
+    fpRenderLoading();
+    fpLoadingToast(true);
+  }
+  fpRun("getDetail",[fpMESIN,key,fpUserNama()],function(d){
+    fpCacheSet(ck,d);
+    if(myGen!==fpGEN) return;
+    if(!fpEl("fp-view-detail").classList.contains("hidden")){
+      var cards=(d&&d.cards)||[];
+      if(cards.length===0 && key===fpToday()){ fpRenderEmptyToday(); }
+      else { fpRenderDetail(d); }
+    }
+  });
+}
+function fpRenderDetail(d){
+  fpSTRUCT=d.struct; fpCARDS=d.cards;
+  fpLoadingToast(false);
+  var sumTot=0; (d.cards||[]).forEach(function(c){ sumTot+=Number(c.total)||0; });
+  fpCrumbDetail(fpKEY, sumTot);
+  var html=(d.cards||[]).map(function(c, idx){
+    var qr=c.kpc? '<img class="fp-qr" width="86" height="86" data-qr="'+encodeURIComponent(c.kpc)+'" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">' : '<div class="fp-qr" style="width:86px;height:86px"></div>';
+    return '<div class="fp-card" data-fp-card="'+idx+'"><div class="fp-det-head"><span class="fp-det-no">NO '+c.no+'</span>'+
+      '<button class="fp-icobtn" title="Edit" onclick="fpEditCard('+idx+')">&#9998;</button>'+
+      '<button class="fp-icobtn" title="Download" onclick="fpOpenPrint('+idx+')"><svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></button>'+
+      '<button class="fp-icobtn" title="Full Screen" onclick="fpFullScreen('+idx+')"><svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg></button></div>'+
+      '<div class="fp-det-body"><div class="fp-det-left">'+
+      '<div class="fp-qrrow">'+qr+'<div class="fp-kpc">'+(c.kpc||"-")+'</div></div>'+
+      '<div class="fp-inf"><b>TANGGAL</b> '+c.tanggal+'</div><div class="fp-inf"><b>OPERATOR</b> '+c.operator+'</div>'+
+      '<div class="fp-inf"><b>MESIN</b> '+c.mesin+'</div><div class="fp-inf"><b>PRODUK</b> '+c.produk+'</div>'+
+      '<div class="fp-inf"><b>PANJANG COIL</b> '+fpFmt(c.panjangCoil)+'</div></div></div>'+
+      '<div style="height:12px"></div>'+fpMergedTable(c.inputs)+'</div>';
+  }).join("") || '<div class="fp-card">Tidak ada data.</div>';
+  fpEl("fp-detail-box").innerHTML=html;
+  var imgs=fpEl("fp-detail-box").querySelectorAll("img[data-qr]");
+  for(var i=0;i<imgs.length;i++){
+    (function(im){
+      var text=decodeURIComponent(im.getAttribute("data-qr"));
+      var cv=fpMakeQr(text, 172);
+      if(cv){ im.src=cv.toDataURL(); }
+      else{ im.src="https://api.qrserver.com/v1/create-qr-code/?size=86x86&data="+encodeURIComponent(text); }
+    })(imgs[i]);
+  }
+}
+function fpFullScreen(idx){
+  var card=document.querySelector('[data-fp-card="'+idx+'"]');
+  if(!card){ return; }
+  var clone=card.cloneNode(true); clone.removeAttribute("data-fp-card");
+  var inner=fpEl("fp-fs-inner"); inner.innerHTML=""; inner.appendChild(clone);
+  fpEl("fp-fs-modal").classList.add("show"); document.body.style.overflow="hidden";
+}
+function fpCloseFS(){
+  fpEl("fp-fs-modal").classList.remove("show");
+  fpEl("fp-fs-inner").innerHTML="";
+  document.body.style.overflow="";
+}
+</script>
+
+<script>
+if(window.__RP_AUTO_START){ fpStartMenu(); }
+</script>
+</body>
+</html>
